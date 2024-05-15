@@ -1,27 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace FinalFinanceTrack
 {
-    /// <summary>
-    /// Interaction logic for MainPage.xaml
-    /// </summary>
     public partial class MainPage : Window
     {
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Equivalent to Form1_Load
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            // Your click event logic here
+        }
+
+        private void button2_Click(object sender, RoutedEventArgs e)
+        {
+            UserMan f2 = new UserMan();
+            f2.Show();
+            this.Hide();
+        }
+
+        private void label1_Click(object sender, RoutedEventArgs e)
+        {
+            // Your label click event logic here
+        }
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            // Your click event logic here
+        }
+
+        private void SETTINGS_Checked(object sender, RoutedEventArgs e)
+        {
+            // Your radio button checked change logic here
         }
     }
 }

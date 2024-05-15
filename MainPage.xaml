@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinalFinanceTrack"
         mc:Ignorable="d"
-        Title="MainPage" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainPage" Height="450" Width="900"
+        Loaded="Window_Loaded">
+    <Grid Background="White">
+        <Label x:Name="label1" Content="OVERVIEW" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,36,0,0" />
+        <Button x:Name="button3" Content="Click Me!" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="12,59,0,0" Click="button3_Click" />
+        <Button x:Name="button1" Content="REPORTS" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="53" Margin="50,341,0,0" Background="LightGray" Click="button1_Click" />
+        <Button x:Name="button2" Content="USER MANAGEMENT" HorizontalAlignment="Left" VerticalAlignment="Top" Width="280" Height="53" Margin="550,341,0,0" Background="LightGray" Click="button2_Click" />
+        <RadioButton x:Name="SETTINGS" Content="SETTINGS" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="771,22,0,0" Checked="SETTINGS_Checked" />
     </Grid>
 </Window>
