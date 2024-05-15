@@ -1,17 +1,18 @@
-﻿using System.Windows;
+﻿using MySql.Data.MySqlClient;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using MySql.Data.MySqlClient;
 
 namespace FinTrackWpf
 {
-    public partial class LogIn : Window
+    public partial class AdminsLogIn : Window
     {
-        public LogIn()
+        public AdminsLogIn()
         {
             InitializeComponent();
         }
 
+        // Event handler to remove placeholder text when the text box receives focus
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -27,34 +28,44 @@ namespace FinTrackWpf
             TextBox textBox = sender as TextBox;
             if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
             {
-                textBox.Text = textBox.Name == "emailTextBox" ? "Email" : "Password";
+                textBox.Text = textBox.Name.Contains("Email") ? "Email" : "Password";
                 textBox.Foreground = Brushes.Gray;
             }
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+
+        // Event handler for the Log In button click
+        // Event handler for the Log In button click
+        private void LogIn_Click(object sender, RoutedEventArgs e)
         {
             string mysqlconn = "server=127.0.0.1;user=root;database=budget;password=";
             MySqlConnection mySqlConnection = new MySqlConnection(mysqlconn);
 
-            string email = emailTextBox.Text;
-            string password = passwordTextBox.Text;
+            string email = adminEmailTextBox.Text;
+            string password = adminPasswordTextBox.Text;
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("No empty fields allowed");
+                return; // Make sure to return after showing the message box.
             }
             else
             {
                 try
                 {
                     mySqlConnection.Open();
-                    MySqlCommand mySqlCommand = new MySqlCommand("SELECT * FROM user WHERE Email = @Email AND Password = @Password", mySqlConnection);
+                    MySqlCommand mySqlCommand = new MySqlCommand("SELECT * FROM admin WHERE Email = @Email AND Password = @Password", mySqlConnection);
                     mySqlCommand.Parameters.AddWithValue("@Email", email);
                     mySqlCommand.Parameters.AddWithValue("@Password", password);
                     MySqlDataReader reader = mySqlCommand.ExecuteReader();
                     if (reader.Read())
                     {
-                        MessageBox.Show("Login success");
+
+
+                        // Open the AdminPasswordRequest window after successful login
+                        AdminPasswordRequest adminPasswordRequest = new AdminPasswordRequest();
+                        adminPasswordRequest.Show();
+
+                        this.Close(); // Close the login window, if you prefer to only have one window open at a time
                     }
                     else
                     {
@@ -72,24 +83,23 @@ namespace FinTrackWpf
             }
         }
 
-        private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            ForgotPassword forgotPasswordWindow = new ForgotPassword();
-            forgotPasswordWindow.Show();
-        }
 
+        // Event handler for the Back button click
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            // Logic to navigate back to the previous page
+            // For example:
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
         }
-        private void SignUpHyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            SignUp signUpWindow = new SignUp();
-            signUpWindow.Show();
-            this.Close();
-        }
 
+        // Event handler for the Forgot Password hyperlink click
+        private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate to the ForgotPasswordAdmin window
+            ForgotPasswordAdmin forgotPasswordAdminWindow = new ForgotPasswordAdmin();
+            forgotPasswordAdminWindow.Show();
+        }
     }
 }
