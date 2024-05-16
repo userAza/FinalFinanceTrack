@@ -1,0 +1,17 @@
+﻿<Window x:Class="FinalFinanceTrack.DeleteUser"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinalFinanceTrack"
+        mc:Ignorable="d"
+        Title="DeleteUser" Height="450" Width="800">
+    <Grid>
+        <Label x:Name="label1" Content="DELETE A USER" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" FontSize="18" FontWeight="Bold"/>
+        <Label x:Name="label2" Content="Enter User Email" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,120,0,0"/>
+        <TextBox x:Name="email_textbox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,120,0,0" Width="400"/>
+        <Button x:Name="Delete_text" Content="DELETE" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="420,180,0,0" Width="100" Click="Delete_text_Click"/>
+        <Button x:Name="back_text" Content="BACK" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,180,0,0" Width="100" Click="back_text_Click"/>
+        
+    </Grid>
+</Window>
