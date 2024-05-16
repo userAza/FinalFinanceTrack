@@ -1,0 +1,33 @@
+﻿<Window x:Class="FinalFinanceTrack.Overview"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FinalFinanceTrack"
+        mc:Ignorable="d"
+        Title="Overview" Height="450" Width="800">
+    <Grid>
+        <!-- Top Bar with Settings Button -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Button Name="SettingsButton" Content="⚙" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                    Margin="10" Width="40" Height="40" Click="SettingsButton_Click"/>
+        </Grid>
+
+        <!-- Main Content Area -->
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Welcome, [Name]" FontSize="24" FontWeight="Bold" Margin="10"/>
+            <TextBlock Text="My Overview" FontSize="18" FontWeight="Bold" Margin="10"/>
+            <Button Name="IncomeButton" Content="Income" Width="200" Margin="10" Click="IncomeButton_Click"/>
+            <Button Name="ExpensesButton" Content="Expenses" Width="200" Margin="10" Click="ExpensesButton_Click"/>
+            <Button Name="SavingsButton" Content="Savings" Width="200" Margin="10" Click="SavingsButton_Click"/>
+            <Button Name="HistoryButton" Content="History" Width="200" Margin="10" Click="HistoryButton_Click"/>
+            <!-- Place the placeholder for the Profile Picture
+            <Image Source="cals.jpg" Width="200" Height="200" Margin="10"/>  -->
+        </StackPanel>
+    </Grid>
+</Window>

@@ -28,7 +28,7 @@ namespace FinalFinanceTrack
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            UserListWindow f6 = new UserListWindow();
+            UserList f6 = new UserList();
             f6.Show();
             this.Hide();
         }
@@ -49,7 +49,7 @@ namespace FinalFinanceTrack
 
         private void button_Delete_Click(object sender, RoutedEventArgs e)
         {
-            DeleteUserWindow f5 = new DeleteUserWindow();
+            DeleteUser f5 = new DeleteUser();
             f5.Show();
             this.Hide();
         }
