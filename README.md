@@ -11,8 +11,10 @@ FinTrack is a web application designed to help individuals manage their finances
 - Savings Goals
 
 ## Technologies Used
--C#
+- C#
+- WPF
 - Lucidchart
+- GitHub
 
 
 ## License
