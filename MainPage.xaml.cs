@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace FinalFinanceTrack
 {
@@ -12,34 +11,52 @@ namespace FinalFinanceTrack
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Equivalent to Form1_Load
+            // Code to execute when the window is loaded
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            // Your click event logic here
+            UserMan userMan = new UserMan();
+            userMan.Show();
+            this.Hide();
         }
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            UserMan f2 = new UserMan();
-            f2.Show();
+            UserListWindow userListWindow = new UserListWindow();
+            userListWindow.Show();
             this.Hide();
-        }
-
-        private void label1_Click(object sender, RoutedEventArgs e)
-        {
-            // Your label click event logic here
         }
 
         private void button3_Click(object sender, RoutedEventArgs e)
         {
-            // Your click event logic here
+            AddUserWindow addUserWindow = new AddUserWindow();
+            addUserWindow.Show();
+            this.Hide();
+        }
+
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+            EditUserWindow editUserWindow = new EditUserWindow();
+            editUserWindow.Show();
+            this.Hide();
+        }
+
+        private void button_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteUser deleteUserWindow = new DeleteUser();
+            deleteUserWindow.Show();
+            this.Hide();
+        }
+
+        private void textBox1_TextChanged(object sender, RoutedEventArgs e)
+        {
+            // Code to execute when the text in the textbox changes
         }
 
         private void SETTINGS_Checked(object sender, RoutedEventArgs e)
         {
-            // Your radio button checked change logic here
+            // Code to execute when the SETTINGS radio button is checked
         }
     }
 }
