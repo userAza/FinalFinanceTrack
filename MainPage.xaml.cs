@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using FinalFinanceTrack;
+using System.Windows;
 
 namespace FinalFinanceTrack
 {
@@ -9,54 +10,26 @@ namespace FinalFinanceTrack
             InitializeComponent();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void ReportsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Code to execute when the window is loaded
+            // Implement the functionality for Reports button
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void UserManagementButton_Click(object sender, RoutedEventArgs e)
         {
             UserMan userMan = new UserMan();
             userMan.Show();
             this.Hide();
         }
 
-        private void button2_Click(object sender, RoutedEventArgs e)
+        private void ClickMeButton_Click(object sender, RoutedEventArgs e)
         {
-            UserListWindow userListWindow = new UserListWindow();
-            userListWindow.Show();
-            this.Hide();
+            // Implement the functionality for Click Me button
         }
 
-        private void button3_Click(object sender, RoutedEventArgs e)
+        private void SettingsRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            AddUserWindow addUserWindow = new AddUserWindow();
-            addUserWindow.Show();
-            this.Hide();
-        }
-
-        private void button4_Click(object sender, RoutedEventArgs e)
-        {
-            EditUserWindow editUserWindow = new EditUserWindow();
-            editUserWindow.Show();
-            this.Hide();
-        }
-
-        private void button_Delete_Click(object sender, RoutedEventArgs e)
-        {
-            DeleteUser deleteUserWindow = new DeleteUser();
-            deleteUserWindow.Show();
-            this.Hide();
-        }
-
-        private void textBox1_TextChanged(object sender, RoutedEventArgs e)
-        {
-            // Code to execute when the text in the textbox changes
-        }
-
-        private void SETTINGS_Checked(object sender, RoutedEventArgs e)
-        {
-            // Code to execute when the SETTINGS radio button is checked
+            // Implement the functionality for Settings radio button
         }
     }
 }

@@ -17,9 +17,8 @@ namespace FinalFinanceTrack
 
         private void back_text_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to another window
-            MainPage f2 = new MainPage();
-            f2.Show();
+            MainPage mainPage = new MainPage();
+            mainPage.Show();
             this.Hide();
         }
 
