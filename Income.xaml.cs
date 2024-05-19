@@ -33,7 +33,7 @@ namespace FinalFinanceTrack
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to the Settings page
-            Settings settingsPage = new Settings();
+            SettingsWindow settingsPage = new SettingsWindow();
             settingsPage.Show();
         }
 
