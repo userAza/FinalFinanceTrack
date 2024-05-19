@@ -45,9 +45,13 @@
         <TextBox x:Name="passwordTextBox" Grid.Row="7" Margin="257,47,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="300"
                  Text="Password" Foreground="Gray" GotFocus="RemovePlaceholderText" LostFocus="AddPlaceholderText" />
 
-        <!-- Black Arrow Image -->
-        <Image Margin="20,0,0,0" Width="30" Height="30" Source="C:\Users\Galaxy Book\Documents\sem2\insp_lab\black-arrow-left-11375.png" MouseLeftButtonDown="Back_Click" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-
+        <!-- Text-based Back Button -->
+        <Button Grid.Row="0" Margin="10,10,0,0" Width="54" Height="23"
+        Content="Back" Click="Back_Click"
+        HorizontalAlignment="Left" VerticalAlignment="Top"
+        Background="DarkGray" Foreground="White"
+        FontSize="12" Padding="10,0">
+        </Button>
 
         <!-- Forgot Password Link -->
         <TextBlock Grid.Row="7" Margin="360,86,0,-40" HorizontalAlignment="Left">

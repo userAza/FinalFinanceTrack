@@ -18,7 +18,6 @@ namespace FinalFinanceTrack
             InitializeComponent();
         }
 
-        // Event handler to remove placeholder text when the text box receives focus
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -32,12 +31,13 @@ namespace FinalFinanceTrack
         private void AddPlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrEmpty(textBox.Text))
+            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
             {
-                textBox.Text = textBox.Tag?.ToString() ?? "Default Text"; // Provide a default text if Tag is null
+                textBox.Text = textBox.Tag?.ToString() ?? "Default Text";
                 textBox.Foreground = Brushes.Gray;
             }
         }
+
 
 
 
@@ -63,6 +63,14 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Email is required.");
                 return;
             }
+
+            // Validate email format specifically for FinTrack domain
+            if (!Regex.IsMatch(emailTextBox.Text.Trim(), @"^[^@\s]+@fintrack\.com$"))
+            {
+                MessageBox.Show("Please enter a valid Fintrack email address ending with @fintrack.com.");
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(passwordTextBox.Text.Trim()))
             {
                 MessageBox.Show("Password is required.");
@@ -123,10 +131,6 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Signup failed. Please try again.");
             }
         }
-
-
-
-
 
 
 

@@ -11,8 +11,17 @@
             <RowDefinition Height="114*"/>
             <RowDefinition Height="7*"/>
         </Grid.RowDefinitions>
-        <!-- Black Arrow Image -->
-        <Image Grid.Row="0" Margin="20,20,0,0" Width="30" Height="30" Source="C:\Users\Galaxy Book\Documents\sem2\insp_lab\black-arrow-left-11375.png" MouseLeftButtonDown="Back_Click" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+        <!-- Text-based Back Button -->
+        <Button Grid.Row="0" Margin="10,10,0,0" Width="54" Height="23"
+        Content="Back" Click="Back_Click"
+        HorizontalAlignment="Left" VerticalAlignment="Top"
+        Background="DarkGray" Foreground="White"
+        FontSize="12" Padding="10,0">
+        </Button>
+
+
+
 
         <!-- Title Text -->
         <TextBlock Margin="89,20,0,262" HorizontalAlignment="Left" FontSize="20" FontWeight="Bold" Width="354">
@@ -27,9 +36,22 @@
         <TextBox x:Name="lastNameTextBox" Margin="89,164,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="239"
          Text="Last Name" Foreground="Gray" Tag="Last Name" GotFocus="RemovePlaceholderText" LostFocus="AddPlaceholderText" />
 
-        <!-- Email TextBox -->
         <TextBox x:Name="emailTextBox" Margin="89,215,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="239" 
-         Text="Email must be ending with @fintrack.com" Foreground="Gray" Tag="Email must be ending with @fintrack.com" GotFocus="RemovePlaceholderText" LostFocus="AddPlaceholderText" TextChanged="emailTextBox_TextChanged" />
+         Text="Email must be ending with @fintrack.com" Foreground="Gray" Tag="Email must be ending with @fintrack.com" GotFocus="RemovePlaceholderText" LostFocus="AddPlaceholderText" TextChanged="emailTextBox_TextChanged">
+            <TextBox.Style>
+                <Style TargetType="TextBox">
+                    <Style.Triggers>
+                        <Trigger Property="Text" Value="Email must be ending with @fintrack.com">
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
+                            <Setter Property="Text" Value="Email must be ending with @fintrack.com"/>
+                            <Setter Property="Foreground" Value="Gray"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBox.Style>
+        </TextBox>
 
         <!-- Password TextBox -->
         <TextBox x:Name="passwordTextBox" Margin="89,270,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Width="239"
