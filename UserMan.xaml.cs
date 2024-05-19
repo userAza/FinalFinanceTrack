@@ -21,7 +21,7 @@ namespace FinalFinanceTrack
             this.Hide();
         }
 
-        private void AddUserButton_Click(object sender, RoutedEventArgs e)
+        private void AddNewUserButton_Click(object sender, RoutedEventArgs e)
         {
             CreateUser createUser = new CreateUser();
             createUser.Show();
@@ -42,7 +42,7 @@ namespace FinalFinanceTrack
             this.Hide();
         }
 
-        private void ViewUserListButton_Click(object sender, RoutedEventArgs e)
+        private void UserListButton_Click(object sender, RoutedEventArgs e)
         {
             UserList userList = new UserList();
             userList.Show();
