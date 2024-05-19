@@ -23,37 +23,35 @@ namespace FinalFinanceTrack
             TextBox textBox = sender as TextBox;
             if (textBox != null && textBox.Foreground == Brushes.Gray && textBox.Text == (textBox.Tag?.ToString() ?? ""))
             {
-                textBox.Text = "";
-                textBox.Foreground = Brushes.Black;
+                textBox.Text = ""; // Clear the placeholder text
+                textBox.Foreground = Brushes.Black; // Set text color to default (user input color)
             }
         }
 
         private void AddPlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
+            if (textBox != null && string.IsNullOrEmpty(textBox.Text))
             {
-                textBox.Text = textBox.Tag?.ToString() ?? "Default Text";
-                textBox.Foreground = Brushes.Gray;
+                textBox.Text = textBox.Tag?.ToString() ?? ""; // Restore the placeholder text
+                textBox.Foreground = Brushes.Gray; // Set text color to indicate placeholder
             }
         }
 
 
 
 
-        // Event handler for Let's Go button click
-
-
-
         private void LetsGo_Click(object sender, RoutedEventArgs e)
         {
-            // Use Trim to ensure that fields are not only whitespace
-            if (string.IsNullOrWhiteSpace(firstNameTextBox.Text.Trim()))
+            // Check if first name is just a placeholder or is empty
+            if (string.IsNullOrWhiteSpace(firstNameTextBox.Text.Trim()) || firstNameTextBox.Text.Trim() == "First Name")
             {
                 MessageBox.Show("First name is required.");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(lastNameTextBox.Text.Trim()))
+
+            // Check if last name is just a placeholder or is empty
+            if (string.IsNullOrWhiteSpace(lastNameTextBox.Text.Trim()) || lastNameTextBox.Text.Trim() == "Last Name")
             {
                 MessageBox.Show("Last name is required.");
                 return;
@@ -76,11 +74,22 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Password is required.");
                 return;
             }
+            if (!IsValidPassword(passwordTextBox.Text))
+            {
+                MessageBox.Show("Password must be at least 8 characters long, include at least one uppercase letter, one special character (.@§$+-*/\\<>), and one number (0-9).");
+                return;
+            }
             if (string.IsNullOrWhiteSpace(confirmPasswordTextBox.Text.Trim()))
             {
                 MessageBox.Show("Confirm password is required.");
                 return;
             }
+            if (passwordTextBox.Text != confirmPasswordTextBox.Text)
+            {
+                MessageBox.Show("The passwords do not match. Please re-enter your passwords.");
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(securityQuestion1TextBox.Text.Trim()))
             {
                 MessageBox.Show("Security Question 1 is required.");
@@ -100,12 +109,6 @@ namespace FinalFinanceTrack
             if (!termsAndConditionsCheckBox.IsChecked ?? false)
             {
                 MessageBox.Show("Please agree to the Terms and Conditions and the Privacy Policy.");
-                return;
-            }
-
-            if (passwordTextBox.Text != confirmPasswordTextBox.Text)
-            {
-                MessageBox.Show("The passwords do not match. Please re-enter your passwords.");
                 return;
             }
 
@@ -131,6 +134,20 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Signup failed. Please try again.");
             }
         }
+
+        private bool IsValidPassword(string password)
+        {
+            var hasMinimum8Chars = new Regex(@".{8,}");
+            var hasUpperCaseLetter = new Regex(@"[A-Z]+");
+            var hasSpecialCharacter = new Regex(@"[.@§$+\-*/\\<>]");
+            var hasNumber = new Regex(@"\d+");  // Regex to check for at least one digit
+
+            return hasMinimum8Chars.IsMatch(password) &&
+                   hasUpperCaseLetter.IsMatch(password) &&
+                   hasSpecialCharacter.IsMatch(password) &&
+                   hasNumber.IsMatch(password); // Check if password contains at least one number
+        }
+
 
 
 
