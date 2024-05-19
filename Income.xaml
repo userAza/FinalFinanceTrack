@@ -31,7 +31,7 @@
         <!-- Main Content Area -->
         <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,60,50,50">
             <TextBlock Text="Income" FontSize="24" FontWeight="Bold" Margin="10"/>
-            <TextBlock Text="My Monthly Income" FontSize="18" FontWeight="Bold" Margin="10"/>
+            <TextBlock Text="My Monthly Income" FontSize="18" FontWeight="Bold" Margin="10" FontFamily="Stencil"/>
             <TextBox Name="IncomeAmount" Text="€ 0.00" Width="200" Margin="10"/>
             <TextBlock Text="Category" FontSize="18" FontWeight="Bold" Margin="10"/>
             <ComboBox Name="CategoryComboBox" Width="200" Margin="10">
