@@ -42,10 +42,16 @@ namespace FinalFinanceTrack
             this.Hide();
         }
 
-        private void ViewUserListButton_Click(object sender, RoutedEventArgs e)
+        private void UserListButton_Click(object sender, RoutedEventArgs e)
         {
             UserList userList = new UserList();
             userList.Show();
+            this.Hide();
+        }
+         private void UserManagementButton_Click(object sender, RoutedEventArgs e)
+        {
+            UserMan userMan = new UserMan();
+            userMan.Show();
             this.Hide();
         }
     }
