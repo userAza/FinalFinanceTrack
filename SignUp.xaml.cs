@@ -7,7 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 
-namespace FinTrackWpf
+namespace FinalFinanceTrack
 {
     public partial class SignUp : Window
     {
@@ -22,7 +22,7 @@ namespace FinTrackWpf
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (textBox != null && textBox.Text == textBox.Tag.ToString() && textBox.Foreground == Brushes.Gray)
+            if (textBox != null && textBox.Foreground == Brushes.Gray && textBox.Text == (textBox.Tag?.ToString() ?? ""))
             {
                 textBox.Text = "";
                 textBox.Foreground = Brushes.Black;
@@ -34,10 +34,11 @@ namespace FinTrackWpf
             TextBox textBox = sender as TextBox;
             if (textBox != null && string.IsNullOrEmpty(textBox.Text))
             {
-                textBox.Text = textBox.Tag.ToString();
+                textBox.Text = textBox.Tag?.ToString() ?? "Default Text"; // Provide a default text if Tag is null
                 textBox.Foreground = Brushes.Gray;
             }
         }
+
 
 
         // Event handler for Let's Go button click

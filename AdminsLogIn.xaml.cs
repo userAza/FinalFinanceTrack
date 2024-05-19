@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace FinTrackWpf
+namespace FinalFinanceTrack
 {
     public partial class AdminsLogIn : Window
     {
@@ -59,12 +59,9 @@ namespace FinTrackWpf
                     MySqlDataReader reader = mySqlCommand.ExecuteReader();
                     if (reader.Read())
                     {
-
-
-                        // Open the AdminPasswordRequest window after successful login
-                        AdminPasswordRequest adminPasswordRequest = new AdminPasswordRequest();
-                        adminPasswordRequest.Show();
-
+                        // Open the MainPage window after successful login
+                        MainPage mainPage = new MainPage();
+                        mainPage.Show();
                         this.Close(); // Close the login window, if you prefer to only have one window open at a time
                     }
                     else
@@ -82,6 +79,7 @@ namespace FinTrackWpf
                 }
             }
         }
+
 
 
         // Event handler for the Back button click

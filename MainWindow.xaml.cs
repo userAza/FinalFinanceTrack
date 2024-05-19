@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace FinTrackWpf
+namespace FinalFinanceTrack
 {
     public partial class MainWindow : Window
     {

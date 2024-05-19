@@ -2,8 +2,9 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Text; // Include for StringBuilder
 
-namespace FinTrackWpf
+namespace FinalFinanceTrack
 {
     public class PasswordResetRequest
     {
@@ -22,7 +23,6 @@ namespace FinTrackWpf
             InitializeComponent();
             LoadRequests();
         }
-
 
         private void LoadRequests()
         {
@@ -43,6 +43,7 @@ namespace FinTrackWpf
                             return;
                         }
 
+                        StringBuilder sb = new StringBuilder();
                         while (reader.Read())
                         {
                             var req = new PasswordResetRequest
@@ -53,8 +54,9 @@ namespace FinTrackWpf
                                 Status = reader.GetString("Status")
                             };
                             newRequests.Add(req);
-                            MessageBox.Show("Loaded: " + req.Email); // Debug message for each loaded entry
+                            sb.AppendLine("Loaded: " + req.Email); // Debug message for each loaded entry
                         }
+                        Console.WriteLine(sb.ToString()); // Output to console instead of showing multiple MessageBoxes
                     }
                 }
                 catch (Exception ex)
@@ -69,12 +71,6 @@ namespace FinTrackWpf
                 RequestsDataGrid.Items.Refresh(); // Force refresh to ensure UI updates
             });
         }
-
-
-
-
-
-
 
         private void ApproveRequest_Click(object sender, RoutedEventArgs e)
         {
@@ -108,9 +104,7 @@ namespace FinTrackWpf
                 cmd.ExecuteNonQuery();
             }
             LoadRequests(); // Refresh the Requests list to reflect the change
-
         }
-
 
         private void ResetUserPassword(string email)
         {
@@ -148,7 +142,5 @@ namespace FinTrackWpf
                 cmd.ExecuteNonQuery();
             }
         }
-
-
     }
 }

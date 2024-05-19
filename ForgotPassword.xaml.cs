@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
 
-namespace FinTrackWpf
+namespace FinalFinanceTrack
 {
     public partial class ForgotPassword : Window
     {

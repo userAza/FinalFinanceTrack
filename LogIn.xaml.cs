@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using MySql.Data.MySqlClient;
 
-namespace FinTrackWpf
+namespace FinalFinanceTrack
 {
     public partial class LogIn : Window
     {
@@ -54,7 +54,9 @@ namespace FinTrackWpf
                     MySqlDataReader reader = mySqlCommand.ExecuteReader();
                     if (reader.Read())
                     {
-                        MessageBox.Show("Login success");
+                        Overview overviewWindow = new Overview(); // Initialize the Overview window
+                        overviewWindow.Show(); // Show the Overview window
+                        this.Close(); // Close the login window
                     }
                     else
                     {
@@ -71,6 +73,7 @@ namespace FinTrackWpf
                 }
             }
         }
+
 
         private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
         {
