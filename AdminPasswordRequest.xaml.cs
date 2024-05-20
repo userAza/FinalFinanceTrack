@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Data;
 using System.Text; // Include for StringBuilder
 
 namespace FinalFinanceTrack
@@ -27,7 +28,6 @@ namespace FinalFinanceTrack
         private void LoadRequests()
         {
             var newRequests = new ObservableCollection<PasswordResetRequest>();
-
             string connectionString = "server=127.0.0.1;user=root;database=budget;password=";
             using (var connection = new MySqlConnection(connectionString))
             {
@@ -43,34 +43,38 @@ namespace FinalFinanceTrack
                             return;
                         }
 
-                        StringBuilder sb = new StringBuilder();
                         while (reader.Read())
                         {
                             var req = new PasswordResetRequest
                             {
                                 RequestID = reader.GetInt32("RequestID"),
-                                Email = reader["Email"].ToString(), // Using ToString() for safety
+                                Email = reader["Email"].ToString(),
                                 RequestTime = reader.GetDateTime("RequestTime"),
                                 Status = reader.GetString("Status")
                             };
                             newRequests.Add(req);
-                            sb.AppendLine("Loaded: " + req.Email); // Debug message for each loaded entry
                         }
-                        Console.WriteLine(sb.ToString()); // Output to console instead of showing multiple MessageBoxes
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error loading data: " + ex.Message);
                 }
+                finally
+                {
+                    if (connection.State == ConnectionState.Open)
+                        connection.Close();
+                }
             }
 
-            Application.Current.Dispatcher.Invoke(() => {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
                 Requests = newRequests;
                 RequestsDataGrid.ItemsSource = Requests;
-                RequestsDataGrid.Items.Refresh(); // Force refresh to ensure UI updates
+                RequestsDataGrid.Items.Refresh(); // Ensure the UI updates with new data
             });
         }
+
 
         private void ApproveRequest_Click(object sender, RoutedEventArgs e)
         {

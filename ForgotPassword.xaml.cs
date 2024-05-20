@@ -54,43 +54,38 @@ namespace FinalFinanceTrack
 
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            try
+            string userEmail = emailTextBox.Text.Trim();
+            if (!IsValidEmail(userEmail))
             {
-                string userEmail = emailTextBox.Text;
-                if (!IsValidEmail(userEmail))
-                {
-                    MessageBox.Show("Please enter a valid email address.");
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(securityQuestion1TextBox.Text) ||
-                    string.IsNullOrWhiteSpace(securityQuestion2TextBox.Text) ||
-                    string.IsNullOrWhiteSpace(securityQuestion3TextBox.Text))
-                {
-                    MessageBox.Show("Please answer all security questions.");
-                    return;
-                }
-
-                // Get the correct answers from the database
-                var (correctAnswer1, correctAnswer2, correctAnswer3) = GetStoredAnswers(userEmail);
-
-                // Check if the answers match
-                if (securityQuestion1TextBox.Text != correctAnswer1 ||
-                    securityQuestion2TextBox.Text != correctAnswer2 ||
-                    securityQuestion3TextBox.Text != correctAnswer3)
-                {
-                    MessageBox.Show("One or more answers are incorrect. Please try again.");
-                    return;
-                }
-
-                // If answers are correct, proceed with password reset process
-                MessageBox.Show("Identity verified. You may proceed to reset your password.");
+                MessageBox.Show("Please enter a valid email address.");
+                return;
             }
-            catch (Exception ex)
+
+            if (string.IsNullOrWhiteSpace(securityQuestion1TextBox.Text) ||
+                string.IsNullOrWhiteSpace(securityQuestion2TextBox.Text) ||
+                string.IsNullOrWhiteSpace(securityQuestion3TextBox.Text))
             {
-                MessageBox.Show($"An error occurred: {ex.Message}");
+                MessageBox.Show("Please answer all security questions.");
+                return;
             }
+
+            // Get the correct answers from the database
+            var (correctAnswer1, correctAnswer2, correctAnswer3) = GetStoredAnswers(userEmail);
+
+            // Check if the answers match
+            if (securityQuestion1TextBox.Text != correctAnswer1 ||
+                securityQuestion2TextBox.Text != correctAnswer2 ||
+                securityQuestion3TextBox.Text != correctAnswer3)
+            {
+                MessageBox.Show("One or more answers are incorrect. Please try again.");
+                return;
+            }
+
+            // If answers are correct, proceed with password reset process
+            InsertPasswordResetRequest(userEmail);  // Insert the password reset request
+            MessageBox.Show("Identity verified. You may proceed to reset your password.");
         }
+
 
 
 
@@ -108,7 +103,6 @@ namespace FinalFinanceTrack
                     var cmd = new MySqlCommand(query, connection);
                     cmd.Parameters.AddWithValue("@Email", email);
                     cmd.ExecuteNonQuery();
-                    MessageBox.Show("Request submitted successfully.");  // Debug output
                 }
             }
             catch (Exception ex)
