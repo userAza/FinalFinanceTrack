@@ -1,0 +1,46 @@
+﻿<Window x:Class="FinalFinanceTrack.ResetPassw"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Reset Password" Height="500" Width="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <!-- Smaller top spacer to shift content up -->
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <!-- Larger bottom spacer to maintain centering -->
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title for resetting password -->
+        <TextBlock Text="Reset your password" FontSize="18" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Grid.Row="1" Margin="0,10,0,5"/>
+
+        <!-- Instruction text -->
+        <TextBlock Text="After this you can proceed on FinTrack!" FontSize="14" 
+                   HorizontalAlignment="Center" Grid.Row="2" Margin="0,5,0,20"/>
+
+        <!-- New Password Label and TextBox -->
+        <TextBlock Text="New Password" Grid.Row="3" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBox x:Name="NewPasswordTextBox" Grid.Row="4" Width="200" Height="30"
+                 HorizontalAlignment="Center" Margin="0,5,0,0"/>
+
+        <!-- Password Requirements -->
+        <TextBlock Text="Password must be at least 8 characters long, include at least one uppercase letter, one special character (.@§$+-*/\&amp;lt;\&amp;gt;), and one number (0-9)."
+                   FontSize="12" Foreground="Gray" Grid.Row="5" HorizontalAlignment="Center" 
+                   TextWrapping="Wrap" Margin="0,5,0,20" Width="360"/>
+
+        <!-- Confirm New Password Label and TextBox -->
+        <TextBlock Text="Confirm New Password" Grid.Row="6" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBox x:Name="ConfirmPasswordTextBox" Grid.Row="7" Width="200" Height="30"
+                 HorizontalAlignment="Center" Margin="0,5,0,0"/>
+
+        <!-- Submit Button -->
+        <Button Content="Submit" Grid.Row="8" Width="80" Height="25" HorizontalAlignment="Center" Margin="0,10,0,10"/>
+    </Grid>
+</Window>

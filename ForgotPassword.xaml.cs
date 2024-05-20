@@ -69,10 +69,7 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            // Get the correct answers from the database
             var (correctAnswer1, correctAnswer2, correctAnswer3) = GetStoredAnswers(userEmail);
-
-            // Check if the answers match
             if (securityQuestion1TextBox.Text != correctAnswer1 ||
                 securityQuestion2TextBox.Text != correctAnswer2 ||
                 securityQuestion3TextBox.Text != correctAnswer3)
@@ -81,10 +78,18 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            // If answers are correct, proceed with password reset process
-            InsertPasswordResetRequest(userEmail);  // Insert the password reset request
-            MessageBox.Show("Identity verified. You may proceed to reset your password.");
+            InsertPasswordResetRequest(userEmail);
+
+            // Identity verification successful, open the ResetPassw window with the user email
+            ResetPassw resetPasswWindow = new ResetPassw(userEmail);
+            resetPasswWindow.ShowDialog(); // Use ShowDialog to make it modal
+
+            // Close the current ForgotPassword window after opening ResetPassw
+            this.Close();
         }
+
+
+
 
 
 
