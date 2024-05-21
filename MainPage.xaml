@@ -3,10 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Main Page" Height="450" Width="1000">
     <Grid>
-        <Button x:Name="ReportsButton" Content="REPORTS" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="53" Margin="50,341,0,0" Click="ReportsButton_Click"/>
-        <Button x:Name="UserManagementButton" Content="USER MANAGEMENT" HorizontalAlignment="Left" VerticalAlignment="Top" Width="280" Height="53" Margin="550,341,0,0" Click="UserManagementButton_Click"/>
-        <Label x:Name="OverviewLabel" Content="OVERVIEW" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,36,0,0"/>
-        <Button x:Name="ClickMeButton" Content="Click Me!" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="12,59,0,0" Click="ClickMeButton_Click"/>
-        <RadioButton x:Name="SettingsRadioButton" Content="SETTINGS" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="771,22,0,0" Checked="SettingsRadioButton_Checked"/>
+        <Button x:Name="ReportsButton" Content="REPORTS" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="53" Margin="50,341,0,0" Click="ReportsButton_Click"
+                Background="#00796B" Foreground="White" BorderBrush="#004D40"/>
+        <Button x:Name="UserManagementButton" Content="USER MANAGEMENT" HorizontalAlignment="Left" VerticalAlignment="Top" Width="280" Height="53" Margin="550,341,0,0" Click="UserManagementButton_Click"
+                Background="#00796B" Foreground="White" BorderBrush="#004D40"/>
+        <Label x:Name="OverviewLabel" Content="OVERVIEW" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,36,0,0"
+               Foreground="#37474F"/>
+        <Button x:Name="ClickMeButton" Content="Click Me!" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="12,59,0,0" Click="ClickMeButton_Click"
+                Background="#004D40" Foreground="White" BorderBrush="#00251A"/>
+        <RadioButton x:Name="SettingsRadioButton" Content="SETTINGS" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="771,22,0,0" Checked="SettingsRadioButton_Checked"
+                     Background="#CFD8DC" Foreground="#00796B" BorderBrush="#004D40"/>
     </Grid>
 </Window>
