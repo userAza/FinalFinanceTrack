@@ -15,7 +15,7 @@
 
         <!-- LOGO -->
 
-        <Image Source="C:\Users\Galaxy Book\Documents\sem2\insp_lab\logo.png" Width="266" Height="153" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="47,40,0,0" Grid.Column="1" />
+        <Image Source="resources/logo.png" Width="266" Height="153" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="47,40,0,0" Grid.Column="1" />
 
 
 
