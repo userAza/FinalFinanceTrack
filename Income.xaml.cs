@@ -27,6 +27,8 @@ namespace FinalFinanceTrack
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the Overview page
+            Overview overviewPage = new Overview();
+            overviewPage.Show();
             this.Close();
         }
 
@@ -35,6 +37,7 @@ namespace FinalFinanceTrack
             // Navigate to the Settings page
             SettingsWindow settingsPage = new SettingsWindow();
             settingsPage.Show();
+            this.Close();
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalFinanceTrack"
         mc:Ignorable="d"
         Title="Overview" Height="450" Width="800">
-    <Grid Background="#FFEDDEF4">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="227*"/>

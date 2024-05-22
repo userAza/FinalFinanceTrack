@@ -44,6 +44,7 @@ namespace FinalFinanceTrack
             // Navigate to the Settings page
             SettingsWindow settingsPage = new SettingsWindow();
             settingsPage.Show();
+            this.Close();
         }
 
         private void OverviewButton_Click(object sender, RoutedEventArgs e)

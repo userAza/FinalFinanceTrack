@@ -29,24 +29,28 @@ namespace FinalFinanceTrack
             // Navigate to the Income page
             Income incomePage = new Income();
             incomePage.Show();
+            this.Close();
         }
 
         private void ExpensesButton_Click(object sender, RoutedEventArgs e)
         {
             Expenses expensePage = new Expenses();
             expensePage.Show();
+            this.Close();
         }
 
         private void SavingsButton_Click(object sender, RoutedEventArgs e)
         {
             Savings savingsPage = new Savings();
             savingsPage.Show();
+            this.Close();
         }
 
         private void HistoryButton_Click(object sender, RoutedEventArgs e)
         {
             History historyPage = new History();
             historyPage.Show();
+            this.Close();
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
@@ -54,6 +58,7 @@ namespace FinalFinanceTrack
             // Navigate to the Settings page
             SettingsWindow settingsPage = new SettingsWindow();
             settingsPage.Show();
+            this.Close();
         }
     }
 }
