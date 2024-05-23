@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalFinanceTrack"
         mc:Ignorable="d"
         Title="Overview" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#FFF9F6F4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition Width="227*"/>
@@ -15,24 +15,32 @@
         <!-- Top Bar with Settings Button -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.ColumnSpan="3">
             <Button Name="SettingsButton" Content="⚙" HorizontalAlignment="Right" VerticalAlignment="Top" 
-                    Margin="10" Width="40" Height="40" Click="SettingsButton_Click"/>
+            Margin="10" Width="40" Height="40" Click="SettingsButton_Click"/>
         </Grid>
 
-        <!-- Main Content Area -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" Margin="57,0,0,0">
-            <TextBlock Text="Welcome" FontSize="24" FontWeight="Bold" Margin="10" FontFamily="Stencil"/>
+        <!-- Title Area -->
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="180,50,0,0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <TextBlock Text="Welcome" FontSize="24" FontWeight="Bold" Margin="10" FontFamily="Stencil" Width="257"/>
             <TextBlock Text="My Overview" FontSize="18" FontWeight="Bold" Margin="10"/>
-            <Button Name="IncomeButton" Content="Income" Width="200" Margin="10" Click="IncomeButton_Click" FontFamily="Berlin Sans FB"/>
-            <Button Name="ExpensesButton" Content="Expenses" Width="200" Margin="10" Click="ExpensesButton_Click"/>
-            <Button Name="SavingsButton" Content="Savings" Width="200" Margin="10" Click="SavingsButton_Click"/>
-            <Button Name="HistoryButton" Content="History" Width="200" Margin="10" Click="HistoryButton_Click"/>
-            <!-- Place the placeholder for the Profile Picture
-            <Image Source="cals.jpg" Width="200" Height="200" Margin="10"/>  -->
         </StackPanel>
+
+        <!-- Button Area -->
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="180,40,0,0" Grid.ColumnSpan="2">
+            <Button Name="IncomeButton" Content="Income" Width="200" Margin="10" Click="IncomeButton_Click" FontFamily="Berlin Sans FB" BorderBrush="#FF8314DC" BorderThickness="2"/>
+            <Button Name="ExpensesButton" Content="Expenses" Width="200" Margin="10" Click="ExpensesButton_Click" BorderBrush="#FF8314DC" BorderThickness="2"/>
+            <Button Name="SavingsButton" Content="Savings" Width="200" Margin="10" Click="SavingsButton_Click" BorderBrush="#FF8314DC" BorderThickness="2"/>
+            <Button Name="HistoryButton" Content="History" Width="200" Margin="10" Click="HistoryButton_Click" BorderBrush="#FF8314DC" BorderThickness="2"/>
+        </WrapPanel>
+
     </Grid>
+    
+   
 </Window>
+    
+

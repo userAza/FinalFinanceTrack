@@ -19,9 +19,12 @@ namespace FinalFinanceTrack
     /// </summary>
     public partial class Income : Window
     {
+        private NavigationManager highlightbtn;
+
         public Income()
         {
             InitializeComponent();
+            highlightbtn = new NavigationManager();
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -51,6 +54,7 @@ namespace FinalFinanceTrack
         private void IncomeButton_Click(object sender, RoutedEventArgs e)
         {
             // Stay on the current page
+            highlightbtn.SetActiveButton(sender as Button);
         }
 
         private void ExpensesButton_Click(object sender, RoutedEventArgs e)
@@ -59,6 +63,7 @@ namespace FinalFinanceTrack
             Expenses expensesPage = new Expenses();
             expensesPage.Show();
             this.Close();
+            highlightbtn.SetActiveButton(sender as Button);
         }
 
         private void SavingsButton_Click(object sender, RoutedEventArgs e)
@@ -67,13 +72,40 @@ namespace FinalFinanceTrack
             Savings savingsPage = new Savings();
             savingsPage.Show();
             this.Close();
+            highlightbtn.SetActiveButton(sender as Button);
         }
+
+
+
+        private void PopulateMonthAndYear()
+        {
+            // Populate months
+            string[] months = new string[] { "January", "February", "March", "April", "May", "June",
+                                         "July", "August", "September", "October", "November", "December" };
+            foreach (string month in months)
+            {
+                MonthComboBox.Items.Add(month);
+            }
+            MonthComboBox.SelectedIndex = DateTime.Now.Month - 1; // Set current month selected
+
+            // Populate years from 10 years ago to the current year
+            int currentYear = DateTime.Now.Year;
+            for (int year = currentYear - 10; year <= currentYear; year++)
+            {
+                YearComboBox.Items.Add(year);
+            }
+            YearComboBox.SelectedItem = currentYear; // Set current year selected
+        }
+
+
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
             // Handle the OK button click event
             // Save income details or perform necessary actions
         }
+
+
     }
 
 }

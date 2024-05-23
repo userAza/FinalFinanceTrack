@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalFinanceTrack"
         mc:Ignorable="d"
         Title="Income" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#FFF9F6F4">
         <!-- Top Bar with Settings Button -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -29,10 +29,12 @@
         </StackPanel>
 
         <!-- Main Content Area -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,60,50,50">
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-1">
             <TextBlock Text="Income" FontSize="24" FontWeight="Bold" Margin="10"/>
             <TextBlock Text="My Monthly Income" FontSize="18" FontWeight="Bold" Margin="10" FontFamily="Stencil"/>
-            <TextBox Name="IncomeAmount" Text="€ 0.00" Width="200" Margin="10"/>
+
+            <TextBlock Text="€" FontSize="18" FontWeight="Bold" Margin="10" Width="22"/>
+            <TextBox x:Name="IncomeAmount" Text="0.00" Width="170" TextChanged="IncomeAmount_TextChanged"/>
             <TextBlock Text="Category" FontSize="18" FontWeight="Bold" Margin="10"/>
             <ComboBox Name="CategoryComboBox" Width="200" Margin="10">
                 <ComboBoxItem Content="Salary"/>
@@ -49,7 +51,7 @@
                     <!-- Add years -->
                 </ComboBox>
             </StackPanel>
-            <Button Name="OKButton" Content="OK" Width="200" Margin="10" Click="OKButton_Click"/>
         </StackPanel>
+        <Button x:Name="OKButton" Content="OK" Click="OKButton_Click" Margin="565,344,180,10" Grid.Row="1"/>
     </Grid>
 </Window>

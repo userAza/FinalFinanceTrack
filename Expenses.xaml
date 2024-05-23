@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalFinanceTrack"
         mc:Ignorable="d"
         Title="Expenses" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#FFF9F6F4">
         <!-- Top Bar with Settings Button -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

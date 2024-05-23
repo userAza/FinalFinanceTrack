@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,6 +20,7 @@ namespace FinalFinanceTrack
     /// </summary>
     public partial class Expenses : Window
     {
+        private NavigationManager highlightbtn;
         public Expenses()
         {
             InitializeComponent();
@@ -61,11 +63,13 @@ namespace FinalFinanceTrack
             Income incomePage = new Income();
             incomePage.Show();
             this.Close();
+            highlightbtn.SetActiveButton(sender as Button);
         }
 
         private void ExpensesButton_Click(object sender, RoutedEventArgs e)
         {
             // Stay on the current page
+            highlightbtn.SetActiveButton(sender as Button);
         }
 
         private void SavingsButton_Click(object sender, RoutedEventArgs e)
@@ -74,6 +78,7 @@ namespace FinalFinanceTrack
             Savings savingsPage = new Savings();
             savingsPage.Show();
             this.Close();
+            highlightbtn.SetActiveButton(sender as Button);
         }
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
