@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -99,13 +100,36 @@ namespace FinalFinanceTrack
 
 
 
+        // Assuming you have UI elements to capture income details such as amount, source, etc.
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            // Handle the OK button click event
-            // Save income details or perform necessary actions
+            DbManager dbManager = new DbManager();
+
+            // Example fields: incomeAmount (TextBox), incomeSource (TextBox)
+            /*  decimal amount;
+              if (decimal.TryParse(incomeAmount.Text, out amount) && !string.IsNullOrEmpty(incomeSource.Text))
+              {
+                  if (dbManager.OpenConnection())
+                  {
+                      string query = "INSERT INTO income (Amount, Source, Date) VALUES (@Amount, @Source, @Date)";
+                      MySqlCommand cmd = new MySqlCommand(query, dbManager.Connection);
+                      cmd.Parameters.AddWithValue("@Amount", amount);
+                      cmd.Parameters.AddWithValue("@Source", incomeSource.Text);
+                      cmd.Parameters.AddWithValue("@Date", DateTime.Now);  // Or any date picker control
+                      cmd.ExecuteNonQuery();
+                      dbManager.CloseConnection();
+                      MessageBox.Show("Income data saved successfully!");
+                  }
+              }
+              else
+              {
+                  MessageBox.Show("Please check your input and try again.");
+              }
+          }
+  */
+
+
         }
 
-
     }
-
 }

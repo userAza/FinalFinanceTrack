@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -101,7 +102,34 @@ namespace FinalFinanceTrack
             MessageBox.Show($"Category: {selectedCategory}\nDate: {selectedDate.ToShortDateString()}\nAmount: €{amount}", "Expense Saved");
 
             // Reset the input fields
-            AmountInput.Text = string.Empty;
+           /* AmountInput.Text = string.Empty;
+
+            if (!decimal.TryParse(AmountInput.Text, out decimal amount))
+            {
+                MessageBox.Show("Please enter a valid amount", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            string selectedCategory = CategoryComboBox.SelectedItem.ToString();
+            DateTime selectedDate = DatePicker.SelectedDate ?? DateTime.Now;
+            DbManager dbManager = new DbManager();
+
+            if (dbManager.OpenConnection())
+            {
+                string query = "INSERT INTO expenses (Category, Amount, Date) VALUES (@Category, @Amount, @Date)";
+                MySqlCommand cmd = new MySqlCommand(query, dbManager.Connection);
+                cmd.Parameters.AddWithValue("@Category", selectedCategory);
+                cmd.Parameters.AddWithValue("@Amount", amount);
+                cmd.Parameters.AddWithValue("@Date", selectedDate);
+                cmd.ExecuteNonQuery();
+                dbManager.CloseConnection();
+                MessageBox.Show("Expense saved successfully!");
+            }
+            else
+            {
+                MessageBox.Show("Failed to connect to the database.");
+            }
+*/
         }
 
         private void AmountInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
