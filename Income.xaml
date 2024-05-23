@@ -29,8 +29,8 @@
         </StackPanel>
 
         <!-- Main Content Area -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-1">
-            <TextBlock Text="Income" FontSize="24" FontWeight="Bold" Margin="10"/>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,79,0,0">
+
             <TextBlock Text="My Monthly Income" FontSize="18" FontWeight="Bold" Margin="10" FontFamily="Stencil"/>
 
             <TextBlock Text="€" FontSize="18" FontWeight="Bold" Margin="10" Width="22"/>
