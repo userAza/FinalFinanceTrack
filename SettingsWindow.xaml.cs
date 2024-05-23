@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Controls;
 
 namespace FinalFinanceTrack
 {
@@ -11,12 +13,9 @@ namespace FinalFinanceTrack
 
         private void ReturnButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Overview page
-            // OverviewWindow overviewWindow = new OverviewWindow();
-            // overviewWindow.Show();
-            // this.Close();
-
-            MessageBox.Show("Return to Overview page");
+            Overview overviewPage = new Overview();
+            overviewPage.Show();
+            this.Close();
         }
 
         private void UpdatePassword_Click(object sender, RoutedEventArgs e)
@@ -28,19 +27,37 @@ namespace FinalFinanceTrack
 
         private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Welcome page
-            // WelcomeWindow welcomeWindow = new WelcomeWindow();
-            // welcomeWindow.Show();
-            // this.Close();
-
-            MessageBox.Show("Logout and return to Welcome page");
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
         }
 
         private void GeneratePolicyDocument_Click(object sender, RoutedEventArgs e)
         {
-            // Generate and display policy document
-            // For demonstration purposes, we'll just show a message
             MessageBox.Show("Generating policy document...");
+        }
+
+        private void TermsAndConditionsLink_Click(object sender, RoutedEventArgs e)
+        {
+            termsPopup.IsOpen = true;
+        }
+
+        private void PrivacyPolicyLink_Click(object sender, RoutedEventArgs e)
+        {
+            privacyPopup.IsOpen = true;
+        }
+
+        private void ClosePopup_Click(object sender, RoutedEventArgs e)
+        {
+            Button closeButton = sender as Button;
+            if (closeButton != null)
+            {
+                Popup popup = closeButton.Tag as Popup;
+                if (popup != null)
+                {
+                    popup.IsOpen = false;
+                }
+            }
         }
     }
 }

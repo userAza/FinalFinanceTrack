@@ -12,7 +12,7 @@ namespace FinalFinanceTrack
 
         private void ReportsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement the functionality for Reports button
+            
         }
 
         private void UserManagementButton_Click(object sender, RoutedEventArgs e)
@@ -22,14 +22,20 @@ namespace FinalFinanceTrack
             this.Hide();
         }
 
-        private void ClickMeButton_Click(object sender, RoutedEventArgs e)
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement the functionality for Click Me button
+            
+            SettingsWindow settingsPage = new SettingsWindow();
+            settingsPage.Show();
+            this.Close();
         }
 
-        private void SettingsRadioButton_Checked(object sender, RoutedEventArgs e)
+        private void OverviewButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement the functionality for Settings radio button
+            
+            Overview overviewPage = new Overview();
+            overviewPage.Show();
+            this.Close();
         }
     }
 }

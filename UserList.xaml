@@ -1,8 +1,9 @@
 ﻿<Window x:Class="FinalFinanceTrack.UserList"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="UserListWindow" Height="450" Width="800">
+        Title="User List" Height="450" Width="800">
     <Grid>
-        <Button x:Name="button_Back" Content="Back to Main Page" Click="button_Back_Click" />
+        <DataGrid x:Name="UserDataGrid" HorizontalAlignment="Left" Height="300" VerticalAlignment="Top" Width="780" Margin="10,10,0,0"/>
+        <Button x:Name="button_Back" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="100" Height="30" Margin="10,0,0,10" Click="button_Back_Click"/>
     </Grid>
 </Window>

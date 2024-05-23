@@ -3,16 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Settings" Height="450" Width="800">
     <Grid>
-        <Label Content="Settings and Services" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" FontSize="16" FontWeight="Bold"/>
+        <Button x:Name="ReturnButton" Content="Return" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="10,10,0,0" Click="ReturnButton_Click"/>
+        <Button x:Name="UpdatePasswordButton" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Height="30" Margin="304,131,0,0" Click="UpdatePassword_Click"/>
+        <Button x:Name="LogoutButton" Content="Logout" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="10,90,0,0" Click="Logout_Click"/>
+        <Button x:Name="GeneratePolicyDocumentButton" Content="Generate Policy Document" HorizontalAlignment="Left" VerticalAlignment="Top" Width="180" Height="30" Margin="270,187,0,0" Click="GeneratePolicyDocument_Click"/>
 
-        <Button Content="Return" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="10,10,0,0" Click="ReturnButton_Click"/>
+        <!-- Terms and Conditions Link -->
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="303,222,0,0">
+            <Hyperlink Click="TermsAndConditionsLink_Click">Terms and Conditions</Hyperlink>
+        </TextBlock>
 
-        <Label x:Name="userLabel" Content="" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10,60,0,0" FontSize="14"/>
+        <!-- Privacy Policy Link -->
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="329,238,0,0">
+            <Hyperlink Click="PrivacyPolicyLink_Click">Privacy Policy</Hyperlink>
+        </TextBlock>
 
-        <Button Content="Update Password" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="30" Margin="10,100,0,0" Click="UpdatePassword_Click"/>
-
-        <Button Content="Logout" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="30" Margin="10,140,0,0" Click="Logout_Click"/>
-
-        <Button Content="Copyright/Regulation" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="30" Margin="10,180,0,0" Click="GeneratePolicyDocument_Click"/>
+        <!-- Popups for Terms and Conditions and Privacy Policy -->
+        <Popup x:Name="termsPopup" Placement="Mouse" StaysOpen="False">
+            <Border BorderBrush="Black" BorderThickness="1" Background="White" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Terms and Conditions content goes here..." TextWrapping="Wrap"/>
+                    <Button Content="Close" Width="50" Click="ClosePopup_Click" Tag="{Binding RelativeSource={RelativeSource AncestorType=Popup}}"/>
+                </StackPanel>
+            </Border>
+        </Popup>
+        <Popup x:Name="privacyPopup" Placement="Mouse" StaysOpen="False">
+            <Border BorderBrush="Black" BorderThickness="1" Background="White" Padding="10">
+                <StackPanel>
+                    <TextBlock Text="Privacy Policy content goes here..." TextWrapping="Wrap"/>
+                    <Button Content="Close" Width="50" Click="ClosePopup_Click" Tag="{Binding RelativeSource={RelativeSource AncestorType=Popup}}"/>
+                </StackPanel>
+            </Border>
+        </Popup>
     </Grid>
 </Window>

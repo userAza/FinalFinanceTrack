@@ -9,9 +9,11 @@
                 Background="#00796B" Foreground="White" BorderBrush="#004D40"/>
         <Label x:Name="OverviewLabel" Content="OVERVIEW" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,36,0,0"
                Foreground="#37474F"/>
-        <Button x:Name="ClickMeButton" Content="Click Me!" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="12,59,0,0" Click="ClickMeButton_Click"
+        <Button x:Name="OverviewButton" Content="OVERVIEW" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="12,59,0,0" Click="OverviewButton_Click"
                 Background="#004D40" Foreground="White" BorderBrush="#00251A"/>
-        <RadioButton x:Name="SettingsRadioButton" Content="SETTINGS" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="771,22,0,0" Checked="SettingsRadioButton_Checked"
-                     Background="#CFD8DC" Foreground="#00796B" BorderBrush="#004D40"/>
+        <Button x:Name="ClickMeButton" Content="Click Me!" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="150,59,0,0" Click="ClickMeButton_Click"
+                Background="#004D40" Foreground="White" BorderBrush="#00251A"/>
+        <Button x:Name="SettingsButton" Content="SETTINGS" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="771,22,0,0" Click="SettingsButton_Click"
+                Background="#004D40" Foreground="White" BorderBrush="#00251A"/>
     </Grid>
 </Window>

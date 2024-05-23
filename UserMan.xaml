@@ -5,7 +5,7 @@
     <Grid>
         <Button x:Name="BackButton" Content="BACK" HorizontalAlignment="Left" VerticalAlignment="Top" Width="101" Height="39" Margin="12,12,0,0" Click="BackButton_Click"/>
         <TextBox x:Name="ManageUsersTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="169" Height="26" Margin="226,92,0,0" Text="MANAGE USERS"/>
-        <Button x:Name="UserListButton" Content="USER LIST" HorizontalAlignment="Left" VerticalAlignment="Top" Width="136" Height="49" Margin="29,139,0,0" Click="UserListButton_Click"/>
+        <Button x:Name="UserListButton" Content="USER LIST" HorizontalAlignment="Left" VerticalAlignment="Top" Width="191" Height="49" Margin="38,203,0,0" Click="UserListButton_Click"/>
         <Button x:Name="AddNewUserButton" Content="ADD NEW USER" HorizontalAlignment="Left" VerticalAlignment="Top" Width="191" Height="47" Margin="38,257,0,0" Click="AddNewUserButton_Click"/>
         <Button x:Name="EditUserButton" Content="EDIT USER" HorizontalAlignment="Left" VerticalAlignment="Top" Width="191" Height="43" Margin="38,310,0,0" Click="EditUserButton_Click"/>
         <Button x:Name="DeleteUserButton" Content="DELETE" HorizontalAlignment="Left" VerticalAlignment="Top" Width="191" Height="40" Margin="38,365,0,0" Click="DeleteUserButton_Click"/>
