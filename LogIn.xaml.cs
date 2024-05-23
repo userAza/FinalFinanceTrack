@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using MySql.Data.MySqlClient;
 
 namespace FinalFinanceTrack
 {
@@ -34,46 +33,39 @@ namespace FinalFinanceTrack
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            string mysqlconn = "server=127.0.0.1;user=root;database=budget;password=";
-            MySqlConnection mySqlConnection = new MySqlConnection(mysqlconn);
-
             string email = emailTextBox.Text;
-            string password = passwordTextBox.Text;
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            string inputPassword = passwordTextBox.Text;
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(inputPassword))
             {
                 MessageBox.Show("No empty fields allowed");
+                return;
+            }
+
+            if (ValidateLogin(email, inputPassword))
+            {
+                Overview overviewWindow = new Overview();
+                overviewWindow.Show();
+                this.Close();
             }
             else
             {
-                try
-                {
-                    mySqlConnection.Open();
-                    MySqlCommand mySqlCommand = new MySqlCommand("SELECT * FROM user WHERE Email = @Email AND Password = @Password", mySqlConnection);
-                    mySqlCommand.Parameters.AddWithValue("@Email", email);
-                    mySqlCommand.Parameters.AddWithValue("@Password", password);
-                    MySqlDataReader reader = mySqlCommand.ExecuteReader();
-                    if (reader.Read())
-                    {
-                        Overview overviewWindow = new Overview(); // Initialize the Overview window
-                        overviewWindow.Show(); // Show the Overview window
-                        this.Close(); // Close the login window
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid Login");
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-                finally
-                {
-                    mySqlConnection.Close();
-                }
+                MessageBox.Show("Invalid Login");
             }
         }
 
+        // Method to validate user login in your Login class
+        private bool ValidateLogin(string email, string inputPassword)
+        {
+            DbManager dbManager = new DbManager();
+            string storedHash = dbManager.GetHashedPassword(email);
+
+            if (storedHash != null && Security.HashPassword(inputPassword) == storedHash)
+            {
+                return true;
+            }
+            return false;
+        }
 
         private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
         {
@@ -87,12 +79,13 @@ namespace FinalFinanceTrack
             mainWindow.Show();
             this.Close();
         }
+
         private void SignUpHyperlink_Click(object sender, RoutedEventArgs e)
         {
             SignUp signUpWindow = new SignUp();
             signUpWindow.Show();
             this.Close();
         }
-
     }
 }
+S

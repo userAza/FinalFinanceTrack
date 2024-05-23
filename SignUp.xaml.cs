@@ -1,18 +1,13 @@
-﻿using MySql.Data.MySqlClient;
-using System.Data;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
-
 namespace FinalFinanceTrack
 {
     public partial class SignUp : Window
     {
-        private string connectionString = "server=127.0.0.1;database=budget;user=root;password=;";
-
         public SignUp()
         {
             InitializeComponent();
@@ -21,7 +16,7 @@ namespace FinalFinanceTrack
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (textBox != null && textBox.Foreground == Brushes.Gray && textBox.Text == (textBox.Tag?.ToString() ?? ""))
+            if (textBox != null && textBox.Foreground == Brushes.Gray)
             {
                 textBox.Text = ""; // Clear the placeholder text
                 textBox.Foreground = Brushes.Black; // Set text color to default (user input color)
@@ -37,9 +32,6 @@ namespace FinalFinanceTrack
                 textBox.Foreground = Brushes.Gray; // Set text color to indicate placeholder
             }
         }
-
-
-
 
         private void LetsGo_Click(object sender, RoutedEventArgs e)
         {
@@ -62,7 +54,6 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            // Validate email format specifically for FinTrack domain
             if (!Regex.IsMatch(emailTextBox.Text.Trim(), @"^[^@\s]+@fintrack\.com$"))
             {
                 MessageBox.Show("Please enter a valid Fintrack email address ending with @fintrack.com.");
@@ -90,44 +81,24 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(securityQuestion1TextBox.Text.Trim()))
-            {
-                MessageBox.Show("Security Question 1 is required.");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(securityQuestion2TextBox.Text.Trim()))
-            {
-                MessageBox.Show("Security Question 2 is required.");
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(securityQuestion3TextBox.Text.Trim()))
-            {
-                MessageBox.Show("Security Question 3 is required.");
-                return;
-            }
-
             if (!termsAndConditionsCheckBox.IsChecked ?? false)
             {
                 MessageBox.Show("Please agree to the Terms and Conditions and the Privacy Policy.");
                 return;
             }
 
-            bool success = InsertUser(
+            DbManager dbManager = new DbManager();
+            if (dbManager.InsertUser(
                 firstNameTextBox.Text.Trim(),
                 lastNameTextBox.Text.Trim(),
                 emailTextBox.Text.Trim(),
-                passwordTextBox.Text,
+                Security.HashPassword(passwordTextBox.Text.Trim()), // Hash the password before sending to InsertUser
                 securityQuestion1TextBox.Text.Trim(),
                 securityQuestion2TextBox.Text.Trim(),
-                securityQuestion3TextBox.Text.Trim()
-            );
-
-            if (success)
+                securityQuestion3TextBox.Text.Trim()))
             {
                 MessageBox.Show("Signup successful! Log in on the login page.");
-                LogIn loginWindow = new LogIn();
-                loginWindow.Show();
-                this.Close();
+                this.Close(); // Optionally close the sign-up window
             }
             else
             {
@@ -140,19 +111,13 @@ namespace FinalFinanceTrack
             var hasMinimum8Chars = new Regex(@".{8,}");
             var hasUpperCaseLetter = new Regex(@"[A-Z]+");
             var hasSpecialCharacter = new Regex(@"[.@§$+\-*/\\<>]");
-            var hasNumber = new Regex(@"\d+");  // Regex to check for at least one digit
+            var hasNumber = new Regex(@"\d+");
 
             return hasMinimum8Chars.IsMatch(password) &&
                    hasUpperCaseLetter.IsMatch(password) &&
                    hasSpecialCharacter.IsMatch(password) &&
-                   hasNumber.IsMatch(password); // Check if password contains at least one number
+                   hasNumber.IsMatch(password);
         }
-
-
-
-
-
-
 
         // Event handler for the Back button click
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -193,6 +158,28 @@ namespace FinalFinanceTrack
             privacyPopup.IsOpen = true; // Open the Privacy Policy pop-up
         }
 
+ 
+
+        private void emailTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (!string.IsNullOrWhiteSpace(textBox.Text) && !Regex.IsMatch(textBox.Text.Trim(), @"^[^@\s]+@fintrack\.com$"))
+            {
+                textBox.Foreground = Brushes.Red; // Change text color to red if email format is incorrect
+            }
+            else
+            {
+                textBox.Foreground = Brushes.Black; // Reset text color to black if email format is corrected
+            }
+        }
+        // Method to open the explanation popup when the hyperlink is clicked
+        private void ExplanationLink_Click(object sender, RoutedEventArgs e)
+        {
+            explanationPopup.IsOpen = true;
+        }
+
+        // Method to close the explanation popup when the "Close" button is clicked
+
         private void ClosePopup_Click(object sender, RoutedEventArgs e)
         {
             // Close the pop-up when the X button is clicked
@@ -207,99 +194,7 @@ namespace FinalFinanceTrack
             }
         }
 
-        private void ExplanationLink_Click(object sender, RoutedEventArgs e)
-        {
-            explanationPopup.IsOpen = true; // Open the explanation pop-up
-        }
 
-        private bool InsertUser(string firstName, string lastName, string email, string password, string answer1, string answer2, string answer3)
-        {
-            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) ||
-                string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) ||
-                string.IsNullOrWhiteSpace(answer1) || string.IsNullOrWhiteSpace(answer2) ||
-                string.IsNullOrWhiteSpace(answer3))
-            {
-                MessageBox.Show("Please fill in all fields.");
-                return false;
-            }
 
-            // Validate email format
-            if (!Regex.IsMatch(email, @"\A[^@\s]+@[^@\s]+\.[^@\s]+\z"))
-            {
-                MessageBox.Show("Please enter a valid email address.");
-                return false;
-            }
-
-            string connectionString = "server=127.0.0.1;user=root;database=budget;password=";
-            MySqlConnection dbConnection = new MySqlConnection(connectionString);
-
-            try
-            {
-                dbConnection.Open();
-
-                // Get the next available ID
-                int nextID = GetNextAvailableID();
-
-                // Construct the INSERT query with the explicit ID value
-                string query = "INSERT INTO user (ID, First_Name, Last_Name, Email, Password, Answer1, Answer2, Answer3) VALUES (@ID, @FirstName, @LastName, @Email, @Password, @Answer1, @Answer2, @Answer3)";
-                MySqlCommand cmd = new MySqlCommand(query, dbConnection);
-                cmd.Parameters.AddWithValue("@ID", nextID);  // Provide the explicit ID value
-                cmd.Parameters.AddWithValue("@FirstName", firstName);
-                cmd.Parameters.AddWithValue("@LastName", lastName);
-                cmd.Parameters.AddWithValue("@Email", email);
-                cmd.Parameters.AddWithValue("@Password", password);  // For simplicity, storing the plaintext password here.
-                cmd.Parameters.AddWithValue("@Answer1", answer1);
-                cmd.Parameters.AddWithValue("@Answer2", answer2);
-                cmd.Parameters.AddWithValue("@Answer3", answer3);
-                cmd.ExecuteNonQuery();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error during sign up: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                if (dbConnection.State != ConnectionState.Closed)
-                    dbConnection.Close();
-            }
-        }
-
-        private int GetNextAvailableID()
-        {
-            string connectionString = "server=127.0.0.1;user=root;database=budget;password=";
-            MySqlConnection dbConnection = new MySqlConnection(connectionString);
-
-            try
-            {
-                dbConnection.Open();
-
-                // Execute the query to get the maximum existing ID
-                string query = "SELECT MAX(ID) FROM user";
-                MySqlCommand cmd = new MySqlCommand(query, dbConnection);
-                int maxID = Convert.ToInt32(cmd.ExecuteScalar());
-
-                // Increment the maximum ID by 1 to get the next available ID
-                int nextID = maxID + 1;
-                return nextID;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error getting next available ID: " + ex.Message);
-                return -1;
-            }
-            finally
-            {
-                if (dbConnection.State != ConnectionState.Closed)
-                    dbConnection.Close();
-            }
-        }
-
-        private void emailTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
     }
 }
-
