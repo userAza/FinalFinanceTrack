@@ -63,8 +63,6 @@ public class DbManager
             return false;
         }
 
-        string hashedPassword = Security.HashPassword(password);  // Hash the password
-
         if (!OpenConnection())
             return false;
 
@@ -76,7 +74,7 @@ public class DbManager
             cmd.Parameters.AddWithValue("@FirstName", firstName);
             cmd.Parameters.AddWithValue("@LastName", lastName);
             cmd.Parameters.AddWithValue("@Email", email);
-            cmd.Parameters.AddWithValue("@Password", hashedPassword);
+            cmd.Parameters.AddWithValue("@Password", password);  // Store password as plain text
             cmd.Parameters.AddWithValue("@Answer1", answer1);
             cmd.Parameters.AddWithValue("@Answer2", answer2);
             cmd.Parameters.AddWithValue("@Answer3", answer3);
@@ -95,8 +93,7 @@ public class DbManager
         }
     }
 
-    // Retrieve hashed password from the database for a given email
-    public string GetHashedPassword(string email)
+    public string GetPassword(string email)
     {
         if (!OpenConnection())
             return null;
@@ -124,5 +121,53 @@ public class DbManager
             CloseConnection();
         }
         return null;
+
     }
+
+
+        public bool InsertIncome(int userId, decimal amount, string month, string year)
+        {
+            if (!OpenConnection())
+                return false;
+
+            MySqlTransaction transaction = null;
+            try
+            {
+                transaction = connection.BeginTransaction();
+
+                // Insert income data into the `income` table
+                string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
+                MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
+                cmdIncome.Parameters.AddWithValue("@Amount", amount);
+                cmdIncome.Parameters.AddWithValue("@Month", month);
+                cmdIncome.Parameters.AddWithValue("@Year", year);
+                cmdIncome.ExecuteNonQuery();
+                long incomeId = cmdIncome.LastInsertedId;
+
+                // Link the new income record with the user
+                string queryUserIncome = "INSERT INTO userincome (user_id, income_id) VALUES (@UserId, @IncomeId);";
+                MySqlCommand cmdUserIncome = new MySqlCommand(queryUserIncome, connection, transaction);
+                cmdUserIncome.Parameters.AddWithValue("@UserId", userId);
+                cmdUserIncome.Parameters.AddWithValue("@IncomeId", incomeId);
+                cmdUserIncome.ExecuteNonQuery();
+
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save income data: {ex.Message}");
+                transaction?.Rollback();
+                return false;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+
+
+
+
 }

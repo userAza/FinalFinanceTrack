@@ -2,7 +2,7 @@
 using System.Windows;
 using FinalFinanceTrack;
 using MySql.Data.MySqlClient;
-using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
+//using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace FinalFinanceTrack
 {

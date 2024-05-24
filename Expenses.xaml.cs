@@ -26,6 +26,8 @@ namespace FinalFinanceTrack
         {
             InitializeComponent();
             PopulateCategories();
+            highlightbtn = new NavigationManager();
+            highlightbtn.SetActiveButton(ExpensesButton);
         }
 
         private void PopulateCategories()
@@ -39,6 +41,8 @@ namespace FinalFinanceTrack
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the previous page
+            Overview overviewPage = new Overview();
+            overviewPage.Show();
             this.Close();
         }
 
@@ -62,9 +66,9 @@ namespace FinalFinanceTrack
         {
             // Navigate to the Income page
             Income incomePage = new Income();
-            incomePage.Show();
+            
             this.Close();
-            highlightbtn.SetActiveButton(sender as Button);
+            
         }
 
         private void ExpensesButton_Click(object sender, RoutedEventArgs e)

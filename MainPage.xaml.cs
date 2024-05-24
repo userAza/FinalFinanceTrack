@@ -37,5 +37,10 @@ namespace FinalFinanceTrack
             overviewPage.Show();
             this.Close();
         }
+
+        private void ClickMeButton_Click(object sender, RoutedEventArgs e)
+        {
+            //to  make codeeeeee.....
+        }
     }
 }

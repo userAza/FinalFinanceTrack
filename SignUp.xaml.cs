@@ -92,7 +92,7 @@ namespace FinalFinanceTrack
                 firstNameTextBox.Text.Trim(),
                 lastNameTextBox.Text.Trim(),
                 emailTextBox.Text.Trim(),
-                Security.HashPassword(passwordTextBox.Text.Trim()), // Hash the password before sending to InsertUser
+                passwordTextBox.Text.Trim(),  // Use the password directly
                 securityQuestion1TextBox.Text.Trim(),
                 securityQuestion2TextBox.Text.Trim(),
                 securityQuestion3TextBox.Text.Trim()))

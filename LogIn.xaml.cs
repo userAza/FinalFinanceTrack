@@ -54,13 +54,12 @@ namespace FinalFinanceTrack
             }
         }
 
-        // Method to validate user login in your Login class
         private bool ValidateLogin(string email, string inputPassword)
         {
             DbManager dbManager = new DbManager();
-            string storedHash = dbManager.GetHashedPassword(email);
+            string storedPassword = dbManager.GetPassword(email);
 
-            if (storedHash != null && Security.HashPassword(inputPassword) == storedHash)
+            if (storedPassword != null && inputPassword == storedPassword)
             {
                 return true;
             }

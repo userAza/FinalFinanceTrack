@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -26,6 +27,7 @@ namespace FinalFinanceTrack
         {
             InitializeComponent();
             highlightbtn = new NavigationManager();
+            highlightbtn.SetActiveButton(IncomeButton);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -103,33 +105,59 @@ namespace FinalFinanceTrack
         // Assuming you have UI elements to capture income details such as amount, source, etc.
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            int userId = SessionUser.GetCurrentUserId(); // Ensure this static class is correctly implemented
+            if (userId == 0)
+            {
+                MessageBox.Show("No user is currently logged in.");
+                return;
+            }
+
+            if (!decimal.TryParse(IncomeAmount.Text, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Please enter a valid, positive amount.");
+                return;
+            }
+
+            string source = CategoryComboBox.Text;
+            if (string.IsNullOrEmpty(source))
+            {
+                MessageBox.Show("Please select a source.");
+                return;
+            }
+
+            if (MonthComboBox.SelectedItem == null || YearComboBox.SelectedItem == null)
+            {
+                MessageBox.Show("Please select both month and year.");
+                return;
+            }
+
+            string selectedMonth = MonthComboBox.SelectedItem.ToString();
+            string selectedYear = YearComboBox.SelectedItem.ToString();
+
             DbManager dbManager = new DbManager();
+            if (!dbManager.InsertIncome(userId, amount, selectedMonth, selectedYear))
+            {
+                MessageBox.Show("Failed to insert income data.");
+            }
+            else
+            {
+                MessageBox.Show("Income data saved successfully!");
+            }
+        }
 
-            // Example fields: incomeAmount (TextBox), incomeSource (TextBox)
-            /*  decimal amount;
-              if (decimal.TryParse(incomeAmount.Text, out amount) && !string.IsNullOrEmpty(incomeSource.Text))
-              {
-                  if (dbManager.OpenConnection())
-                  {
-                      string query = "INSERT INTO income (Amount, Source, Date) VALUES (@Amount, @Source, @Date)";
-                      MySqlCommand cmd = new MySqlCommand(query, dbManager.Connection);
-                      cmd.Parameters.AddWithValue("@Amount", amount);
-                      cmd.Parameters.AddWithValue("@Source", incomeSource.Text);
-                      cmd.Parameters.AddWithValue("@Date", DateTime.Now);  // Or any date picker control
-                      cmd.ExecuteNonQuery();
-                      dbManager.CloseConnection();
-                      MessageBox.Show("Income data saved successfully!");
-                  }
-              }
-              else
-              {
-                  MessageBox.Show("Please check your input and try again.");
-              }
-          }
-  */
-
-
+        private void IncomeAmount_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!decimal.TryParse(IncomeAmount.Text, out _))
+            {
+                IncomeAmount.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            else
+            {
+                IncomeAmount.Foreground = new SolidColorBrush(Colors.Black);
+            }
         }
 
     }
+
 }
+
