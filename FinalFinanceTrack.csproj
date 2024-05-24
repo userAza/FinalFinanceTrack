@@ -14,8 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="MySql.Data" Version="8.4.0" />
-    <PackageReference Include="NuGet.Frameworks" Version="6.9.1" />
+    <PackageReference Include="NuGet.Frameworks" Version="6.10.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,12 +1,17 @@
 ﻿<Window x:Class="FinalFinanceTrack.History"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="HISTORY" Height="652" Width="1000">
-    <Grid Background="SeaGreen">
-        <Button x:Name="button1" Content="BACK" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Height="48" Margin="12,12,0,0" Click="button1_Click" Background="DarkRed" />
-        <TextBox x:Name="textBox1" Text="HISTORY" HorizontalAlignment="Left" VerticalAlignment="Top" Width="193" Height="54" Margin="301,53,0,0" FontFamily="Arial Rounded MT Bold" FontSize="20" Background="LightGray" />
-        <Button x:Name="button2" Content="Search Bar" HorizontalAlignment="Left" VerticalAlignment="Top" Width="153" Height="38" Margin="614,101,0,0" Click="button2_Click" Background="LightGray" />
-        <Button x:Name="button3" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="88" Height="35" Margin="564,163,0,0" Click="button3_Click" Background="LightGray" />
-        <Button x:Name="button4" Content="Filter" HorizontalAlignment="Left" VerticalAlignment="Top" Width="76" Height="35" Margin="716,163,0,0" Background="Silver" />
+        Title="History" Height="450" Width="800">
+    <Grid>
+        <Button x:Name="BackButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="10,10,0,0" Click="button1_Click"/>
+
+        <TextBlock Text="Search by Year and Month (e.g., 2023 05)" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,40,0,0"/>
+        <TextBox x:Name="SearchTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="10,60,0,0"/>
+
+        <Button x:Name="SearchButton" Content="Search" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="220,60,0,0" Click="button2_Click"/>
+        <Button x:Name="FilterButton" Content="Filter" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="330,60,0,0" Click="FilterButton_Click"/>
+        <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="440,60,0,0" Click="button3_Click"/>
+
+        <TextBlock x:Name="HistoryTextBlock" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,100,0,0" TextWrapping="Wrap"/>
     </Grid>
 </Window>
