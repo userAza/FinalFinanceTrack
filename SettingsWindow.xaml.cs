@@ -59,5 +59,12 @@ namespace FinalFinanceTrack
                 }
             }
         }
+
+        private void AddProfilePicture_Click(object sender, RoutedEventArgs e)
+        {
+            AddProfilePic addProfilePicWindow = new AddProfilePic();
+            addProfilePicWindow.Show();
+            this.Close();
+        }
     }
 }

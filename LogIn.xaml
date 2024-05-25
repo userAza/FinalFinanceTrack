@@ -47,12 +47,11 @@
         </Grid>
 
         <!-- Back Button -->
-        <Button Grid.Row="0" Margin="10,10,0,0" Width="54" Height="23"
+        <Button Grid.Row="0" Margin="10,10,0,0" Width="54"
                 Content="Back" Click="Back_Click"
-                HorizontalAlignment="Left" VerticalAlignment="Top"
+                HorizontalAlignment="Left"
                 Background="DarkGray" Foreground="White"
-                FontSize="12" Padding="10,0">
-        </Button>
+                FontSize="12" Padding="10,0"/>
 
         <!-- Forgot Password Link -->
         <TextBlock Grid.Row="7" Margin="360,86,0,-40" HorizontalAlignment="Left">

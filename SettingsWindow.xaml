@@ -4,8 +4,12 @@
         Title="Settings" Height="450" Width="800">
     <Grid>
         <Button x:Name="ReturnButton" Content="Return" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="10,10,0,0" Click="ReturnButton_Click"/>
-        <Button x:Name="UpdatePasswordButton" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Height="30" Margin="304,131,0,0" Click="UpdatePassword_Click"/>
         <Button x:Name="LogoutButton" Content="Logout" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="10,90,0,0" Click="Logout_Click"/>
+
+        <!-- Add or Change Profile Picture Button -->
+        <Button x:Name="AddProfilePictureButton" Content="Add or change profile picture" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="30" Margin="304,90,0,0" Click="AddProfilePicture_Click"/>
+
+        <Button x:Name="UpdatePasswordButton" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Height="30" Margin="304,131,0,0" Click="UpdatePassword_Click"/>
         <Button x:Name="GeneratePolicyDocumentButton" Content="Generate Policy Document" HorizontalAlignment="Left" VerticalAlignment="Top" Width="180" Height="30" Margin="270,187,0,0" Click="GeneratePolicyDocument_Click"/>
 
         <!-- Terms and Conditions Link -->

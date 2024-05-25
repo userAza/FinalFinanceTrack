@@ -1,0 +1,41 @@
+﻿<Window x:Class="FinalFinanceTrack.AddProfilePic"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AddProfilePic" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Back Button -->
+        <Button Grid.Row="0" Margin="10,10,0,10" Width="54"
+                Content="Back" Click="Back_Click"
+                HorizontalAlignment="Left"
+                Background="DarkGray" Foreground="White"
+                FontSize="12" Padding="10,0"/>
+
+        <!-- Title Text -->
+        <TextBlock Text="Add or change your profile picture!" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
+
+        <!-- Allowed formats text -->
+        <TextBlock Grid.Row="1" Text="Allowed formats: JPEG, JPG, PNG" FontSize="14" Foreground="Gray" HorizontalAlignment="Center" Margin="10"/>
+
+        <!-- Grey Square for Profile Picture -->
+        <Grid Grid.Row="2" Width="200" Height="200" HorizontalAlignment="Center" VerticalAlignment="Center" Background="LightGray" Margin="10">
+            <Canvas Width="200" Height="200">
+                <Image x:Name="ProfileImage" Stretch="Uniform" ClipToBounds="True" Width="200" Height="200"/>
+            </Canvas>
+            <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="200"/>
+        </Grid>
+
+        <!-- Button to Upload New Picture -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
+            <Button Content="Upload Picture" Width="150" Height="30" Margin="5" Click="UploadPicture_Click"/>
+            <Button Content="OK" Width="150" Height="30" Margin="5" Click="SavePicture_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

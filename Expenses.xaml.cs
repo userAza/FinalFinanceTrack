@@ -91,12 +91,12 @@ namespace FinalFinanceTrack
             DateTime selectedDate = DatePicker.SelectedDate ?? DateTime.Now;
 
             DbManager dbManager = new DbManager();
-            string query = "INSERT INTO expenses (Category, Amount, Date) VALUES (@Category, @Amount, @Date)";
+            string query = "INSERT INTO expense (Amount, Month, Year) VALUES (@Amount, @Month, @Year)";
             Dictionary<string, object> parameters = new Dictionary<string, object>
             {
-                {"@Category", selectedCategory},
                 {"@Amount", amount},
-                {"@Date", selectedDate.ToString("yyyy-MM-dd")}
+                {"@Month", selectedDate.ToString("MMMM")},
+                {"@Year", selectedDate.Year.ToString()}
             };
 
             if (dbManager.ExecuteQuery(query, parameters))
