@@ -166,6 +166,32 @@ public class DbManager
             }
         }
 
+    public bool ExecuteQuery(string query, Dictionary<string, object> parameters)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            foreach (var param in parameters)
+            {
+                cmd.Parameters.AddWithValue(param.Key, param.Value);
+            }
+            cmd.ExecuteNonQuery();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Database operation failed: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
 
 
 

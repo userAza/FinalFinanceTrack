@@ -78,32 +78,7 @@ namespace FinalFinanceTrack
             highlightbtn.SetActiveButton(sender as Button);
         }
 
-
-
-        private void PopulateMonthAndYear()
-        {
-            // Populate months
-            string[] months = new string[] { "January", "February", "March", "April", "May", "June",
-                                         "July", "August", "September", "October", "November", "December" };
-            foreach (string month in months)
-            {
-                MonthComboBox.Items.Add(month);
-            }
-            MonthComboBox.SelectedIndex = DateTime.Now.Month - 1; // Set current month selected
-
-            // Populate years from 10 years ago to the current year
-            int currentYear = DateTime.Now.Year;
-            for (int year = currentYear - 10; year <= currentYear; year++)
-            {
-                YearComboBox.Items.Add(year);
-            }
-            YearComboBox.SelectedItem = currentYear; // Set current year selected
-        }
-
-
-
-        // Assuming you have UI elements to capture income details such as amount, source, etc.
-        private void OKButton_Click(object sender, RoutedEventArgs e)
+        private void OKButton_LinkClick(object sender, RoutedEventArgs e)
         {
             int userId = SessionUser.GetCurrentUserId(); // Ensure this static class is correctly implemented
             if (userId == 0)
@@ -125,23 +100,24 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            if (MonthComboBox.SelectedItem == null || YearComboBox.SelectedItem == null)
+            DateTime? selectedDate = IncomeDatePicker.SelectedDate;
+            if (!selectedDate.HasValue)
             {
-                MessageBox.Show("Please select both month and year.");
+                MessageBox.Show("Please select a date.");
                 return;
             }
 
-            string selectedMonth = MonthComboBox.SelectedItem.ToString();
-            string selectedYear = YearComboBox.SelectedItem.ToString();
+            // Convert DateTime to a string format suitable for your database
+            string formattedDate = selectedDate.Value.ToString("yyyy-MM-dd"); // Adjust the format as necessary
 
             DbManager dbManager = new DbManager();
-            if (!dbManager.InsertIncome(userId, amount, selectedMonth, selectedYear))
+            if (dbManager.InsertIncome(userId, amount, source, formattedDate)) // Ensure that this method matches your DbManager capabilities
             {
-                MessageBox.Show("Failed to insert income data.");
+                MessageBox.Show("Income data saved successfully!");
             }
             else
             {
-                MessageBox.Show("Income data saved successfully!");
+                MessageBox.Show("Failed to insert income data.");
             }
         }
 
@@ -157,7 +133,22 @@ namespace FinalFinanceTrack
             }
         }
 
+        private void IncomeAmount_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text == "0.00")
+            {
+                textBox.Text = "";  // Clear the text when focus is gained
+            }
+        }
+
+        private void IncomeAmount_LostFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (string.IsNullOrWhiteSpace(textBox.Text))
+            {
+                textBox.Text = "0.00";  // Set back the placeholder text when focus is lost
+            }
+        }
     }
-
 }
-
