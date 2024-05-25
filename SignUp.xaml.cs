@@ -105,7 +105,9 @@ namespace FinalFinanceTrack
                 securityQuestion2TextBox.Text.Trim(),
                 securityQuestion3TextBox.Text.Trim()))
             {
-                MessageBox.Show("Signup successful! Log in on the login page.");
+                MessageBox.Show("Signup successful! Redirecting to the login page.");
+                LogIn loginWindow = new LogIn();
+                loginWindow.Show();
                 this.Close();
             }
             else
@@ -113,6 +115,7 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Signup failed. Please try again.");
             }
         }
+
 
         private bool IsValidPassword(string password)
         {
