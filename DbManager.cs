@@ -192,6 +192,34 @@ public class DbManager
         }
     }
 
+    public bool UpdateUserPassword(string email, string newPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "UPDATE user SET Password = @Password WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Password", newPassword);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            int rowsAffected = cmd.ExecuteNonQuery();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+
+
 
 
 

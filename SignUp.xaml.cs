@@ -11,6 +11,8 @@ namespace FinalFinanceTrack
         public SignUp()
         {
             InitializeComponent();
+            UpdatePasswordPlaceholder();
+            UpdateConfirmPasswordPlaceholder();
         }
 
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
@@ -18,8 +20,8 @@ namespace FinalFinanceTrack
             TextBox textBox = sender as TextBox;
             if (textBox != null && textBox.Foreground == Brushes.Gray)
             {
-                textBox.Text = ""; // Clear the placeholder text
-                textBox.Foreground = Brushes.Black; // Set text color to default (user input color)
+                textBox.Text = "";
+                textBox.Foreground = Brushes.Black;
             }
         }
 
@@ -28,26 +30,25 @@ namespace FinalFinanceTrack
             TextBox textBox = sender as TextBox;
             if (textBox != null && string.IsNullOrEmpty(textBox.Text))
             {
-                textBox.Text = textBox.Tag?.ToString() ?? ""; // Restore the placeholder text
-                textBox.Foreground = Brushes.Gray; // Set text color to indicate placeholder
+                textBox.Text = textBox.Tag?.ToString() ?? "";
+                textBox.Foreground = Brushes.Gray;
             }
         }
 
         private void LetsGo_Click(object sender, RoutedEventArgs e)
         {
-            // Check if first name is just a placeholder or is empty
             if (string.IsNullOrWhiteSpace(firstNameTextBox.Text.Trim()) || firstNameTextBox.Text.Trim() == "First Name")
             {
                 MessageBox.Show("First name is required.");
                 return;
             }
 
-            // Check if last name is just a placeholder or is empty
             if (string.IsNullOrWhiteSpace(lastNameTextBox.Text.Trim()) || lastNameTextBox.Text.Trim() == "Last Name")
             {
                 MessageBox.Show("Last name is required.");
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(emailTextBox.Text.Trim()))
             {
                 MessageBox.Show("Email is required.");
@@ -60,22 +61,29 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(passwordTextBox.Text.Trim()))
+            string password = passwordBox.Visibility == Visibility.Visible ? passwordBox.Password : passwordTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Password is required.");
                 return;
             }
-            if (!IsValidPassword(passwordTextBox.Text))
+
+            if (!IsValidPassword(password))
             {
                 MessageBox.Show("Password must be at least 8 characters long, include at least one uppercase letter, one special character (.@§$+-*/\\<>), and one number (0-9).");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(confirmPasswordTextBox.Text.Trim()))
+
+            string confirmPassword = confirmPasswordBox.Visibility == Visibility.Visible ? confirmPasswordBox.Password : confirmPasswordTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(confirmPassword))
             {
                 MessageBox.Show("Confirm password is required.");
                 return;
             }
-            if (passwordTextBox.Text != confirmPasswordTextBox.Text)
+
+            if (password != confirmPassword)
             {
                 MessageBox.Show("The passwords do not match. Please re-enter your passwords.");
                 return;
@@ -92,13 +100,13 @@ namespace FinalFinanceTrack
                 firstNameTextBox.Text.Trim(),
                 lastNameTextBox.Text.Trim(),
                 emailTextBox.Text.Trim(),
-                passwordTextBox.Text.Trim(),  // Use the password directly
+                password,
                 securityQuestion1TextBox.Text.Trim(),
                 securityQuestion2TextBox.Text.Trim(),
                 securityQuestion3TextBox.Text.Trim()))
             {
                 MessageBox.Show("Signup successful! Log in on the login page.");
-                this.Close(); // Optionally close the sign-up window
+                this.Close();
             }
             else
             {
@@ -119,14 +127,13 @@ namespace FinalFinanceTrack
                    hasNumber.IsMatch(password);
         }
 
-        // Event handler for the Back button click
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            // Logic to navigate back to the MainWindow
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
         }
+
         private void LoginHyperlink_Click(object sender, RoutedEventArgs e)
         {
             LogIn loginWindow = new LogIn();
@@ -136,53 +143,46 @@ namespace FinalFinanceTrack
 
         private void PrivacyPolicy_Click(object sender, RoutedEventArgs e)
         {
-            // Show Privacy Policy content
         }
 
         private void TermsAndConditions_Click(object sender, RoutedEventArgs e)
         {
-            // Show Terms and Conditions content
         }
 
         private void termsAndConditionsCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            // This method can be empty
         }
+
         private void TermsAndConditionsLink_Click(object sender, RoutedEventArgs e)
         {
-            termsPopup.IsOpen = true; // Open the Terms and Conditions pop-up
+            termsPopup.IsOpen = true;
         }
 
-        private void PrivacyPolicyLink_Click(object sender, RoutedEventArgs e) // Renamed the method
+        private void PrivacyPolicyLink_Click(object sender, RoutedEventArgs e)
         {
-            privacyPopup.IsOpen = true; // Open the Privacy Policy pop-up
+            privacyPopup.IsOpen = true;
         }
-
- 
 
         private void emailTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (!string.IsNullOrWhiteSpace(textBox.Text) && !Regex.IsMatch(textBox.Text.Trim(), @"^[^@\s]+@fintrack\.com$"))
             {
-                textBox.Foreground = Brushes.Red; // Change text color to red if email format is incorrect
+                textBox.Foreground = Brushes.Red;
             }
             else
             {
-                textBox.Foreground = Brushes.Black; // Reset text color to black if email format is corrected
+                textBox.Foreground = Brushes.Black;
             }
         }
-        // Method to open the explanation popup when the hyperlink is clicked
+
         private void ExplanationLink_Click(object sender, RoutedEventArgs e)
         {
             explanationPopup.IsOpen = true;
         }
 
-        // Method to close the explanation popup when the "Close" button is clicked
-
         private void ClosePopup_Click(object sender, RoutedEventArgs e)
         {
-            // Close the pop-up when the X button is clicked
             Button closeButton = sender as Button;
             if (closeButton != null)
             {
@@ -194,7 +194,98 @@ namespace FinalFinanceTrack
             }
         }
 
+        private void TogglePasswordVisibility_Click(object sender, RoutedEventArgs e)
+        {
+            if (passwordBox.Visibility == Visibility.Visible)
+            {
+                passwordBox.Visibility = Visibility.Collapsed;
+                passwordTextBox.Text = passwordBox.Password;
+                passwordTextBox.Visibility = Visibility.Visible;
+                togglePasswordVisibilityButton.Content = "👁";
+                UpdatePasswordPlaceholder();
+            }
+            else
+            {
+                passwordTextBox.Visibility = Visibility.Collapsed;
+                passwordBox.Password = passwordTextBox.Text;
+                passwordBox.Visibility = Visibility.Visible;
+                togglePasswordVisibilityButton.Content = "👁️";
+                UpdatePasswordPlaceholder();
+            }
+        }
 
+        private void ToggleConfirmPasswordVisibility_Click(object sender, RoutedEventArgs e)
+        {
+            if (confirmPasswordBox.Visibility == Visibility.Visible)
+            {
+                confirmPasswordBox.Visibility = Visibility.Collapsed;
+                confirmPasswordTextBox.Text = confirmPasswordBox.Password;
+                confirmPasswordTextBox.Visibility = Visibility.Visible;
+                toggleConfirmPasswordVisibilityButton.Content = "👁";
+                UpdateConfirmPasswordPlaceholder();
+            }
+            else
+            {
+                confirmPasswordTextBox.Visibility = Visibility.Collapsed;
+                confirmPasswordBox.Password = confirmPasswordTextBox.Text;
+                confirmPasswordBox.Visibility = Visibility.Visible;
+                toggleConfirmPasswordVisibilityButton.Content = "👁️";
+                UpdateConfirmPasswordPlaceholder();
+            }
+        }
 
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            UpdatePasswordPlaceholder();
+        }
+
+        private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            passwordPlaceholder.Visibility = Visibility.Collapsed;
+        }
+
+        private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            UpdatePasswordPlaceholder();
+        }
+
+        private void ConfirmPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            UpdateConfirmPasswordPlaceholder();
+        }
+
+        private void ConfirmPasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            confirmPasswordPlaceholder.Visibility = Visibility.Collapsed;
+        }
+
+        private void ConfirmPasswordBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            UpdateConfirmPasswordPlaceholder();
+        }
+
+        private void UpdatePasswordPlaceholder()
+        {
+            if (string.IsNullOrEmpty(passwordBox.Password) && passwordBox.Visibility == Visibility.Visible)
+            {
+                passwordPlaceholder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                passwordPlaceholder.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void UpdateConfirmPasswordPlaceholder()
+        {
+            if (string.IsNullOrEmpty(confirmPasswordBox.Password) && confirmPasswordBox.Visibility == Visibility.Visible)
+            {
+                confirmPasswordPlaceholder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                confirmPasswordPlaceholder.Visibility = Visibility.Collapsed;
+            }
+        }
     }
 }

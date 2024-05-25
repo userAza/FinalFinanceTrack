@@ -9,6 +9,7 @@ namespace FinalFinanceTrack
         public LogIn()
         {
             InitializeComponent();
+            UpdatePasswordPlaceholder();
         }
 
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
@@ -31,10 +32,30 @@ namespace FinalFinanceTrack
             }
         }
 
+        private void TogglePasswordVisibility_Click(object sender, RoutedEventArgs e)
+        {
+            if (passwordBox.Visibility == Visibility.Visible)
+            {
+                passwordBox.Visibility = Visibility.Collapsed;
+                passwordTextBox.Text = passwordBox.Password;
+                passwordTextBox.Visibility = Visibility.Visible;
+                togglePasswordVisibilityButton.Content = "👁";
+                UpdatePasswordPlaceholder();
+            }
+            else
+            {
+                passwordTextBox.Visibility = Visibility.Collapsed;
+                passwordBox.Password = passwordTextBox.Text;
+                passwordBox.Visibility = Visibility.Visible;
+                togglePasswordVisibilityButton.Content = "👁️";
+                UpdatePasswordPlaceholder();
+            }
+        }
+
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             string email = emailTextBox.Text;
-            string inputPassword = passwordTextBox.Text;
+            string inputPassword = passwordBox.Visibility == Visibility.Visible ? passwordBox.Password : passwordTextBox.Text;
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(inputPassword))
             {
@@ -84,6 +105,33 @@ namespace FinalFinanceTrack
             SignUp signUpWindow = new SignUp();
             signUpWindow.Show();
             this.Close();
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            UpdatePasswordPlaceholder();
+        }
+
+        private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            passwordPlaceholder.Visibility = Visibility.Collapsed;
+        }
+
+        private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            UpdatePasswordPlaceholder();
+        }
+
+        private void UpdatePasswordPlaceholder()
+        {
+            if (string.IsNullOrEmpty(passwordBox.Password) && passwordBox.Visibility == Visibility.Visible)
+            {
+                passwordPlaceholder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                passwordPlaceholder.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

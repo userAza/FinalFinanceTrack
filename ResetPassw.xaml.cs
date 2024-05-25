@@ -34,10 +34,22 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            // Assuming you have a method to update the password in your database
-            UpdateUserPassword(userEmail, newPassword);
-            MessageBox.Show("Your password has been reset successfully.");
-            this.Close();
+            // Update the user password
+            DbManager dbManager = new DbManager();
+            if (dbManager.UpdateUserPassword(userEmail, newPassword))
+            {
+                MessageBox.Show("Your password has been reset successfully.");
+
+
+                // Navigate to the login page
+                LogIn loginWindow = new LogIn();
+                loginWindow.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Failed to reset password. Please try again.");
+            }
         }
 
         private bool IsValidPassword(string password)
@@ -51,12 +63,6 @@ namespace FinalFinanceTrack
                    hasUpperCaseLetter.IsMatch(password) &&
                    hasNumber.IsMatch(password) &&
                    hasSpecialCharacter.IsMatch(password);
-        }
-
-        private void UpdateUserPassword(string email, string newPassword)
-        {
-            // This method should update the password for the user in your database
-            // Example implementation needed
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
