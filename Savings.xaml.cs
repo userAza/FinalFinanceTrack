@@ -1,35 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FinalFinanceTrack
 {
-    /// <summary>
-    /// Interaction logic for Savings.xaml
-    /// </summary>
     public partial class Savings : Window
     {
         public Savings()
         {
             InitializeComponent();
-            CalculateSavings();
+            CalculateSavings(DateTime.Now.Month); // Initialize with the current month
         }
 
-        private void CalculateSavings()
+        private void CalculateSavings(int month)
         {
-            // Assuming that you have a method to get the total income and expenses
-            decimal totalIncome = GetTotalIncome();
-            decimal totalExpenses = GetTotalExpenses();
+            // Assuming that you have methods to get the total income and expenses for a given month
+            decimal totalIncome = GetTotalIncome(month);
+            decimal totalExpenses = GetTotalExpenses(month);
             decimal savings = totalIncome - totalExpenses;
 
             SavingsAmount.Text = $"€ {savings:N2}";
@@ -39,18 +26,48 @@ namespace FinalFinanceTrack
             SavingsProgressBar.Value = (double)savingsPercentage;
         }
 
-        private decimal GetTotalIncome()
+        private decimal GetTotalIncome(int month)
         {
-            // Replace with actual logic to retrieve total income
+            // Replace with actual logic to retrieve total income for the given month
             // This is a placeholder
-            return 1000.00m;
+            return month switch
+            {
+                1 => 1000.00m,
+                2 => 1100.00m,
+                3 => 1200.00m,
+                4 => 1300.00m,
+                5 => 1400.00m,
+                6 => 1500.00m,
+                7 => 1600.00m,
+                8 => 1700.00m,
+                9 => 1800.00m,
+                10 => 1900.00m,
+                11 => 2000.00m,
+                12 => 2100.00m,
+                _ => 1000.00m,
+            };
         }
 
-        private decimal GetTotalExpenses()
+        private decimal GetTotalExpenses(int month)
         {
-            // Replace with actual logic to retrieve total expenses
+            // Replace with actual logic to retrieve total expenses for the given month
             // This is a placeholder
-            return 400.00m;
+            return month switch
+            {
+                1 => 400.00m,
+                2 => 500.00m,
+                3 => 600.00m,
+                4 => 700.00m,
+                5 => 800.00m,
+                6 => 900.00m,
+                7 => 1000.00m,
+                8 => 1100.00m,
+                9 => 1200.00m,
+                10 => 1300.00m,
+                11 => 1400.00m,
+                12 => 1500.00m,
+                _ => 400.00m,
+            };
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -93,6 +110,15 @@ namespace FinalFinanceTrack
         private void SavingsButton_Click(object sender, RoutedEventArgs e)
         {
             // Stay on the current page
+        }
+
+        private void MonthComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MonthComboBox.SelectedIndex >= 0)
+            {
+                int selectedMonth = MonthComboBox.SelectedIndex + 1;
+                CalculateSavings(selectedMonth);
+            }
         }
     }
 }

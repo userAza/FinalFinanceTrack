@@ -219,6 +219,96 @@ public class DbManager
     }
 
 
+    public string GetAdminPassword(string email)
+    {
+        if (!OpenConnection())
+            return null;
+
+        try
+        {
+            string query = "SELECT Password FROM admin WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return reader["Password"].ToString();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving password: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+        return null;
+    }
+
+    public bool UpdateAdminPassword(string email, string newPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "UPDATE admin SET Password = @Password WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Password", newPassword);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            int rowsAffected = cmd.ExecuteNonQuery();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public (string, string, string) GetAdminSecurityAnswers(string email)
+    {
+        if (!OpenConnection())
+            return (null, null, null);
+
+        try
+        {
+            string query = "SELECT Answer1, Answer2, Answer3 FROM admin WHERE Email = @Email LIMIT 1";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    string answer1 = reader["Answer1"] as string;
+                    string answer2 = reader["Answer2"] as string;
+                    string answer3 = reader["Answer3"] as string;
+                    return (answer1, answer2, answer3);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving security answers: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+        return (null, null, null);
+    }
+
+
 
 
 
