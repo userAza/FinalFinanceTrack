@@ -105,7 +105,9 @@ namespace FinalFinanceTrack
                 securityQuestion2TextBox.Text.Trim(),
                 securityQuestion3TextBox.Text.Trim()))
             {
-                MessageBox.Show("Signup successful! Redirecting to the login page.");
+                MessageBox.Show("Signup successful! Log in on the login page.");
+
+                // Navigate to the LogIn window
                 LogIn loginWindow = new LogIn();
                 loginWindow.Show();
                 this.Close();
@@ -203,17 +205,16 @@ namespace FinalFinanceTrack
                 passwordBox.Visibility = Visibility.Collapsed;
                 passwordTextBox.Text = passwordBox.Password;
                 passwordTextBox.Visibility = Visibility.Visible;
-                togglePasswordVisibilityButton.Content = "👁️";
-                passwordTextBox.Focus();  // Set focus to allow editing
-                passwordTextBox.SelectionStart = passwordTextBox.Text.Length; // Move cursor to the end
+                togglePasswordVisibilityButton.Content = "👁";
+                UpdatePasswordPlaceholder();
             }
             else
             {
                 passwordTextBox.Visibility = Visibility.Collapsed;
                 passwordBox.Password = passwordTextBox.Text;
                 passwordBox.Visibility = Visibility.Visible;
-                togglePasswordVisibilityButton.Content = "👁";
-                passwordBox.Focus();  // Set focus to allow editing
+                togglePasswordVisibilityButton.Content = "👁️";
+                UpdatePasswordPlaceholder();
             }
         }
 
@@ -224,17 +225,16 @@ namespace FinalFinanceTrack
                 confirmPasswordBox.Visibility = Visibility.Collapsed;
                 confirmPasswordTextBox.Text = confirmPasswordBox.Password;
                 confirmPasswordTextBox.Visibility = Visibility.Visible;
-                toggleConfirmPasswordVisibilityButton.Content = "👁️";
-                confirmPasswordTextBox.Focus();  // Set focus to allow editing
-                confirmPasswordTextBox.SelectionStart = confirmPasswordTextBox.Text.Length; // Move cursor to the end
+                toggleConfirmPasswordVisibilityButton.Content = "👁";
+                UpdateConfirmPasswordPlaceholder();
             }
             else
             {
                 confirmPasswordTextBox.Visibility = Visibility.Collapsed;
                 confirmPasswordBox.Password = confirmPasswordTextBox.Text;
                 confirmPasswordBox.Visibility = Visibility.Visible;
-                toggleConfirmPasswordVisibilityButton.Content = "👁";
-                confirmPasswordBox.Focus();  // Set focus to allow editing
+                toggleConfirmPasswordVisibilityButton.Content = "👁️";
+                UpdateConfirmPasswordPlaceholder();
             }
         }
 
