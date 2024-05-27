@@ -12,6 +12,5 @@
         <TextBox x:Name="email_textbox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,120,0,0" Width="400"/>
         <Button x:Name="Delete_text" Content="DELETE" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="420,180,0,0" Width="100" Click="Delete_text_Click"/>
         <Button x:Name="back_text" Content="BACK" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="270,180,0,0" Width="100" Click="back_text_Click"/>
-        
     </Grid>
 </Window>

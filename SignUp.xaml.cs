@@ -95,15 +95,16 @@ namespace FinalFinanceTrack
                 return;
             }
 
+            // Assuming profilePicture is fetched from a file picker or another source as byte array
+            byte[] profilePicture = GetProfilePicture();
+
             DbManager dbManager = new DbManager();
             if (dbManager.InsertUser(
                 firstNameTextBox.Text.Trim(),
                 lastNameTextBox.Text.Trim(),
                 emailTextBox.Text.Trim(),
                 password,
-                securityQuestion1TextBox.Text.Trim(),
-                securityQuestion2TextBox.Text.Trim(),
-                securityQuestion3TextBox.Text.Trim()))
+                profilePicture))
             {
                 MessageBox.Show("Signup successful! Log in on the login page.");
 
@@ -117,6 +118,15 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Signup failed. Please try again.");
             }
         }
+
+        private byte[] GetProfilePicture()
+        {
+            // Implement the logic to fetch the profile picture as a byte array.
+            // This could involve opening a file dialog, reading the selected file, and converting it to a byte array.
+            // For the sake of example, let's assume we return a dummy byte array.
+            return new byte[0]; // Replace with actual implementation
+        }
+
 
         private bool IsValidPassword(string password)
         {

@@ -4,21 +4,26 @@ namespace FinalFinanceTrack
 {
     public partial class DeleteUser : Window
     {
-        private int userId;
         private DbManager dbManager;
+        private int userId;
 
         public DeleteUser(int userId)
         {
             InitializeComponent();
-            this.userId = userId;
             dbManager = new DbManager();
+            this.userId = userId;
         }
 
-        
-
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private void Delete_text_Click(object sender, RoutedEventArgs e)
         {
-            bool isDeleted = dbManager.DeleteUser(userId);
+            string email = email_textbox.Text.Trim();
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                MessageBox.Show("Please enter a valid email address.");
+                return;
+            }
+
+            bool isDeleted = dbManager.DeleteUserByEmail(email);
             if (isDeleted)
             {
                 MessageBox.Show("User deleted successfully!");
@@ -30,7 +35,7 @@ namespace FinalFinanceTrack
             }
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void back_text_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

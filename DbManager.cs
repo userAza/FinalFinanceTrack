@@ -93,21 +93,21 @@ public class DbManager
     //        CloseConnection();
     //    }
     //}
-    public bool InsertUser(string firstName, string lastName, string email, string password, byte[] profilePicture)
+    public bool InsertUser(string firstName, string lastName, string email, string password, byte[] profilePhoto)
     {
         if (!OpenConnection())
             return false;
 
         try
         {
-            string query = "INSERT INTO Users (First_Name, Last_Name, Email, Password, ProfilePicture) VALUES (@FirstName, @LastName, @Email, @Password, @ProfilePicture)";
+            string query = "INSERT INTO user (First_Name, Last_Name, Email, Password, profilePhoto) VALUES (@FirstName, @LastName, @Email, @Password, @profilePhoto)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
 
             cmd.Parameters.AddWithValue("@FirstName", firstName);
             cmd.Parameters.AddWithValue("@LastName", lastName);
             cmd.Parameters.AddWithValue("@Email", email);
             cmd.Parameters.AddWithValue("@Password", password);  // Store password as plain text
-            cmd.Parameters.AddWithValue("@ProfilePicture", profilePicture);
+            cmd.Parameters.AddWithValue("@ProfilePhoto", profilePhoto);
 
             cmd.ExecuteNonQuery();
             return true;
@@ -131,7 +131,7 @@ public class DbManager
 
         try
         {
-            string query = "SELECT Id, First_Name, Last_Name, Email FROM Users";
+            string query = "SELECT Id, First_Name, Last_Name, Email FROM user";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
             adapter.Fill(dataTable);
@@ -155,7 +155,7 @@ public class DbManager
 
         try
         {
-            string query = "DELETE FROM Users WHERE Id = @UserId";
+            string query = "DELETE FROM user WHERE Id = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@UserId", userId);
 
@@ -398,7 +398,7 @@ public class DbManager
 
         try
         {
-            string query = "DELETE FROM User WHERE Email = @Email";
+            string query = "DELETE FROM user WHERE Email = @Email";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@Email", email);
 
@@ -425,7 +425,7 @@ public class DbManager
 
         try
         {
-            string query = "SELECT * FROM Users";
+            string query = "SELECT * FROM user";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
             adapter.Fill(dataTable);
@@ -450,7 +450,7 @@ public class DbManager
 
         try
         {
-            string query = "SELECT * FROM Users WHERE Id = @UserId";
+            string query = "SELECT * FROM user WHERE Id = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@UserId", userId);
             MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
@@ -481,7 +481,7 @@ public class DbManager
 
         try
         {
-            string query = "UPDATE Users SET First_Name = @FirstName, Last_Name = @LastName, Email = @Email WHERE Id = @UserId";
+            string query = "UPDATE user SET First_Name = @FirstName, Last_Name = @LastName, Email = @Email WHERE Id = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@FirstName", firstName);
             cmd.Parameters.AddWithValue("@LastName", lastName);
@@ -571,7 +571,7 @@ public class DbManager
 
         try
         {
-            string query = "SELECT COUNT(*) FROM Users WHERE UserId = @UserId AND Password = @Password";
+            string query = "SELECT COUNT(*) FROM user WHERE UserId = @UserId AND Password = @Password";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@UserId", userId);
             cmd.Parameters.AddWithValue("@Password", hashedOldPassword);
@@ -597,7 +597,7 @@ public class DbManager
 
         try
         {
-            string query = "UPDATE Users SET Password = @Password WHERE UserId = @UserId";
+            string query = "UPDATE user SET Password = @Password WHERE UserId = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@Password", newPassword);
             cmd.Parameters.AddWithValue("@UserId", userId);
