@@ -150,5 +150,12 @@ namespace FinalFinanceTrack
                 textBox.Text = "0.00";  // Set back the placeholder text when focus is lost
             }
         }
+
+        private void HistoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            History historyPage = new History();
+            historyPage.Show();
+            this.Close();
+        }
     }
 }

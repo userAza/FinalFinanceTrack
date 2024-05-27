@@ -27,6 +27,7 @@
             <Button Name="IncomeButton" Content="Income" Width="100" Margin="5" Click="IncomeButton_Click"/>
             <Button Name="ExpensesButton" Content="Expenses" Width="100" Margin="5" Click="ExpensesButton_Click" Background="LightGray"/>
             <Button Name="SavingsButton" Content="Savings" Width="100" Margin="5" Click="SavingsButton_Click"/>
+            <Button Name="HistoryButton" Content="History" Width="100" Margin="5" Click="HistoryButton_Click"/>
         </StackPanel>
 
         <!-- Main Content Area -->
