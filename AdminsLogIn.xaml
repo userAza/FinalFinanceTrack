@@ -3,35 +3,38 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="AdminsLogIn" Height="500" Width="800">
     <Grid>
-
-        <!-- Text-based Back Button -->
-        <Button Grid.Row="0" Margin="10,10,0,0" Width="54" Height="23"
-        Content="Back" Click="Back_Click"
-        HorizontalAlignment="Left" VerticalAlignment="Top"
-        Background="DarkGray" Foreground="White"
-        FontSize="12" Padding="10,0">
-        </Button>
-        <!-- Email TextBox -->
-        <TextBox x:Name="adminEmailTextBox" Margin="0,155,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Center" Width="300" 
-         Text="Email" Foreground="Gray" GotFocus="RemovePlaceholderText" LostFocus="AddPlaceholderText" />
+        <!-- Back Button -->
+        <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0"
+                Width="54" Height="23" Background="DarkGray" Foreground="White" FontSize="12" Padding="10,0"
+                Click="Back_Click"/>
 
         <!-- Title Text -->
-        <TextBlock Margin="250,58,0,359" HorizontalAlignment="Left" FontSize="20" FontWeight="Bold" Width="354"><Run Text="Admin log i"/><Run Language="en-be" Text="n"/></TextBlock>
+        <TextBlock Text="Admin Login" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" 
+                   VerticalAlignment="Top" Margin="0,50,0,0"/>
 
+        <!-- Email TextBox -->
+        <TextBox x:Name="adminEmailTextBox" Text="Email" Foreground="Gray" 
+                 HorizontalAlignment="Center" VerticalAlignment="Top" Width="300" Height="30" 
+                 Margin="0,100,0,0" GotFocus="RemovePlaceholderText" LostFocus="AddPlaceholderText"/>
 
-        <!-- Password TextBox -->
-        <TextBox x:Name="adminPasswordTextBox" Margin="0,200,0,0" Height="30" VerticalAlignment="Top" HorizontalAlignment="Center" Width="300"
-         Text="Password" Foreground="Gray" GotFocus="RemovePlaceholderText" LostFocus="AddPlaceholderText" />
+        <!-- Password TextBox and PasswordBox -->
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,140,0,0" Width="330" Height="30">
+            <PasswordBox x:Name="adminPasswordBox" Width="300" Visibility="Visible" 
+                         PasswordChanged="AdminPasswordBox_PasswordChanged" GotFocus="PasswordBox_GotFocus" LostFocus="PasswordBox_LostFocus"/>
+            <TextBox x:Name="adminPasswordTextBox" Width="300" Visibility="Collapsed" Foreground="Gray" GotFocus="RemovePlaceholderText" LostFocus="AddPlaceholderText"/>
+            <TextBlock x:Name="adminPasswordPlaceholder" Text="Password" Foreground="Gray" Margin="17,0,-12,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+            <Button x:Name="toggleAdminPasswordVisibilityButton" Content="👁" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleAdminPasswordVisibility_Click" Margin="286,0,0,0"/>
+        </Grid>
 
         <!-- Forgot Password Link -->
-        <TextBlock Margin="0,242,0,-42" HorizontalAlignment="Center">
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,188,0,0">
             <Hyperlink Click="ForgotPasswordHyperlink_Click">
                 Forgot password?
             </Hyperlink>
         </TextBlock>
 
         <!-- Log In Button -->
-        <Button Content="Log In" Width="150" Height="40" Margin="0,302,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Click="LogIn_Click"/>
-
+        <Button Content="Log In" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="40"
+                Margin="0,308,0,0" Click="LogIn_Click"/>
     </Grid>
 </Window>

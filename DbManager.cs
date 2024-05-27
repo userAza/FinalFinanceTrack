@@ -2,7 +2,8 @@
 using System;
 using System.Data;
 using System.Windows;
-using System.Text.RegularExpressions; // Ensure this using directive is here for Regex
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 public class DbManager
 {
@@ -121,50 +122,48 @@ public class DbManager
             CloseConnection();
         }
         return null;
-
     }
 
+    public bool InsertIncome(int userId, decimal amount, string month, string year)
+    {
+        if (!OpenConnection())
+            return false;
 
-        public bool InsertIncome(int userId, decimal amount, string month, string year)
+        MySqlTransaction transaction = null;
+        try
         {
-            if (!OpenConnection())
-                return false;
+            transaction = connection.BeginTransaction();
 
-            MySqlTransaction transaction = null;
-            try
-            {
-                transaction = connection.BeginTransaction();
+            // Insert income data into the `income` table
+            string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
+            MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
+            cmdIncome.Parameters.AddWithValue("@Amount", amount);
+            cmdIncome.Parameters.AddWithValue("@Month", month);
+            cmdIncome.Parameters.AddWithValue("@Year", year);
+            cmdIncome.ExecuteNonQuery();
+            long incomeId = cmdIncome.LastInsertedId;
 
-                // Insert income data into the `income` table
-                string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
-                MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
-                cmdIncome.Parameters.AddWithValue("@Amount", amount);
-                cmdIncome.Parameters.AddWithValue("@Month", month);
-                cmdIncome.Parameters.AddWithValue("@Year", year);
-                cmdIncome.ExecuteNonQuery();
-                long incomeId = cmdIncome.LastInsertedId;
+            // Link the new income record with the user
+            string queryUserIncome = "INSERT INTO userincome (user_id, income_id) VALUES (@UserId, @IncomeId);";
+            MySqlCommand cmdUserIncome = new MySqlCommand(queryUserIncome, connection, transaction);
+            cmdUserIncome.Parameters.AddWithValue("@UserId", userId);
+            cmdUserIncome.Parameters.AddWithValue("@IncomeId", incomeId);
+            cmdUserIncome.ExecuteNonQuery();
 
-                // Link the new income record with the user
-                string queryUserIncome = "INSERT INTO userincome (user_id, income_id) VALUES (@UserId, @IncomeId);";
-                MySqlCommand cmdUserIncome = new MySqlCommand(queryUserIncome, connection, transaction);
-                cmdUserIncome.Parameters.AddWithValue("@UserId", userId);
-                cmdUserIncome.Parameters.AddWithValue("@IncomeId", incomeId);
-                cmdUserIncome.ExecuteNonQuery();
-
-                transaction.Commit();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to save income data: {ex.Message}");
-                transaction?.Rollback();
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
+            transaction.Commit();
+            return true;
         }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to save income data: {ex.Message}");
+            transaction?.Rollback();
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
     public bool ExecuteQuery(string query, Dictionary<string, object> parameters)
     {
@@ -217,7 +216,6 @@ public class DbManager
             CloseConnection();
         }
     }
-
 
     public string GetAdminPassword(string email)
     {
@@ -308,10 +306,35 @@ public class DbManager
         return (null, null, null);
     }
 
+    // New method to validate admin login
+    public bool ValidateAdminLogin(string email, string password)
+    {
+        if (!OpenConnection())
+            return false;
 
+        try
+        {
+            string query = "SELECT Password FROM admin WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
 
-
-
-
-
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    string storedPassword = reader["Password"].ToString();
+                    return storedPassword == password;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error validating login: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+        return false;
+    }
 }

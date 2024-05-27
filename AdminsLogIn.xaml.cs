@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -7,12 +6,15 @@ namespace FinalFinanceTrack
 {
     public partial class AdminsLogIn : Window
     {
+        private DbManager dbManager;
+
         public AdminsLogIn()
         {
             InitializeComponent();
+            dbManager = new DbManager();
+            UpdatePasswordPlaceholder();
         }
 
-        // Event handler to remove placeholder text when the text box receives focus
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -33,69 +35,86 @@ namespace FinalFinanceTrack
             }
         }
 
-
-        // Event handler for the Log In button click
-        // Event handler for the Log In button click
-        private void LogIn_Click(object sender, RoutedEventArgs e)
+        private void ToggleAdminPasswordVisibility_Click(object sender, RoutedEventArgs e)
         {
-            string mysqlconn = "server=127.0.0.1;user=root;database=budget;password=";
-            MySqlConnection mySqlConnection = new MySqlConnection(mysqlconn);
-
-            string email = adminEmailTextBox.Text;
-            string password = adminPasswordTextBox.Text;
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            if (adminPasswordBox.Visibility == Visibility.Visible)
             {
-                MessageBox.Show("No empty fields allowed");
-                return; // Make sure to return after showing the message box.
+                adminPasswordBox.Visibility = Visibility.Collapsed;
+                adminPasswordTextBox.Text = adminPasswordBox.Password;
+                adminPasswordTextBox.Visibility = Visibility.Visible;
+                toggleAdminPasswordVisibilityButton.Content = "👁";
+                UpdatePasswordPlaceholder();
             }
             else
             {
-                try
-                {
-                    mySqlConnection.Open();
-                    MySqlCommand mySqlCommand = new MySqlCommand("SELECT * FROM admin WHERE Email = @Email AND Password = @Password", mySqlConnection);
-                    mySqlCommand.Parameters.AddWithValue("@Email", email);
-                    mySqlCommand.Parameters.AddWithValue("@Password", password);
-                    MySqlDataReader reader = mySqlCommand.ExecuteReader();
-                    if (reader.Read())
-                    {
-                        // Open the MainPage window after successful login
-                        MainPage mainPage = new MainPage();
-                        mainPage.Show();
-                        this.Close(); // Close the login window, if you prefer to only have one window open at a time
-                    }
-                    else
-                    {
-                        MessageBox.Show("Invalid Login");
-                    }
-                }
-                catch (MySqlException ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-                finally
-                {
-                    mySqlConnection.Close();
-                }
+                adminPasswordTextBox.Visibility = Visibility.Collapsed;
+                adminPasswordBox.Password = adminPasswordTextBox.Text;
+                adminPasswordBox.Visibility = Visibility.Visible;
+                toggleAdminPasswordVisibilityButton.Content = "👁️";
+                UpdatePasswordPlaceholder();
             }
         }
 
+        private void AdminPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            UpdatePasswordPlaceholder();
+        }
 
+        private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            adminPasswordPlaceholder.Visibility = Visibility.Collapsed;
+        }
 
-        // Event handler for the Back button click
+        private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            UpdatePasswordPlaceholder();
+        }
+
+        private void UpdatePasswordPlaceholder()
+        {
+            if (string.IsNullOrEmpty(adminPasswordBox.Password) && adminPasswordBox.Visibility == Visibility.Visible)
+            {
+                adminPasswordPlaceholder.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                adminPasswordPlaceholder.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void LogIn_Click(object sender, RoutedEventArgs e)
+        {
+            string email = adminEmailTextBox.Text;
+            string password = adminPasswordBox.Visibility == Visibility.Visible ? adminPasswordBox.Password : adminPasswordTextBox.Text;
+
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("No empty fields allowed");
+                return;
+            }
+
+            string storedPassword = dbManager.GetAdminPassword(email);
+            if (storedPassword != null && password == storedPassword)
+            {
+                MainPage mainPage = new MainPage();
+                mainPage.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Invalid Login");
+            }
+        }
+
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            // Logic to navigate back to the previous page
-            // For example:
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
         }
 
-        // Event handler for the Forgot Password hyperlink click
         private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the ForgotPasswordAdmin window
             ForgotPasswordAdmin forgotPasswordAdminWindow = new ForgotPasswordAdmin();
             forgotPasswordAdminWindow.Show();
         }
