@@ -46,7 +46,7 @@ namespace FinalFinanceTrack
             if (isUpdated)
             {
                 MessageBox.Show("User details saved successfully!");
-                this.Close();
+                //this.Close();
             }
             else
             {

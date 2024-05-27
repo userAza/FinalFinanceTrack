@@ -8,17 +8,11 @@
         <Label x:Name="label3" Content="Last Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,166,0,0" />
         <Label x:Name="label4" Content="Email Address" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,215,0,0" />
         <TextBlock x:Name="label5" Text="Password" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,269,0,0" />
-        <Label x:Name="label6" Content="Profile Picture" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,322,0,0" />
         <TextBox x:Name="Firstname_textbox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="357" Margin="158,108,0,0" />
         <TextBox x:Name="LastName_Textbox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="357" Margin="158,166,0,0" />
         <TextBox x:Name="EmailAddress_textbox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="357" Margin="181,215,0,0" />
         <PasswordBox x:Name="Password_textbox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="357" Margin="148,269,0,0" />
 
-        <!-- Image control to display the selected profile picture -->
-        <Image x:Name="ProfilePicture_image" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="100" Margin="158,322,0,0" />
-
-        <!-- Button to open file dialog for selecting the profile picture -->
-        <Button x:Name="SelectProfilePicture_button" Content="Select Picture" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="30" Margin="270,322,0,0" Click="SelectProfilePicture_button_Click" Background="LightGray" />
 
         <Button x:Name="button_createuser" Content="CREATE USER" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="46" Margin="512,415,0,0" Click="button_createuser_Click" Background="LightGray" />
         <Button x:Name="button_Exit" Content="BACK" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="46" Margin="228,415,0,0" Click="button_Exit_Click" Background="LightGray" />

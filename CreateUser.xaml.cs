@@ -39,17 +39,17 @@ namespace FinalFinanceTrack
             }
         }
 
-        private void SelectProfilePicture_button_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
+        //private void SelectProfilePicture_button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    OpenFileDialog openFileDialog = new OpenFileDialog();
+        //    openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
 
-            if (openFileDialog.ShowDialog() == true)
-            {
-                profilePicturePath = openFileDialog.FileName;
-                ProfilePicture_image.Source = new BitmapImage(new Uri(profilePicturePath));
-            }
-        }
+        //    if (openFileDialog.ShowDialog() == true)
+        //    {
+        //        profilePicturePath = openFileDialog.FileName;
+        //        ProfilePicture_image.Source = new BitmapImage(new Uri(profilePicturePath));
+        //    }
+        //}
 
         private void button_createuser_Click(object sender, RoutedEventArgs e)
         {
@@ -74,7 +74,7 @@ namespace FinalFinanceTrack
             if (isSuccess)
             {
                 MessageBox.Show("User created successfully!");
-                this.Close();
+                //this.Close();
             }
             else
             {

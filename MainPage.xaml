@@ -3,13 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Main Page" Height="450" Width="1000" Background="White">
     <Grid>
-        <Button x:Name="ReportsButton" Content="REPORTS" HorizontalAlignment="Left" VerticalAlignment="Top" Width="229" Height="53" Margin="50,341,0,0"
-                Background="#D3D3D3" Foreground="Black" BorderBrush="#A9A9A9" Click="ReportsButton_Click"/>
-        <Button x:Name="UserManagementButton" Content="USER MANAGEMENT" HorizontalAlignment="Left" VerticalAlignment="Top" Width="280" Height="53" Margin="550,341,0,0"
-                Background="#D3D3D3" Foreground="Black" BorderBrush="#A9A9A9" Click="UserManagementButton_Click"/>
-        <Button x:Name="OverviewButton" Content="OVERVIEW" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="12,59,0,0"
-                Background="#D3D3D3" Foreground="Black" BorderBrush="#A9A9A9" Click="OverviewButton_Click"/>
-        <Button x:Name="SettingsButton" Content="SETTINGS" HorizontalAlignment="Left" VerticalAlignment="Top" Width="93" Height="34" Margin="771,22,0,0"
-                Background="#D3D3D3" Foreground="Black" BorderBrush="#A9A9A9" Click="SettingsButton_Click"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- User Management Button -->
+        <Button x:Name="UserManagementButton" Content="USER MANAGEMENT" Width="280" Height="53" Margin="0,200,0,0"
+                Background="#D3D3D3" Foreground="Black" BorderBrush="#A9A9A9" Click="UserManagementButton_Click"
+                HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
+        <!-- Settings Button with Symbol -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Grid.Column="1">
+            <Button Name="SettingsButton" Content="⚙" Width="40" Height="40" Click="SettingsButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

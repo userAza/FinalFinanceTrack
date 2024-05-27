@@ -10,11 +10,6 @@ namespace FinalFinanceTrack
             InitializeComponent();
         }
 
-        private void ReportsButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void UserManagementButton_Click(object sender, RoutedEventArgs e)
         {
             UserMan userMan = new UserMan();

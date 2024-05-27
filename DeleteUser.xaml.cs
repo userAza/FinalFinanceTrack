@@ -27,7 +27,7 @@ namespace FinalFinanceTrack
             if (isDeleted)
             {
                 MessageBox.Show("User deleted successfully!");
-                this.Close();
+                //this.Close();
             }
             else
             {
