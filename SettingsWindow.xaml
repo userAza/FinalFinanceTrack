@@ -3,41 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Settings" Height="450" Width="800">
     <Grid>
-        <Button x:Name="ReturnButton" Content="Return" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="10,10,0,0" Click="ReturnButton_Click"/>
-        <Button x:Name="LogoutButton" Content="Logout" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="10,90,0,0" Click="Logout_Click"/>
+        <!-- Text-based Back Button -->
+        <Button Grid.Row="0" Margin="33,26,0,0" Width="54" Height="23"
+                Content="Back" Click="Back_Click"
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Background="DarkGray" Foreground="White"
+                FontSize="12" Padding="10,0">
+        </Button>
+        <Button x:Name="LogoutButton" Content="Logout" HorizontalAlignment="Left" VerticalAlignment="Top" Width="122" Height="30" Margin="323,238,0,0" Click="Logout_Click" RenderTransformOrigin="3.215,4.775"/>
 
         <!-- Add or Change Profile Picture Button -->
-        <Button x:Name="AddProfilePictureButton" Content="Add or change profile picture" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Height="30" Margin="304,90,0,0" Click="AddProfilePicture_Click"/>
+        <Button x:Name="AddProfilePictureButton" Content="Add or change profile picture" HorizontalAlignment="Left" VerticalAlignment="Top" Width="172" Height="30" Margin="298,138,0,0" Click="AddProfilePicture_Click"/>
 
-        <Button x:Name="UpdatePasswordButton" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Height="30" Margin="304,131,0,0" Click="UpdatePassword_Click"/>
-        <Button x:Name="GeneratePolicyDocumentButton" Content="Generate Policy Document" HorizontalAlignment="Left" VerticalAlignment="Top" Width="180" Height="30" Margin="270,187,0,0" Click="GeneratePolicyDocument_Click"/>
-
-        <!-- Terms and Conditions Link -->
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="303,222,0,0">
-            <Hyperlink Click="TermsAndConditionsLink_Click">Terms and Conditions</Hyperlink>
-        </TextBlock>
-
-        <!-- Privacy Policy Link -->
-        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="329,238,0,0">
-            <Hyperlink Click="PrivacyPolicyLink_Click">Privacy Policy</Hyperlink>
-        </TextBlock>
-
-        <!-- Popups for Terms and Conditions and Privacy Policy -->
-        <Popup x:Name="termsPopup" Placement="Mouse" StaysOpen="False">
-            <Border BorderBrush="Black" BorderThickness="1" Background="White" Padding="10">
-                <StackPanel>
-                    <TextBlock Text="Terms and Conditions content goes here..." TextWrapping="Wrap"/>
-                    <Button Content="Close" Width="50" Click="ClosePopup_Click" Tag="{Binding RelativeSource={RelativeSource AncestorType=Popup}}"/>
-                </StackPanel>
-            </Border>
-        </Popup>
-        <Popup x:Name="privacyPopup" Placement="Mouse" StaysOpen="False">
-            <Border BorderBrush="Black" BorderThickness="1" Background="White" Padding="10">
-                <StackPanel>
-                    <TextBlock Text="Privacy Policy content goes here..." TextWrapping="Wrap"/>
-                    <Button Content="Close" Width="50" Click="ClosePopup_Click" Tag="{Binding RelativeSource={RelativeSource AncestorType=Popup}}"/>
-                </StackPanel>
-            </Border>
-        </Popup>
+        <Button x:Name="UpdatePasswordButton" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Top" Width="172" Height="30" Margin="298,90,0,0" Click="UpdatePassword_Click"/>
+        <Button x:Name="PolicyDocumentButton" Content="Policy Document" HorizontalAlignment="Left" VerticalAlignment="Top" Width="172" Height="30" Margin="298,187,0,0" Click="PolicyDocument_Click"/>
     </Grid>
 </Window>

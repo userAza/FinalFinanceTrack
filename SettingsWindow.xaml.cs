@@ -1,6 +1,4 @@
 ﻿using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Controls;
 
 namespace FinalFinanceTrack
 {
@@ -11,7 +9,7 @@ namespace FinalFinanceTrack
             InitializeComponent();
         }
 
-        private void ReturnButton_Click(object sender, RoutedEventArgs e)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
             Overview overviewPage = new Overview();
             overviewPage.Show();
@@ -32,32 +30,11 @@ namespace FinalFinanceTrack
             this.Close();
         }
 
-        private void GeneratePolicyDocument_Click(object sender, RoutedEventArgs e)
+        private void PolicyDocument_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Generating policy document...");
-        }
-
-        private void TermsAndConditionsLink_Click(object sender, RoutedEventArgs e)
-        {
-            termsPopup.IsOpen = true;
-        }
-
-        private void PrivacyPolicyLink_Click(object sender, RoutedEventArgs e)
-        {
-            privacyPopup.IsOpen = true;
-        }
-
-        private void ClosePopup_Click(object sender, RoutedEventArgs e)
-        {
-            Button closeButton = sender as Button;
-            if (closeButton != null)
-            {
-                Popup popup = closeButton.Tag as Popup;
-                if (popup != null)
-                {
-                    popup.IsOpen = false;
-                }
-            }
+            PolicyDocument policyDocumentWindow = new PolicyDocument();
+            policyDocumentWindow.Show();
+            this.Close();
         }
 
         private void AddProfilePicture_Click(object sender, RoutedEventArgs e)
