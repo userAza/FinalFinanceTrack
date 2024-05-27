@@ -122,6 +122,56 @@ public class DbManager
             CloseConnection();
         }
     }
+    public DataTable GetAllUsers()
+    {
+        DataTable dataTable = new DataTable();
+
+        if (!OpenConnection())
+            return dataTable;
+
+        try
+        {
+            string query = "SELECT Id, First_Name, Last_Name, Email FROM Users";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+            adapter.Fill(dataTable);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error loading user data: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return dataTable;
+    }
+
+    public bool DeleteUser(int userId)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "DELETE FROM Users WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            int result = cmd.ExecuteNonQuery();
+            return result > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error deleting user: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
     public string GetPassword(string email)
     {
