@@ -37,5 +37,12 @@
             <Button Content="Upload Picture" Width="150" Height="30" Margin="5" Click="UploadPicture_Click"/>
             <Button Content="OK" Width="150" Height="30" Margin="5" Click="SavePicture_Click"/>
         </StackPanel>
+
+        <!-- Popup for Auto-closing Message -->
+        <Popup x:Name="MessagePopup" Placement="Center" IsOpen="False">
+            <Border Background="Gray" CornerRadius="10" Padding="10">
+                <TextBlock Text="Picture saved!" Foreground="White" FontWeight="Bold"/>
+            </Border>
+        </Popup>
     </Grid>
 </Window>

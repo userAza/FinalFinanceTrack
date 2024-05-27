@@ -1,32 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace FinalFinanceTrack
 {
-    /// <summary>
-    /// Interaction logic for Overview.xaml
-    /// </summary>
     public partial class Overview : Window
     {
+        private const string ProfilePicturePath = "ProfilePicture.png";
+
         public Overview()
         {
             InitializeComponent();
+            LoadProfilePicture();
+        }
+
+        public void LoadProfilePicture()
+        {
+            if (File.Exists(ProfilePicturePath))
+            {
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(ProfilePicturePath, UriKind.RelativeOrAbsolute);
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.EndInit();
+                ProfileImage.Source = bitmap;
+                ProfileImage.Visibility = Visibility.Visible;
+            }
         }
 
         private void IncomeButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Income page
             Income incomePage = new Income();
             incomePage.Show();
             this.Close();
@@ -55,10 +59,21 @@ namespace FinalFinanceTrack
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Settings page
             SettingsWindow settingsPage = new SettingsWindow();
             settingsPage.Show();
             this.Close();
+        }
+
+        private void ProfilePicture_Click(object sender, RoutedEventArgs e)
+        {
+            AddProfilePic addProfilePicWindow = new AddProfilePic();
+            addProfilePicWindow.ProfilePictureSaved += AddProfilePicWindow_ProfilePictureSaved;
+            addProfilePicWindow.ShowDialog();
+        }
+
+        private void AddProfilePicWindow_ProfilePictureSaved()
+        {
+            LoadProfilePicture(); // Reload the profile picture after it has been saved
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace FinalFinanceTrack
 {
@@ -9,16 +8,15 @@ namespace FinalFinanceTrack
         public LogIn()
         {
             InitializeComponent();
-            UpdatePasswordPlaceholder();
         }
 
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (textBox != null && textBox.Foreground == Brushes.Gray)
+            if (textBox != null && textBox.Foreground == System.Windows.Media.Brushes.Gray)
             {
                 textBox.Text = "";
-                textBox.Foreground = Brushes.Black;
+                textBox.Foreground = System.Windows.Media.Brushes.Black;
             }
         }
 
@@ -28,7 +26,7 @@ namespace FinalFinanceTrack
             if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
             {
                 textBox.Text = textBox.Name == "emailTextBox" ? "Email" : "Password";
-                textBox.Foreground = Brushes.Gray;
+                textBox.Foreground = System.Windows.Media.Brushes.Gray;
             }
         }
 
@@ -36,19 +34,17 @@ namespace FinalFinanceTrack
         {
             if (passwordBox.Visibility == Visibility.Visible)
             {
-                passwordBox.Visibility = Visibility.Collapsed;
                 passwordTextBox.Text = passwordBox.Password;
+                passwordBox.Visibility = Visibility.Collapsed;
                 passwordTextBox.Visibility = Visibility.Visible;
                 togglePasswordVisibilityButton.Content = "👁";
-                UpdatePasswordPlaceholder();
             }
             else
             {
-                passwordTextBox.Visibility = Visibility.Collapsed;
                 passwordBox.Password = passwordTextBox.Text;
                 passwordBox.Visibility = Visibility.Visible;
+                passwordTextBox.Visibility = Visibility.Collapsed;
                 togglePasswordVisibilityButton.Content = "👁️";
-                UpdatePasswordPlaceholder();
             }
         }
 
@@ -109,28 +105,9 @@ namespace FinalFinanceTrack
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            UpdatePasswordPlaceholder();
-        }
-
-        private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            passwordPlaceholder.Visibility = Visibility.Collapsed;
-        }
-
-        private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            UpdatePasswordPlaceholder();
-        }
-
-        private void UpdatePasswordPlaceholder()
-        {
-            if (string.IsNullOrEmpty(passwordBox.Password) && passwordBox.Visibility == Visibility.Visible)
+            if (passwordBox.Visibility == Visibility.Visible)
             {
-                passwordPlaceholder.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                passwordPlaceholder.Visibility = Visibility.Collapsed;
+                passwordTextBox.Text = passwordBox.Password;
             }
         }
     }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -9,6 +11,9 @@ namespace FinalFinanceTrack
 {
     public partial class AddProfilePic : Window
     {
+        public event Action ProfilePictureSaved;
+        private const string ProfilePicturePath = "ProfilePicture.png";
+
         public AddProfilePic()
         {
             InitializeComponent();
@@ -19,7 +24,7 @@ namespace FinalFinanceTrack
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures) // Set initial directory to user's "Pictures" folder
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures)
             };
 
             if (openFileDialog.ShowDialog() == true)
@@ -37,7 +42,7 @@ namespace FinalFinanceTrack
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(openFileDialog.FileName);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.Rotation = GetRotation(bitmap.UriSource.LocalPath); // Correct the rotation
+                    bitmap.Rotation = GetRotation(bitmap.UriSource.LocalPath);
                     bitmap.EndInit();
 
                     ProfileImage.Source = bitmap;
@@ -77,7 +82,7 @@ namespace FinalFinanceTrack
             }
         }
 
-        private void SavePicture_Click(object sender, RoutedEventArgs e)
+        private async void SavePicture_Click(object sender, RoutedEventArgs e)
         {
             var rtb = new RenderTargetBitmap(200, 200, 96, 96, PixelFormats.Pbgra32);
             rtb.Render(ProfileImage.Parent as Visual);
@@ -85,18 +90,22 @@ namespace FinalFinanceTrack
             var png = new PngBitmapEncoder();
             png.Frames.Add(BitmapFrame.Create(rtb));
 
-            using (var stream = new FileStream("ProfilePicture.png", FileMode.Create))
+            using (var stream = new FileStream(ProfilePicturePath, FileMode.Create))
             {
                 png.Save(stream);
             }
 
-            MessageBox.Show("Picture saved!");
+            // Display popup message
+            MessagePopup.IsOpen = true;
+            await Task.Delay(2000); // Wait for 2 seconds
+            MessagePopup.IsOpen = false;
+
+            // Raise the event to notify the Overview window
+            ProfilePictureSaved?.Invoke();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow();
-            settingsWindow.Show();
             this.Close();
         }
     }

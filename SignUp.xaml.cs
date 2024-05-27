@@ -116,7 +116,6 @@ namespace FinalFinanceTrack
             }
         }
 
-
         private bool IsValidPassword(string password)
         {
             var hasMinimum8Chars = new Regex(@".{8,}");
@@ -204,16 +203,17 @@ namespace FinalFinanceTrack
                 passwordBox.Visibility = Visibility.Collapsed;
                 passwordTextBox.Text = passwordBox.Password;
                 passwordTextBox.Visibility = Visibility.Visible;
-                togglePasswordVisibilityButton.Content = "👁";
-                UpdatePasswordPlaceholder();
+                togglePasswordVisibilityButton.Content = "👁️";
+                passwordTextBox.Focus();  // Set focus to allow editing
+                passwordTextBox.SelectionStart = passwordTextBox.Text.Length; // Move cursor to the end
             }
             else
             {
                 passwordTextBox.Visibility = Visibility.Collapsed;
                 passwordBox.Password = passwordTextBox.Text;
                 passwordBox.Visibility = Visibility.Visible;
-                togglePasswordVisibilityButton.Content = "👁️";
-                UpdatePasswordPlaceholder();
+                togglePasswordVisibilityButton.Content = "👁";
+                passwordBox.Focus();  // Set focus to allow editing
             }
         }
 
@@ -224,16 +224,17 @@ namespace FinalFinanceTrack
                 confirmPasswordBox.Visibility = Visibility.Collapsed;
                 confirmPasswordTextBox.Text = confirmPasswordBox.Password;
                 confirmPasswordTextBox.Visibility = Visibility.Visible;
-                toggleConfirmPasswordVisibilityButton.Content = "👁";
-                UpdateConfirmPasswordPlaceholder();
+                toggleConfirmPasswordVisibilityButton.Content = "👁️";
+                confirmPasswordTextBox.Focus();  // Set focus to allow editing
+                confirmPasswordTextBox.SelectionStart = confirmPasswordTextBox.Text.Length; // Move cursor to the end
             }
             else
             {
                 confirmPasswordTextBox.Visibility = Visibility.Collapsed;
                 confirmPasswordBox.Password = confirmPasswordTextBox.Text;
                 confirmPasswordBox.Visibility = Visibility.Visible;
-                toggleConfirmPasswordVisibilityButton.Content = "👁️";
-                UpdateConfirmPasswordPlaceholder();
+                toggleConfirmPasswordVisibilityButton.Content = "👁";
+                confirmPasswordBox.Focus();  // Set focus to allow editing
             }
         }
 
