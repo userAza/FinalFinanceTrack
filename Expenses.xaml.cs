@@ -113,5 +113,12 @@ namespace FinalFinanceTrack
         {
             e.Handled = !decimal.TryParse(e.Text, out _); // Ensure only numeric input
         }
+
+        private void HistoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            History historyPage = new History();
+            historyPage.Show();
+            this.Close();
+        }
     }
 }
