@@ -8,19 +8,6 @@ namespace FinalFinanceTrack
         {
             InitializeComponent();
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Equivalent to Form1_Load
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            MainPage mainPage = new MainPage();
-            mainPage.Show();
-            this.Hide();
-        }
-
         private void AddNewUserButton_Click(object sender, RoutedEventArgs e)
         {
             CreateUser createUser = new CreateUser();

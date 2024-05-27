@@ -1,32 +1,61 @@
-﻿using System.Windows;
+﻿using System.Data;
+using System.Windows;
 
 namespace FinalFinanceTrack
 {
     public partial class EditUser : Window
     {
-        public EditUser()
+        private DbManager dbManager;
+        private int userId;
+
+        public EditUser(int userId)
         {
             InitializeComponent();
+            dbManager = new DbManager();
+            this.userId = userId;
+            LoadUserData();
+        }
+
+        private void LoadUserData()
+        {
+            DataTable userData = dbManager.GetUserById(userId);
+
+            if (userData != null && userData.Rows.Count > 0)
+            {
+                DataRow row = userData.Rows[0];
+                UserIdTextBox.Text = row["Id"].ToString();
+                FirstNameTextBox.Text = row["First_Name"].ToString();
+                LastNameTextBox.Text = row["Last_Name"].ToString();
+                EmailTextBox.Text = row["Email"].ToString();
+            }
+            else
+            {
+                MessageBox.Show("User not found.");
+                this.Close();
+            }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Implement the functionality to save the edited user details
-            // For example:
-            // string userId = UserIdTextBox.Text;
-            // string userName = UserNameTextBox.Text;
-            // string email = EmailTextBox.Text;
-            // Save the details to the database or perform the necessary operations
+            string firstName = FirstNameTextBox.Text;
+            string lastName = LastNameTextBox.Text;
+            string email = EmailTextBox.Text;
 
-            MessageBox.Show("User details saved successfully!");
+            bool isUpdated = dbManager.UpdateUser(userId, firstName, lastName, email);
 
-            // Close the window after saving
-            this.Close();
+            if (isUpdated)
+            {
+                MessageBox.Show("User details saved successfully!");
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Error saving user details.");
+            }
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            // Close the window without saving
             this.Close();
         }
     }

@@ -47,45 +47,74 @@ public class DbManager
         }
     }
 
-    public bool InsertUser(string firstName, string lastName, string email, string password, string answer1, string answer2, string answer3)
+    //public bool InsertUser(string firstName, string lastName, string email, string password, string answer1, string answer2, string answer3)
+    //{
+    //    if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) ||
+    //        string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) ||
+    //        string.IsNullOrWhiteSpace(answer1) || string.IsNullOrWhiteSpace(answer2) ||
+    //        string.IsNullOrWhiteSpace(answer3))
+    //    {
+    //        MessageBox.Show("Please fill in all fields.");
+    //        return false;
+    //    }
+
+    //    if (!Regex.IsMatch(email, @"\A[^@\s]+@[^@\s]+\.[^@\s]+\z"))
+    //    {
+    //        MessageBox.Show("Please enter a valid email address.");
+    //        return false;
+    //    }
+
+    //    if (!OpenConnection())
+    //        return false;
+
+    //    try
+    //    {
+    //        string query = "INSERT INTO user (First_Name, Last_Name, Email, Password, Answer1, Answer2, Answer3) VALUES (@FirstName, @LastName, @Email, @Password, @Answer1, @Answer2, @Answer3)";
+    //        MySqlCommand cmd = new MySqlCommand(query, connection);
+
+    //        cmd.Parameters.AddWithValue("@FirstName", firstName);
+    //        cmd.Parameters.AddWithValue("@LastName", lastName);
+    //        cmd.Parameters.AddWithValue("@Email", email);
+    //        cmd.Parameters.AddWithValue("@Password", password);  // Store password as plain text
+    //        cmd.Parameters.AddWithValue("@Answer1", answer1);
+    //        cmd.Parameters.AddWithValue("@Answer2", answer2);
+    //        cmd.Parameters.AddWithValue("@Answer3", answer3);
+
+    //        cmd.ExecuteNonQuery();
+    //        return true;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        MessageBox.Show("Error during sign up: " + ex.Message);
+    //        return false;
+    //    }
+    //    finally
+    //    {
+    //        CloseConnection();
+    //    }
+    //}
+    public bool InsertUser(string firstName, string lastName, string email, string password, byte[] profilePicture)
     {
-        if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) ||
-            string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) ||
-            string.IsNullOrWhiteSpace(answer1) || string.IsNullOrWhiteSpace(answer2) ||
-            string.IsNullOrWhiteSpace(answer3))
-        {
-            MessageBox.Show("Please fill in all fields.");
-            return false;
-        }
-
-        if (!Regex.IsMatch(email, @"\A[^@\s]+@[^@\s]+\.[^@\s]+\z"))
-        {
-            MessageBox.Show("Please enter a valid email address.");
-            return false;
-        }
-
         if (!OpenConnection())
             return false;
 
         try
         {
-            string query = "INSERT INTO user (First_Name, Last_Name, Email, Password, Answer1, Answer2, Answer3) VALUES (@FirstName, @LastName, @Email, @Password, @Answer1, @Answer2, @Answer3)";
+            string query = "INSERT INTO Users (First_Name, Last_Name, Email, Password, ProfilePicture) VALUES (@FirstName, @LastName, @Email, @Password, @ProfilePicture)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
 
             cmd.Parameters.AddWithValue("@FirstName", firstName);
             cmd.Parameters.AddWithValue("@LastName", lastName);
             cmd.Parameters.AddWithValue("@Email", email);
             cmd.Parameters.AddWithValue("@Password", password);  // Store password as plain text
-            cmd.Parameters.AddWithValue("@Answer1", answer1);
-            cmd.Parameters.AddWithValue("@Answer2", answer2);
-            cmd.Parameters.AddWithValue("@Answer3", answer3);
+            cmd.Parameters.AddWithValue("@ProfilePicture", profilePicture);
 
             cmd.ExecuteNonQuery();
             return true;
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error during sign up: " + ex.Message);
+            MessageBox.Show("Error during user creation: " + ex.Message);
             return false;
         }
         finally
@@ -305,6 +334,238 @@ public class DbManager
         }
         return (null, null, null);
     }
+
+    public bool DeleteUserByEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            MessageBox.Show("Please enter a valid email address.");
+            return false;
+        }
+
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "DELETE FROM User WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            int rowsAffected = cmd.ExecuteNonQuery();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error deleting user: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public DataTable GetUsers()
+    {
+        DataTable dataTable = new DataTable();
+
+        if (!OpenConnection())
+            return null;
+
+        try
+        {
+            string query = "SELECT * FROM Users";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+            adapter.Fill(dataTable);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error loading user data: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return dataTable;
+    }
+    public DataTable GetUserById(int userId)
+    {
+        DataTable dataTable = new DataTable();
+
+        if (!OpenConnection())
+            return null;
+
+        try
+        {
+            string query = "SELECT * FROM Users WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+            adapter.Fill(dataTable);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error loading user data: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return dataTable;
+    }
+
+    public bool UpdateUser(int userId, string firstName, string lastName, string email)
+    {
+        if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(email))
+        {
+            MessageBox.Show("Please fill in all fields.");
+            return false;
+        }
+
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "UPDATE Users SET First_Name = @FirstName, Last_Name = @LastName, Email = @Email WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@FirstName", firstName);
+            cmd.Parameters.AddWithValue("@LastName", lastName);
+            cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            int rowsAffected = cmd.ExecuteNonQuery();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating user: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+
+    public decimal GetTotalSavings(int year, int month)
+    {
+        decimal savings = 0;
+
+        if (!OpenConnection())
+            return savings;
+
+        try
+        {
+            string query = "SELECT SUM(Savings) FROM History WHERE YEAR(Date) = @Year AND MONTH(Date) = @Month";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Year", year);
+            cmd.Parameters.AddWithValue("@Month", month);
+
+            object result = cmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                savings = Convert.ToDecimal(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error loading savings: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return savings;
+    }
+
+    public List<int> GetDistinctYears()
+    {
+        List<int> years = new List<int>();
+
+        if (!OpenConnection())
+            return years;
+
+        try
+        {
+            string query = "SELECT DISTINCT YEAR(Date) AS Year FROM History";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                years.Add(reader.GetInt32(0));
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error loading years: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return years;
+    }
+    public bool ValidateOldPassword(int userId, string hashedOldPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "SELECT COUNT(*) FROM Users WHERE UserId = @UserId AND Password = @Password";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@Password", hashedOldPassword);
+
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            return count > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error validating old password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public bool UpdatePassword(int userId, string newPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "UPDATE Users SET Password = @Password WHERE UserId = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Password", newPassword);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            int result = cmd.ExecuteNonQuery();
+            return result > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
 
     // New method to validate admin login
     public bool ValidateAdminLogin(string email, string password)

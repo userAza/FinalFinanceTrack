@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using MySql.Data.MySqlClient;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 
@@ -10,15 +9,16 @@ namespace FinalFinanceTrack
 {
     public partial class History : Window
     {
-        private string connectionString = "server=127.0.0.1;user=root;database=budget;Password="; 
+        private DbManager dbManager;
+
         public History()
         {
             InitializeComponent();
+            dbManager = new DbManager();
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            
             Overview overviewPage = new Overview();
             overviewPage.Show();
             this.Close();
@@ -26,7 +26,6 @@ namespace FinalFinanceTrack
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            
             string searchText = SearchTextBox.Text.Trim();
             if (!string.IsNullOrEmpty(searchText))
             {
@@ -44,62 +43,39 @@ namespace FinalFinanceTrack
 
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
-            
             FilterByYear();
         }
 
         private void button3_Click(object sender, RoutedEventArgs e)
         {
-            
             SaveHistoryAsPdf();
         }
 
         private void DisplaySavings(int year, int month)
         {
-            string query = "SELECT SUM(Savings) FROM History WHERE YEAR(Date) = @Year AND MONTH(Date) = @Month";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Year", year);
-                command.Parameters.AddWithValue("@Month", month);
+            decimal savings = dbManager.GetTotalSavings(year, month);
 
-                connection.Open();
-                object result = command.ExecuteScalar();
-                if (result != null)
-                {
-                    decimal savings = Convert.ToDecimal(result);
-                    HistoryTextBlock.Text = $"Total savings for {month}/{year}: €{savings:N2}";
-                }
-                else
-                {
-                    HistoryTextBlock.Text = $"No savings found for {month}/{year}.";
-                }
+            if (savings > 0)
+            {
+                HistoryTextBlock.Text = $"Total savings for {month}/{year}: €{savings:N2}";
+            }
+            else
+            {
+                HistoryTextBlock.Text = $"No savings found for {month}/{year}.";
             }
         }
 
         private void FilterByYear()
         {
-            string query = "SELECT DISTINCT YEAR(Date) AS Year FROM History";
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            List<int> years = dbManager.GetDistinctYears();
+
+            if (years.Count > 0)
             {
-                MySqlCommand command = new MySqlCommand(query, connection);
-
-                connection.Open();
-                MySqlDataReader reader = command.ExecuteReader();
-                List<int> years = new List<int>();
-                while (reader.Read())
-                {
-                    years.Add(reader.GetInt32(0));
-                }
-
-                if (years.Count > 0)
-                {
-                    HistoryTextBlock.Text = "Available years:\n" + string.Join("\n", years);
-                }
-                else
-                {
-                    HistoryTextBlock.Text = "No years found.";
-                }
+                HistoryTextBlock.Text = "Available years:\n" + string.Join("\n", years);
+            }
+            else
+            {
+                HistoryTextBlock.Text = "No years found.";
             }
         }
 

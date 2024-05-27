@@ -1,18 +1,17 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using System.Windows;
 
 namespace FinalFinanceTrack
 {
     public partial class UserList : Window
     {
-        private string connectionString = "server=127.0.0.1;user=root;database=budget;User="; 
+        private DbManager dbManager;
 
         public UserList()
         {
             InitializeComponent();
+            dbManager = new DbManager();
             LoadUserData();
         }
 
@@ -20,15 +19,14 @@ namespace FinalFinanceTrack
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                DataTable userData = dbManager.GetUsers();
+                if (userData != null)
                 {
-                    conn.Open();
-                    MySqlCommand cmd = new MySqlCommand("SELECT * FROM Users", conn);
-                    MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                    DataTable dataTable = new DataTable();
-                    adapter.Fill(dataTable);
-
-                    UserDataGrid.ItemsSource = dataTable.DefaultView;
+                    UserDataGrid.ItemsSource = userData.DefaultView;
+                }
+                else
+                {
+                    MessageBox.Show("No user data found.");
                 }
             }
             catch (Exception ex)
@@ -36,6 +34,7 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Error loading user data: " + ex.Message);
             }
         }
+
         private void button_Back_Click(object sender, RoutedEventArgs e)
         {
             MainPage mainPage = new MainPage();

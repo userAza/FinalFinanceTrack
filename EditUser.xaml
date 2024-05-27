@@ -4,15 +4,18 @@
         Title="Edit User" Height="450" Width="800">
     <Grid>
         <Label x:Name="UserIdLabel" Content="User ID:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,50,0,0"/>
-        <TextBox x:Name="UserIdTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="150,50,0,0"/>
+        <TextBox x:Name="UserIdTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="150,50,0,0" IsReadOnly="True"/>
 
-        <Label x:Name="UserNameLabel" Content="Username:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,100,0,0"/>
-        <TextBox x:Name="UserNameTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="150,100,0,0"/>
+        <Label x:Name="FirstNameLabel" Content="First Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,100,0,0"/>
+        <TextBox x:Name="FirstNameTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="150,100,0,0"/>
 
-        <Label x:Name="EmailLabel" Content="Email:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,150,0,0"/>
-        <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="150,150,0,0"/>
+        <Label x:Name="LastNameLabel" Content="Last Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,150,0,0"/>
+        <TextBox x:Name="LastNameTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="150,150,0,0"/>
 
-        <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="150,200,0,0" Click="SaveButton_Click"/>
-        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="260,200,0,0" Click="CancelButton_Click"/>
+        <Label x:Name="EmailLabel" Content="Email:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,200,0,0"/>
+        <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="150,200,0,0"/>
+
+        <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="150,250,0,0" Click="SaveButton_Click"/>
+        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="30" Margin="260,250,0,0" Click="CancelButton_Click"/>
     </Grid>
 </Window>

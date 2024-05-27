@@ -1,17 +1,17 @@
 ﻿using System;
-using MySql.Data.MySqlClient;
 using System.Windows;
 
 namespace FinalFinanceTrack
 {
     public partial class UpdatePasswordWindow : Window
     {
-        private string connectionString = "server=127.0.0.1;user=root;database=budget;Password"; // Replace with your actual connection string
-        private int userId=1; 
+        private DbManager dbManager;
+        private int userId = 1; // Replace with the actual user ID
 
         public UpdatePasswordWindow()
         {
             InitializeComponent();
+            dbManager = new DbManager();
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
@@ -22,10 +22,11 @@ namespace FinalFinanceTrack
 
             if (newPassword == confirmPassword)
             {
-                if (ValidateOldPassword(oldPassword))
+                string hashedOldPassword = Security.HashPassword(oldPassword);
+                if (dbManager.ValidateOldPassword(userId, hashedOldPassword))
                 {
                     string hashedNewPassword = Security.HashPassword(newPassword);
-                    if (UpdatePasswordInDatabase(hashedNewPassword))
+                    if (dbManager.UpdatePassword(userId, hashedNewPassword))
                     {
                         MessageBox.Show("New password saved.");
                     }
@@ -42,39 +43,6 @@ namespace FinalFinanceTrack
             else
             {
                 MessageBox.Show("New password and confirmation do not match.");
-            }
-        }
-
-        private bool ValidateOldPassword(string oldPassword)
-        {
-            string hashedOldPassword = Security.HashPassword(oldPassword);
-            string query = "SELECT COUNT(*) FROM Users WHERE UserId = @UserId AND Password = @Password"; // Adjust query to your schema
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@UserId", userId);
-                command.Parameters.AddWithValue("@Password", hashedOldPassword);
-
-                connection.Open();
-                int count = Convert.ToInt32(command.ExecuteScalar());
-                return count > 0;
-            }
-        }
-
-        private bool UpdatePasswordInDatabase(string newPassword)
-        {
-            string query = "UPDATE Users SET Password = @Password WHERE UserId = @UserId"; 
-
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
-            {
-                MySqlCommand command = new MySqlCommand(query, connection);
-                command.Parameters.AddWithValue("@Password", newPassword);
-                command.Parameters.AddWithValue("@UserId", userId);
-
-                connection.Open();
-                int result = command.ExecuteNonQuery();
-                return result > 0;
             }
         }
 
