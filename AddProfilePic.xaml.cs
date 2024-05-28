@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -16,7 +15,7 @@ namespace FinalFinanceTrack
 
         public AddProfilePic()
         {
-            InitializeComponent();
+            InitializeComponent(); // This should be recognized if the XAML is correctly linked
         }
 
         private void UploadPicture_Click(object sender, RoutedEventArgs e)
