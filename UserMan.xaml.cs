@@ -1,73 +1,82 @@
-﻿using System;
-using System.Data;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 
 namespace FinalFinanceTrack
 {
     public partial class UserMan : Window
     {
-        private DbManager dbManager;
-        private int selectedUserId = -1;
+        private int userId;
 
-        public UserMan()
+        public UserMan(int userId)
         {
             InitializeComponent();
-            dbManager = new DbManager();
-            LoadUserData();
-        }
-
-        private void LoadUserData()
-        {
-            DataTable userData = dbManager.GetAllUsers();
-            if (userData.Rows.Count > 0)
-            {
-                // For demonstration, just set the selectedUserId to the first user in the list
-                selectedUserId = Convert.ToInt32(userData.Rows[0]["Id"]);
-            }
-        }
-
-        private void AddNewUserButton_Click(object sender, RoutedEventArgs e)
-        {
-            CreateUser createUser = new CreateUser();
-            createUser.Show();
-            this.Hide();
-        }
-
-        private void EditUserButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (selectedUserId != -1)
-            {
-                EditUser editUser = new EditUser(selectedUserId);
-                editUser.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Please select a user to edit.");
-            }
-        }
-
-
-        private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (selectedUserId != -1)
-            {
-                DeleteUser deleteUser = new DeleteUser(selectedUserId);
-                deleteUser.Show();
-                this.Hide();
-            }
-            else
-            {
-                MessageBox.Show("Please select a user to delete.");
-            }
+            this.userId = userId;
         }
 
         private void UserListButton_Click(object sender, RoutedEventArgs e)
         {
-            UserList userList = new UserList();
+            UserList userList = new UserList(userId);
             userList.Show();
-            this.Hide();
+            this.Close();
+        }
+
+        private void AddNewUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Toggle visibility of the Add User Panel
+            if (AddUserPanel.Visibility == Visibility.Collapsed)
+            {
+                AddUserPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AddUserPanel.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void EditUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditUser editUser = new EditUser(userId);
+            editUser.Show();
+            this.Close();
+        }
+
+        private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteUser deleteUser = new DeleteUser(userId);
+            deleteUser.Show();
+            this.Close();
+        }
+
+        private void CreateUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            string firstName = FirstNameTextBox.Text;
+            string lastName = LastNameTextBox.Text;
+            string email = EmailTextBox.Text;
+            string password = PasswordBox.Password;
+
+            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) ||
+                string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            {
+                MessageBox.Show("Please fill in all fields.");
+                return;
+            }
+
+            DbManager dbManager = new DbManager();
+            bool success = dbManager.InsertUser(firstName, lastName, email, password, null);
+
+            if (success)
+            {
+                MessageBox.Show("User created successfully.");
+                // Clear input fields and hide the Add User Panel
+                FirstNameTextBox.Clear();
+                LastNameTextBox.Clear();
+                EmailTextBox.Clear();
+                PasswordBox.Clear();
+                AddUserPanel.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                MessageBox.Show("Failed to create user.");
+            }
         }
     }
 }

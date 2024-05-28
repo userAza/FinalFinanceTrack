@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalFinanceTrack"
         mc:Ignorable="d"
         Title="Savings" Height="500" Width="800">
-    <Grid>
+    <Grid Background="#FFF9F6F4">
         <!-- Top Bar with Settings Button -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -16,7 +16,9 @@
 
         <Grid Grid.Row="0">
             <Button Name="BackButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                    Margin="10" Width="60" Height="30" Click="BackButton_Click"/>
+                    Margin="10" Width="60" Height="30" Click="BackButton_Click" Background="DarkGray" 
+            Foreground="White" FontSize="12" Padding="10,0"/>
+
             <Button Name="SettingsButton" Content="⚙" HorizontalAlignment="Right" VerticalAlignment="Top" 
                     Margin="10" Width="40" Height="40" Click="SettingsButton_Click"/>
         </Grid>

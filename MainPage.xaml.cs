@@ -14,9 +14,9 @@ namespace FinalFinanceTrack
 
         private void UserManagementButton_Click(object sender, RoutedEventArgs e)
         {
-            UserMan userMan = new UserMan();
-            userMan.Show();
-            this.Hide();
+            UserMan userManagement = new UserMan(userId);
+            userManagement.Show();
+            this.Close();
         }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
@@ -24,18 +24,6 @@ namespace FinalFinanceTrack
             AdminSettings adminSettings = new AdminSettings(userId);
             adminSettings.Show();
             this.Close();
-        }
-
-        private void OverviewButton_Click(object sender, RoutedEventArgs e)
-        {
-            Overview overviewPage = new Overview();
-            overviewPage.Show();
-            this.Close();
-        }
-
-        private void ClickMeButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Placeholder for additional code
         }
     }
 }

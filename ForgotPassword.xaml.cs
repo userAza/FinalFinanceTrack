@@ -1,18 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Text.RegularExpressions;
 
 namespace FinalFinanceTrack
 {
@@ -23,7 +14,6 @@ namespace FinalFinanceTrack
             InitializeComponent();
         }
 
-        // Event handler to remove placeholder text when the text box receives focus
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -34,7 +24,6 @@ namespace FinalFinanceTrack
             }
         }
 
-        // Event handler to add placeholder text when the text box loses focus and is empty
         private void AddPlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -45,8 +34,6 @@ namespace FinalFinanceTrack
             }
         }
 
-
-        // Validates the email format
         private bool IsValidEmail(string email)
         {
             return Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
@@ -88,14 +75,6 @@ namespace FinalFinanceTrack
             this.Close();
         }
 
-
-
-
-
-
-
-
-
         private void InsertPasswordResetRequest(string email)
         {
             try
@@ -116,15 +95,10 @@ namespace FinalFinanceTrack
             }
         }
 
-
-
-        // Event handler for the Back button click
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            // Close the ForgotPassword window
             this.Close();
         }
-
 
         private (string, string, string) GetStoredAnswers(string email)
         {
@@ -149,6 +123,5 @@ namespace FinalFinanceTrack
             }
             return (null, null, null); // Return null if no data found
         }
-
     }
 }

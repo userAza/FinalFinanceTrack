@@ -1,27 +1,63 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace FinalFinanceTrack
 {
     public partial class AdminsLogIn : Window
     {
-        private DbManager dbManager;
-
         public AdminsLogIn()
         {
             InitializeComponent();
-            dbManager = new DbManager();
-            UpdatePasswordPlaceholder();
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate back to the previous window
+            // Assuming you have a MainWindow or another window to navigate back to
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
+        }
+
+        private void LogIn_Click(object sender, RoutedEventArgs e)
+        {
+            string email = adminEmailTextBox.Text;
+            string password = adminPasswordBox.Password;
+
+            // Here you would implement your login logic, e.g., checking credentials against a database
+            // For demonstration purposes, let's assume a successful login and retrieve a userId
+
+            // Replace with actual userId retrieval logic
+            int userId = 1;
+
+            // Navigate to MainPage with userId
+            MainPage mainPage = new MainPage(userId);
+            mainPage.Show();
+            this.Close();
+        }
+
+        private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            // Navigate to the password reset page
+            ResetPassw resetPassw = new ResetPassw();
+            resetPassw.Show();
+            this.Close();
         }
 
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (textBox != null && textBox.Foreground == Brushes.Gray)
+            if (textBox != null && textBox.Text == "Email")
             {
                 textBox.Text = "";
-                textBox.Foreground = Brushes.Black;
+                textBox.Foreground = System.Windows.Media.Brushes.Black;
+            }
+
+            if (textBox == adminPasswordTextBox && adminPasswordTextBox.Visibility == Visibility.Visible)
+            {
+                adminPasswordTextBox.Visibility = Visibility.Collapsed;
+                adminPasswordBox.Visibility = Visibility.Visible;
+                adminPasswordBox.Focus();
             }
         }
 
@@ -30,8 +66,14 @@ namespace FinalFinanceTrack
             TextBox textBox = sender as TextBox;
             if (textBox != null && string.IsNullOrWhiteSpace(textBox.Text))
             {
-                textBox.Text = textBox.Name.Contains("Email") ? "Email" : "Password";
-                textBox.Foreground = Brushes.Gray;
+                textBox.Text = "Email";
+                textBox.Foreground = System.Windows.Media.Brushes.Gray;
+            }
+
+            if (textBox == adminPasswordTextBox && string.IsNullOrWhiteSpace(adminPasswordBox.Password))
+            {
+                adminPasswordTextBox.Visibility = Visibility.Visible;
+                adminPasswordBox.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -39,25 +81,30 @@ namespace FinalFinanceTrack
         {
             if (adminPasswordBox.Visibility == Visibility.Visible)
             {
-                adminPasswordBox.Visibility = Visibility.Collapsed;
                 adminPasswordTextBox.Text = adminPasswordBox.Password;
+                adminPasswordBox.Visibility = Visibility.Collapsed;
                 adminPasswordTextBox.Visibility = Visibility.Visible;
-                toggleAdminPasswordVisibilityButton.Content = "👁";
-                UpdatePasswordPlaceholder();
+                toggleAdminPasswordVisibilityButton.Content = "🙈";
             }
             else
             {
-                adminPasswordTextBox.Visibility = Visibility.Collapsed;
                 adminPasswordBox.Password = adminPasswordTextBox.Text;
+                adminPasswordTextBox.Visibility = Visibility.Collapsed;
                 adminPasswordBox.Visibility = Visibility.Visible;
-                toggleAdminPasswordVisibilityButton.Content = "👁️";
-                UpdatePasswordPlaceholder();
+                toggleAdminPasswordVisibilityButton.Content = "👁";
             }
         }
 
         private void AdminPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            UpdatePasswordPlaceholder();
+            if (!string.IsNullOrWhiteSpace(adminPasswordBox.Password))
+            {
+                adminPasswordPlaceholder.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                adminPasswordPlaceholder.Visibility = Visibility.Visible;
+            }
         }
 
         private void PasswordBox_GotFocus(object sender, RoutedEventArgs e)
@@ -67,56 +114,10 @@ namespace FinalFinanceTrack
 
         private void PasswordBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            UpdatePasswordPlaceholder();
-        }
-
-        private void UpdatePasswordPlaceholder()
-        {
-            if (string.IsNullOrEmpty(adminPasswordBox.Password) && adminPasswordBox.Visibility == Visibility.Visible)
+            if (string.IsNullOrWhiteSpace(adminPasswordBox.Password))
             {
                 adminPasswordPlaceholder.Visibility = Visibility.Visible;
             }
-            else
-            {
-                adminPasswordPlaceholder.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void LogIn_Click(object sender, RoutedEventArgs e)
-        {
-            string email = adminEmailTextBox.Text;
-            string password = adminPasswordBox.Visibility == Visibility.Visible ? adminPasswordBox.Password : adminPasswordTextBox.Text;
-
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("No empty fields allowed");
-                return;
-            }
-
-            string storedPassword = dbManager.GetAdminPassword(email);
-            if (storedPassword != null && password == storedPassword)
-            {
-                MainPage mainPage = new MainPage(/* Pass the userId here */);
-                mainPage.Show();
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Invalid Login");
-            }
-        }
-
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            this.Close();
-        }
-
-        private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            ForgotPasswordAdmin forgotPasswordAdminWindow = new ForgotPasswordAdmin();
-            forgotPasswordAdminWindow.Show();
         }
     }
 }

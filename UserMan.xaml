@@ -2,10 +2,20 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="User Management" Height="500" Width="800">
-    <Grid>
-        <Button x:Name="UserListButton" Content="USER LIST" HorizontalAlignment="Center" VerticalAlignment="Top" Width="191" Height="49" Margin="0,50,0,0" Click="UserListButton_Click"/>
-        <Button x:Name="AddNewUserButton" Content="ADD NEW USER" HorizontalAlignment="Center" VerticalAlignment="Top" Width="191" Height="47" Margin="0,110,0,0" Click="AddNewUserButton_Click"/>
-        <Button x:Name="EditUserButton" Content="EDIT USER" HorizontalAlignment="Center" VerticalAlignment="Top" Width="191" Height="43" Margin="0,170,0,0" Click="EditUserButton_Click"/>
-        <Button x:Name="DeleteUserButton" Content="DELETE" HorizontalAlignment="Center" VerticalAlignment="Top" Width="191" Height="40" Margin="0,230,0,0" Click="DeleteUserButton_Click"/>
+    <Grid Background="#FFF9F6F4">
+
+        <Button x:Name="UserListButton" Content="USER LIST" HorizontalAlignment="Center" VerticalAlignment="Top" Width="192" Height="49" Margin="0,108,0,0" Click="UserListButton_Click"/>
+        <Button x:Name="AddNewUserButton" Content="ADD NEW USER" HorizontalAlignment="Center" VerticalAlignment="Top" Width="192" Height="47" Margin="0,168,0,0" Click="AddNewUserButton_Click"/>
+        <Button x:Name="EditUserButton" Content="EDIT USER" HorizontalAlignment="Center" VerticalAlignment="Top" Width="192" Height="43" Margin="0,228,0,0" Click="EditUserButton_Click"/>
+        <Button x:Name="DeleteUserButton" Content="DELETE" HorizontalAlignment="Center" VerticalAlignment="Top" Width="192" Height="40" Margin="0,288,0,0" Click="DeleteUserButton_Click"/>
+
+        <!-- Add New User Form -->
+        <StackPanel x:Name="AddUserPanel" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+            <TextBox x:Name="FirstNameTextBox" Margin="0,10,0,10" Width="200" Height="30"/>
+            <TextBox x:Name="LastNameTextBox" Margin="0,10,0,10" Width="200" Height="30"/>
+            <TextBox x:Name="EmailTextBox" Margin="0,10,0,10" Width="200" Height="30"/>
+            <PasswordBox x:Name="PasswordBox" Margin="0,10,0,10" Width="200" Height="30"/>
+            <Button Content="Create User" Click="CreateUserButton_Click" Margin="0,10,0,10" Width="200" Height="30"/>
+        </StackPanel>
     </Grid>
 </Window>

@@ -36,10 +36,10 @@
 
         <!-- Button Area -->
         <WrapPanel Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1" Margin="180,40,0,0" Grid.ColumnSpan="2">
-            <Button Name="IncomeButton" Content="Income" Width="200" Margin="10" Click="IncomeButton_Click" FontFamily="Berlin Sans FB" BorderBrush="#FF8314DC" BorderThickness="2"/>
-            <Button Name="ExpensesButton" Content="Expenses" Width="200" Margin="10" Click="ExpensesButton_Click" BorderBrush="#FF8314DC" BorderThickness="2"/>
-            <Button Name="SavingsButton" Content="Savings" Width="200" Margin="10" Click="SavingsButton_Click" BorderBrush="#FF8314DC" BorderThickness="2"/>
-            <Button Name="HistoryButton" Content="History" Width="200" Margin="10" Click="HistoryButton_Click" BorderBrush="#FF8314DC" BorderThickness="2"/>
+            <Button Name="IncomeButton" Content="Income" Width="200" Margin="10" Click="IncomeButton_Click" FontFamily="Berlin Sans FB" BorderThickness="2"/>
+            <Button Name="ExpensesButton" Content="Expenses" Width="200" Margin="10" Click="ExpensesButton_Click" BorderThickness="2"/>
+            <Button Name="SavingsButton" Content="Savings" Width="200" Margin="10" Click="SavingsButton_Click" BorderThickness="2"/>
+            <Button Name="HistoryButton" Content="History" Width="200" Margin="10" Click="HistoryButton_Click" BorderThickness="2"/>
         </WrapPanel>
     </Grid>
 </Window>

@@ -12,9 +12,9 @@ namespace FinalFinanceTrack
             InitializeComponent();
         }
 
-        public ResetPassw(string email) : this() // Call the default constructor to initialize components
+        public ResetPassw(string email) : this()
         {
-            userEmail = email; // Store email for later use (e.g., updating password in the database)
+            userEmail = email;
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
@@ -36,10 +36,10 @@ namespace FinalFinanceTrack
 
             // Update the user password
             DbManager dbManager = new DbManager();
-            if (dbManager.UpdateUserPassword(userEmail, newPassword))
+            User user = dbManager.GetUserByEmail(userEmail);
+            if (user != null && dbManager.UpdatePassword(user.Id, newPassword))
             {
                 MessageBox.Show("Your password has been reset successfully.");
-
 
                 // Navigate to the login page
                 LogIn loginWindow = new LogIn();
@@ -67,12 +67,12 @@ namespace FinalFinanceTrack
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            // Handle button click event
         }
 
         private void NewPasswordTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-
+            // Handle text changed event
         }
     }
 }
