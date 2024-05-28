@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalFinanceTrack"
         mc:Ignorable="d"
         Title="AdminSettings" Height="500" Width="800">
-    <Grid>
+    <Grid Background="#FFF9F6F4">
         
     </Grid>
 </Window>

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FinalFinanceTrack"
         mc:Ignorable="d"
         Title="DeleteUser" Height="500" Width="800">
-    <Grid>
+    <Grid Background="#FFF9F6F4">
         <Label x:Name="label1" Content="DELETE A USER" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" FontSize="18" FontWeight="Bold" FontFamily="Stencil"/>
         <Label x:Name="label2" Content="Enter User Email" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,120,0,0"/>
         <TextBox x:Name="email_textbox" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="170,120,0,0" Width="400"/>

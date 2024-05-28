@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="PolicyDocument" Height="500" Width="800">
-    <Grid>
+    <Grid Background="#FFF9F6F4">
         <!-- Text-based Back Button -->
         <Button Grid.Row="0" Margin="10,10,0,0" Width="54" Height="23"
                 Content="Back" Click="Back_Click"
