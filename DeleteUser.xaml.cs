@@ -35,10 +35,7 @@ namespace FinalFinanceTrack
             }
         }
 
-        private void back_text_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+       
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             UserMan userMan = new UserMan(userId);
