@@ -60,6 +60,7 @@
             <!-- ProgressBar to represent savings visually -->
             <ProgressBar x:Name="SavingsProgressBar" Width="300" Height="30" Margin="20" 
                          Minimum="0" Maximum="100" Value="0"/>
+            <TextBlock x:Name="SavingsPercentage" Text="0%" FontSize="16" FontWeight="Bold" Margin="10"/>
         </StackPanel>
     </Grid>
 </Window>

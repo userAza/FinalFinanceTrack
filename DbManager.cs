@@ -289,7 +289,7 @@ namespace FinalFinanceTrack
         }
 
 
- 
+
 
 
 
@@ -576,6 +576,31 @@ namespace FinalFinanceTrack
             return savings;
         }
 
+        public bool ValidateOldPassword(int userId, string oldPassword)
+        {
+            if (!OpenConnection())
+                return false;
+
+            try
+            {
+                string query = "SELECT COUNT(*) FROM user WHERE Password = @Password";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@Password", oldPassword);
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error validating old password: " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
         public List<int> GetDistinctYears()
         {
             List<int> years = new List<int>();
@@ -606,48 +631,121 @@ namespace FinalFinanceTrack
             return years;
         }
 
-        public bool ValidateOldPassword(int userId, string oldPassword)
+
+        public int GetIncomeCategoryId(string categoryName)
         {
             if (!OpenConnection())
-                return false;
+                return -1;
 
             try
             {
-                string query = "SELECT COUNT(*) FROM user WHERE Password = @Password";
+                string query = "SELECT id FROM categoryincome WHERE Name = @CategoryName";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Password", oldPassword);
+                cmd.Parameters.AddWithValue("@CategoryName", categoryName);
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return reader.GetInt32("id");
+                    }
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error validating old password: " + ex.Message);
-                return false;
+                MessageBox.Show("Error retrieving category ID: " + ex.Message);
             }
             finally
             {
                 CloseConnection();
             }
+
+            return -1; // Return an invalid ID if something went wrong
         }
-        public bool ValidateAdminPassword(string email, string oldPassword)
+
+        public static decimal GetTotalIncomeForUser(int userId, int month, DbManager dbManager)
+        {
+            decimal totalIncome = 0;
+
+            if (dbManager.OpenConnection())
+            {
+                try
+                {
+                    string query = "SELECT SUM(Amount) FROM income WHERE ID = @UserId AND MONTH = @Month";
+                    MySqlCommand command = new MySqlCommand(query, dbManager.connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@Month", month);
+
+                    object result = command.ExecuteScalar();
+                    if (result != DBNull.Value)
+                    {
+                        totalIncome = Convert.ToDecimal(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error retrieving total income: " + ex.Message);
+                }
+                finally
+                {
+                    dbManager.CloseConnection();
+                }
+            }
+
+            return totalIncome;
+        }
+
+        public static decimal GetTotalExpensesForUser(int userId, int month, DbManager dbManager)
+        {
+            decimal totalExpenses = 0;
+
+            if (dbManager.OpenConnection())
+            {
+                try
+                {
+                    string query = "SELECT SUM(Amount) FROM expense WHERE ID = @UserId AND MONTH = @Month";
+                    MySqlCommand command = new MySqlCommand(query, dbManager.connection);
+                    command.Parameters.AddWithValue("@UserId", userId);
+                    command.Parameters.AddWithValue("@Month", month);
+
+                    object result = command.ExecuteScalar();
+                    if (result != DBNull.Value)
+                    {
+                        totalExpenses = Convert.ToDecimal(result);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error retrieving total expenses: " + ex.Message);
+                }
+                finally
+                {
+                    dbManager.CloseConnection();
+                }
+            }
+
+            return totalExpenses;
+        }
+        public bool ValidateSecurityQuestions(string email, string answer1, string answer2, string answer3)
         {
             if (!OpenConnection())
                 return false;
 
             try
             {
-                string query = "SELECT COUNT(*) FROM admin WHERE Email = @Email AND Password = @Password";
+                string query = "SELECT COUNT(*) FROM admin WHERE Email = @Email AND SecurityQuestion1 = @Answer1 AND SecurityQuestion2 = @Answer2 AND SecurityQuestion3 = @Answer3";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Email", email.Trim());
-                cmd.Parameters.AddWithValue("@Password", oldPassword.Trim());
+                cmd.Parameters.AddWithValue("@Answer1", answer1.Trim());
+                cmd.Parameters.AddWithValue("@Answer2", answer2.Trim());
+                cmd.Parameters.AddWithValue("@Answer3", answer3.Trim());
 
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
                 return count > 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error validating old password: " + ex.Message);
+                MessageBox.Show("Error validating security questions: " + ex.Message);
                 return false;
             }
             finally
@@ -681,39 +779,5 @@ namespace FinalFinanceTrack
                 CloseConnection();
             }
         }
-
-        public int GetIncomeCategoryId(string categoryName)
-        {
-            if (!OpenConnection())
-                return -1;
-
-            try
-            {
-                string query = "SELECT id FROM categoryincome WHERE Name = @CategoryName";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@CategoryName", categoryName);
-
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return reader.GetInt32("id");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving category ID: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return -1; // Return an invalid ID if something went wrong
-        }
-
-
-
     }
 }

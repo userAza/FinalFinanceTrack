@@ -13,7 +13,6 @@ namespace FinalFinanceTrack
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             // Navigate back to the previous window
-            // Assuming you have a MainWindow or another window to navigate back to
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
             this.Close();
@@ -24,11 +23,8 @@ namespace FinalFinanceTrack
             string email = adminEmailTextBox.Text;
             string password = adminPasswordBox.Password;
 
-            // Here you would implement your login logic, e.g., checking credentials against a database
-            // For demonstration purposes, let's assume a successful login and retrieve a userId
-
-            // Replace with actual userId retrieval logic
-            int userId = 1;
+            // Implement your login logic, e.g., checking credentials against a database
+            int userId = 1; // Replace with actual userId retrieval logic
 
             // Navigate to MainPage with userId
             MainPage mainPage = new MainPage(userId);
@@ -38,14 +34,13 @@ namespace FinalFinanceTrack
 
         private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the AdminResetPassw window
-            AdminResetPassw adminResetPassw = new AdminResetPassw(adminEmailTextBox.Text);
-            adminResetPassw.Show();
+            // Navigate to the ForgotPasswordAdmin window
+            ForgotPasswordAdmin forgotPasswordAdmin = new ForgotPasswordAdmin();
+            forgotPasswordAdmin.Show();
             this.Close();
         }
 
-
-            private void RemovePlaceholderText(object sender, RoutedEventArgs e)
+        private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (textBox != null && textBox.Text == "Email")

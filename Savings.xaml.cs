@@ -1,22 +1,24 @@
-﻿using System;
+﻿using System.Windows.Controls;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace FinalFinanceTrack
 {
     public partial class Savings : Window
     {
+        private DbManager dbManager;
+
         public Savings()
         {
             InitializeComponent();
+            dbManager = new DbManager(); // Initialize the DbManager
             CalculateSavings(DateTime.Now.Month); // Initialize with the current month
         }
 
         private void CalculateSavings(int month)
         {
-            // Assuming that you have methods to get the total income and expenses for a given month
-            decimal totalIncome = GetTotalIncome(month);
-            decimal totalExpenses = GetTotalExpenses(month);
+            int userId = Utility.GetCurrentUserId();
+            decimal totalIncome = DbManager.GetTotalIncomeForUser(userId, month, dbManager); // Pass the dbManager instance
+            decimal totalExpenses = DbManager.GetTotalExpensesForUser(userId, month, dbManager); // Pass the dbManager instance
             decimal savings = totalIncome - totalExpenses;
 
             SavingsAmount.Text = $"€ {savings:N2}";
@@ -24,50 +26,9 @@ namespace FinalFinanceTrack
             // Calculate savings percentage
             decimal savingsPercentage = totalIncome != 0 ? (savings / totalIncome) * 100 : 0;
             SavingsProgressBar.Value = (double)savingsPercentage;
-        }
 
-        private decimal GetTotalIncome(int month)
-        {
-            // Replace with actual logic to retrieve total income for the given month
-            // This is a placeholder
-            return month switch
-            {
-                1 => 1000.00m,
-                2 => 1100.00m,
-                3 => 1200.00m,
-                4 => 1300.00m,
-                5 => 1400.00m,
-                6 => 1500.00m,
-                7 => 1600.00m,
-                8 => 1700.00m,
-                9 => 1800.00m,
-                10 => 1900.00m,
-                11 => 2000.00m,
-                12 => 2100.00m,
-                _ => 1000.00m,
-            };
-        }
-
-        private decimal GetTotalExpenses(int month)
-        {
-            // Replace with actual logic to retrieve total expenses for the given month
-            // This is a placeholder
-            return month switch
-            {
-                1 => 400.00m,
-                2 => 500.00m,
-                3 => 600.00m,
-                4 => 700.00m,
-                5 => 800.00m,
-                6 => 900.00m,
-                7 => 1000.00m,
-                8 => 1100.00m,
-                9 => 1200.00m,
-                10 => 1300.00m,
-                11 => 1400.00m,
-                12 => 1500.00m,
-                _ => 400.00m,
-            };
+            // Display the savings percentage on the progress bar
+            SavingsPercentage.Text = $"{savingsPercentage:N2}%";
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -78,7 +39,6 @@ namespace FinalFinanceTrack
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Settings page
             int userId = Utility.GetCurrentUserId();
             SettingsWindow settingsPage = new SettingsWindow(userId);
             settingsPage.Show();
@@ -87,7 +47,6 @@ namespace FinalFinanceTrack
 
         private void OverviewButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Overview page
             Overview overviewPage = new Overview();
             overviewPage.Show();
             this.Close();
@@ -95,7 +54,6 @@ namespace FinalFinanceTrack
 
         private void IncomeButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Income page
             Income incomePage = new Income();
             incomePage.Show();
             this.Close();
@@ -103,7 +61,6 @@ namespace FinalFinanceTrack
 
         private void ExpensesButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Expenses page
             Expenses expensesPage = new Expenses();
             expensesPage.Show();
             this.Close();
@@ -122,12 +79,12 @@ namespace FinalFinanceTrack
                 CalculateSavings(selectedMonth);
             }
         }
+
         private void HistoryButton_Click(object sender, RoutedEventArgs e)
         {
             History historyPage = new History();
             historyPage.Show();
             this.Close();
         }
-
     }
 }
