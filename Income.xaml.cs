@@ -78,6 +78,13 @@ namespace FinalFinanceTrack
             highlightbtn.SetActiveButton(sender as Button);
         }
 
+        private int GetIncomeCategoryId(string categoryName)
+        {
+            DbManager dbManager = new DbManager();
+            return dbManager.GetIncomeCategoryId(categoryName);
+        }
+
+
         private void OKButton_LinkClick(object sender, RoutedEventArgs e)
         {
             int userId = SessionUser.GetCurrentUserId(); // Ensure this static class is correctly implemented
@@ -93,25 +100,27 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            string source = CategoryComboBox.Text;
-            if (string.IsNullOrEmpty(source))
+            if (CategoryComboBox.SelectedItem == null)
             {
-                MessageBox.Show("Please select a source.");
+                MessageBox.Show("Please select a category", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            DateTime? selectedDate = IncomeDatePicker.SelectedDate;
-            if (!selectedDate.HasValue)
-            {
-                MessageBox.Show("Please select a date.");
-                return;
-            }
+            string selectedCategory = (CategoryComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            int categoryId = GetIncomeCategoryId(selectedCategory);
+            DateTime selectedDate = IncomeDatePicker.SelectedDate ?? DateTime.Now;
 
-            // Convert DateTime to a string format suitable for your database
-            string formattedDate = selectedDate.Value.ToString("yyyy-MM-dd"); // Adjust the format as necessary
+            string query = "INSERT INTO income (Amount, Month, Year, categoryinc_ID) VALUES (@Amount, @Month, @Year, @CategoryId)";
+            Dictionary<string, object> parameters = new Dictionary<string, object>
+                {
+                    {"@Amount", amount},
+                    {"@Month", selectedDate.Month.ToString()},
+                    {"@Year", selectedDate.Year.ToString()},
+                    {"@CategoryId", categoryId}
+                };
 
             DbManager dbManager = new DbManager();
-            if (dbManager.InsertIncome(userId, amount, source, formattedDate)) // Ensure that this method matches your DbManager capabilities
+            if (dbManager.ExecuteQuery(query, parameters))
             {
                 MessageBox.Show("Income data saved successfully!");
             }

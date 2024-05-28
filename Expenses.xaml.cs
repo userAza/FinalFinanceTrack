@@ -35,12 +35,22 @@ namespace FinalFinanceTrack
             overviewPage.Show();
             this.Close();
         }
+        private int GetCurrentUserId()
+        {
+            // Implement this method to retrieve the current user's ID.
+            // This is just a placeholder implementation.
+            return SessionUser.GetCurrentUserId();
+        }
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsPage = new SettingsWindow();
+            int userId = GetCurrentUserId();
+            SettingsWindow settingsPage = new SettingsWindow(userId);
             settingsPage.Show();
         }
+
+
+   
 
         private void OverviewButton_Click(object sender, RoutedEventArgs e)
         {
