@@ -287,6 +287,7 @@ namespace FinalFinanceTrack
             }
         }
 
+
         public bool UpdateAdminPassword(string email, string newPassword)
         {
             if (!OpenConnection())
@@ -312,6 +313,39 @@ namespace FinalFinanceTrack
                 CloseConnection();
             }
         }
+
+        public bool ValidateAdminPassword(string email, string oldPassword)
+        {
+            if (!OpenConnection())
+                return false;
+
+            try
+            {
+                string trimmedEmail = email.Trim();
+                string trimmedPassword = oldPassword.Trim();
+
+                string query = "SELECT COUNT(*) FROM admin WHERE Email = @Email AND Password = @Password";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@Email", trimmedEmail);
+                cmd.Parameters.AddWithValue("@Password", trimmedPassword);
+
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                return count > 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error validating old password: " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+
+
 
         public string GetAdminPassword(string email)
         {
@@ -710,5 +744,7 @@ namespace FinalFinanceTrack
             }
             return false;
         }
+
+
     }
 }

@@ -38,9 +38,9 @@ namespace FinalFinanceTrack
 
         private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the password reset page
-            ResetPassw resetPassw = new ResetPassw();
-            resetPassw.Show();
+            // Navigate to the AdminResetPassw window
+            AdminResetPassw adminResetPassw = new AdminResetPassw(adminEmailTextBox.Text);
+            adminResetPassw.Show();
             this.Close();
         }
 
