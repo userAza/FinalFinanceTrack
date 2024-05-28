@@ -8,12 +8,12 @@
 
     <Grid Background="#FFF9F6F4">
         <Button x:Name="button_Exit" Grid.Row="0" Margin="10,10,0,0" Width="54" Height="23"
-                Content="Back" Click="Back_Click"
+                Content="Back" Click="button_Exit_Click"
                 HorizontalAlignment="Left" VerticalAlignment="Top"
                 Background="DarkGray" Foreground="White"
                 FontSize="12" Padding="10,0">
         </Button>
-        <Label x:Name="label1" Content="ADD A USER" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="374,18,0,0" FontFamily="Stencil" FontSize="18" Background="Silver" />
+        <Label x:Name="label1" Content="ADD A USER" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="374,18,0,0" FontFamily="Stencil" FontSize="18" />
         <Label x:Name="label2" Content="First Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,108,0,0" />
         <Label x:Name="label3" Content="Last Name" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,166,0,0" />
         <Label x:Name="label4" Content="Email Address" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,215,0,0" />
@@ -25,6 +25,5 @@
 
 
         <Button x:Name="button_createuser" Content="CREATE USER" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="46" Margin="512,415,0,0" Click="button_createuser_Click" Background="LightGray" />
-        <Button x:Name="button_Exit" Content="BACK" HorizontalAlignment="Left" VerticalAlignment="Top" Width="150" Height="46" Margin="228,415,0,0" Click="button_Exit_Click" Background="LightGray" />
     </Grid>
 </Window>
