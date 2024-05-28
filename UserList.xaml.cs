@@ -39,9 +39,9 @@ namespace FinalFinanceTrack
 
         private void button_Back_Click(object sender, RoutedEventArgs e)
         {
-            MainPage mainPage = new MainPage(userId);
-            mainPage.Show();
-            this.Hide();
+            UserMan userMan = new UserMan(userId);
+            userMan.Show();
+            this.Close();
         }
     }
 }
