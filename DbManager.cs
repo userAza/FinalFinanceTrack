@@ -467,20 +467,32 @@ namespace FinalFinanceTrack
             }
         }
 
-        public DataTable GetUserByEmail(string email)
+        public User GetUserByEmail(string email)
         {
-            DataTable dataTable = new DataTable();
-
             if (!OpenConnection())
-                return dataTable;
+                return null;
 
             try
             {
                 string query = "SELECT * FROM user WHERE Email = @Email";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Email", email);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                adapter.Fill(dataTable);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        User user = new User
+                        {
+                            Id = reader.GetInt32("Id"),
+                            FirstName = reader.GetString("First_Name"),
+                            LastName = reader.GetString("Last_Name"),
+                            Email = reader.GetString("Email"),
+                            Password = reader.GetString("Password")
+                        };
+                        return user;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -490,9 +502,9 @@ namespace FinalFinanceTrack
             {
                 CloseConnection();
             }
-
-            return dataTable;
+            return null;
         }
+
 
 
         public DataTable GetUserById(int userId)
@@ -521,6 +533,63 @@ namespace FinalFinanceTrack
 
             return dataTable;
         }
+
+
+        public int? GetUserIdByEmail(string email)
+        {
+            if (!OpenConnection())
+                return null;
+
+            try
+            {
+                string query = "SELECT Id FROM user WHERE Email = @Email";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@Email", email);
+
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    return Convert.ToInt32(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving user ID: " + ex.Message);
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return null;
+        }
+        public string GetUserEmailById(int userId)
+        {
+            if (!OpenConnection())
+                return null;
+
+            try
+            {
+                string query = "SELECT Email FROM user WHERE Id = @UserId";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@UserId", userId);
+
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                {
+                    return result.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving user email: " + ex.Message);
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return null;
+        }
+
 
 
         public decimal GetTotalSavings(int year, int month)

@@ -20,7 +20,7 @@ namespace FinalFinanceTrack
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             string newPassword = NewPasswordTextBox.Text;
-            string confirmPassword = ConfirmPasswordTextBox.Text;
+            string confirmPassword = NewPasswordTextBox.Text;
 
             if (!IsValidPassword(newPassword))
             {
@@ -34,14 +34,11 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            // Update the user password
             DbManager dbManager = new DbManager();
-            User user = dbManager.GetUserByEmail(userEmail);
-            if (user != null && dbManager.UpdatePassword(user.Id, newPassword))
+            int? userId = dbManager.GetUserIdByEmail(userEmail);
+            if (userId.HasValue && dbManager.UpdatePassword(userId.Value, newPassword))
             {
                 MessageBox.Show("Your password has been reset successfully.");
-
-                // Navigate to the login page
                 LogIn loginWindow = new LogIn();
                 loginWindow.Show();
                 this.Close();

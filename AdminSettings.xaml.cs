@@ -28,10 +28,18 @@ namespace FinalFinanceTrack
 
         private void UpdatePasswordButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the reset password window
-            ResetPassw resetPassw = new ResetPassw(userId);
-            resetPassw.Show();
-            this.Close();
+            DbManager dbManager = new DbManager();
+            string userEmail = dbManager.GetUserEmailById(userId); // New method to get email by user ID
+            if (userEmail != null)
+            {
+                ResetPassw resetPassw = new ResetPassw(userEmail);
+                resetPassw.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Failed to find user email. Please try again.");
+            }
         }
     }
 }
