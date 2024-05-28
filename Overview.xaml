@@ -20,8 +20,8 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.ColumnSpan="3">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
-                <Border Width="100" Height="100" Background="LightGray" BorderBrush="Black" BorderThickness="2" MouseLeftButtonDown="ProfilePicture_Click" Margin="0,0,10,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,27,44,0">
+                <Border Width="100" Height="100" Background="LightGray" BorderBrush="Black" BorderThickness="2" MouseLeftButtonDown="ProfilePicture_Click" Margin="0,0,50,0">
                     <Image x:Name="ProfileImage" Stretch="Uniform" ClipToBounds="True"/>
                 </Border>
                 <Button Name="SettingsButton" Content="⚙" Width="40" Height="40" Click="SettingsButton_Click"/>
