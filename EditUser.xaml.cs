@@ -72,8 +72,11 @@ namespace FinalFinanceTrack
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            UserMan userMan = new UserMan(userId); 
+            userMan.Show();
             this.Close();
         }
+
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
