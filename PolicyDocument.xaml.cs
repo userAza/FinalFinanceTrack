@@ -13,8 +13,9 @@ namespace FinalFinanceTrack
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow();
-            settingsWindow.Show();
+            int userId = Utility.GetCurrentUserId();
+            SettingsWindow settingsPage = new SettingsWindow(userId);
+            settingsPage.Show();
             this.Close();
         }
 

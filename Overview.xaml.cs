@@ -59,17 +59,20 @@ namespace FinalFinanceTrack
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsPage = new SettingsWindow();
+            int userId = Utility.GetCurrentUserId();
+            SettingsWindow settingsPage = new SettingsWindow(userId);
             settingsPage.Show();
             this.Close();
         }
 
         private void ProfilePicture_Click(object sender, RoutedEventArgs e)
         {
-            AddProfilePic addProfilePicWindow = new AddProfilePic();
+            int userId = Utility.GetCurrentUserId();
+            AddProfilePic addProfilePicWindow = new AddProfilePic(userId);
             addProfilePicWindow.ProfilePictureSaved += AddProfilePicWindow_ProfilePictureSaved;
             addProfilePicWindow.ShowDialog();
         }
+
 
         private void AddProfilePicWindow_ProfilePictureSaved()
         {

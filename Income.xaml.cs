@@ -40,11 +40,12 @@ namespace FinalFinanceTrack
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate to the Settings page
-            SettingsWindow settingsPage = new SettingsWindow();
+            int userId = Utility.GetCurrentUserId();
+            SettingsWindow settingsPage = new SettingsWindow(userId);
             settingsPage.Show();
             this.Close();
         }
+
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -78,16 +79,9 @@ namespace FinalFinanceTrack
             highlightbtn.SetActiveButton(sender as Button);
         }
 
-        private int GetIncomeCategoryId(string categoryName)
-        {
-            DbManager dbManager = new DbManager();
-            return dbManager.GetIncomeCategoryId(categoryName);
-        }
-
-
         private void OKButton_LinkClick(object sender, RoutedEventArgs e)
         {
-            int userId = SessionUser.GetCurrentUserId(); // Ensure this static class is correctly implemented
+            int userId = Utility.GetCurrentUserId();
             if (userId == 0)
             {
                 MessageBox.Show("No user is currently logged in.");
@@ -100,27 +94,26 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            if (CategoryComboBox.SelectedItem == null)
+            string source = CategoryComboBox.Text;
+            if (string.IsNullOrEmpty(source))
             {
-                MessageBox.Show("Please select a category", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Please select a source.");
                 return;
             }
 
-            string selectedCategory = (CategoryComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-            int categoryId = GetIncomeCategoryId(selectedCategory);
-            DateTime selectedDate = IncomeDatePicker.SelectedDate ?? DateTime.Now;
+            DateTime? selectedDate = IncomeDatePicker.SelectedDate;
+            if (!selectedDate.HasValue)
+            {
+                MessageBox.Show("Please select a date.");
+                return;
+            }
 
-            string query = "INSERT INTO income (Amount, Month, Year, categoryinc_ID) VALUES (@Amount, @Month, @Year, @CategoryId)";
-            Dictionary<string, object> parameters = new Dictionary<string, object>
-                {
-                    {"@Amount", amount},
-                    {"@Month", selectedDate.Month.ToString()},
-                    {"@Year", selectedDate.Year.ToString()},
-                    {"@CategoryId", categoryId}
-                };
+            // Extract month and year from the selected date
+            string month = selectedDate.Value.ToString("MMMM");
+            string year = selectedDate.Value.ToString("yyyy");
 
             DbManager dbManager = new DbManager();
-            if (dbManager.ExecuteQuery(query, parameters))
+            if (dbManager.InsertIncome(userId, amount, month, year)) // Ensure that this method matches your DbManager capabilities
             {
                 MessageBox.Show("Income data saved successfully!");
             }

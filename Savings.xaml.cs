@@ -79,8 +79,10 @@ namespace FinalFinanceTrack
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             // Navigate to the Settings page
-            SettingsWindow settingsPage = new SettingsWindow();
+            int userId = Utility.GetCurrentUserId();
+            SettingsWindow settingsPage = new SettingsWindow(userId);
             settingsPage.Show();
+            this.Hide();
         }
 
         private void OverviewButton_Click(object sender, RoutedEventArgs e)
