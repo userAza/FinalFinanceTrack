@@ -58,7 +58,7 @@ namespace FinalFinanceTrack
             byte[] profilePictureData = File.ReadAllBytes(profilePicturePath);
 
 
-            bool isSuccess = dbManager.InsertUser(firstName, lastName, email, password, profilePictureData);
+            bool isSuccess = dbManager.InsertUser(firstName, lastName, email, password);
 
             if (isSuccess)
             {

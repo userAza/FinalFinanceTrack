@@ -48,21 +48,20 @@ namespace FinalFinanceTrack
             }
         }
 
-        public bool InsertUser(string firstName, string lastName, string email, string password, byte[] profilePhoto)
+        public bool InsertUser(string firstName, string lastName, string email, string password)
         {
             if (!OpenConnection())
                 return false;
 
             try
             {
-                string query = "INSERT INTO user (First_Name, Last_Name, Email, Password, profilePhoto) VALUES (@FirstName, @LastName, @Email, @Password, @profilePhoto)";
+                string query = "INSERT INTO user (First_Name, Last_Name, Email, Password, profilePhoto) VALUES (@FirstName, @LastName, @Email, @Password)";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
 
                 cmd.Parameters.AddWithValue("@FirstName", firstName);
                 cmd.Parameters.AddWithValue("@LastName", lastName);
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@Password", password);
-                cmd.Parameters.AddWithValue("@ProfilePhoto", profilePhoto);
 
                 cmd.ExecuteNonQuery();
                 return true;
@@ -607,7 +606,7 @@ namespace FinalFinanceTrack
             return years;
         }
 
-        public bool ValidateOldPassword(int userId, string hashedOldPassword)
+        public bool ValidateOldPassword(int userId, string oldPassword)
         {
             if (!OpenConnection())
                 return false;
@@ -616,7 +615,7 @@ namespace FinalFinanceTrack
             {
                 string query = "SELECT COUNT(*) FROM user WHERE Password = @Password";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Password", hashedOldPassword);
+                cmd.Parameters.AddWithValue("@Password", oldPassword);
 
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
                 return count > 0;
