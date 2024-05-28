@@ -54,7 +54,7 @@ namespace FinalFinanceTrack
             }
 
             DbManager dbManager = new DbManager();
-            bool success = dbManager.InsertUser(firstName, lastName, email, password, null);
+            bool success = dbManager.InsertUser(firstName, lastName, email, password);
 
             if (success)
             {
