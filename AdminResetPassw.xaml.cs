@@ -8,17 +8,20 @@ namespace FinalFinanceTrack
     public partial class AdminResetPassw : Window
     {
         private string adminEmail;
+        private DbManager dbManager;
 
         public AdminResetPassw(string email)
         {
             InitializeComponent();
             adminEmail = email;
+            dbManager = new DbManager();
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            string newPassword = AdminNewPasswordTextBox.Text;
-            string confirmPassword = AdminConfirmPasswordTextBox.Text;
+            string oldPassword = AdminOldPasswordTextBox.Text.Trim();
+            string newPassword = AdminNewPasswordTextBox.Text.Trim();
+            string confirmPassword = AdminConfirmPasswordTextBox.Text.Trim();
 
             if (!IsValidPassword(newPassword))
             {
@@ -32,8 +35,13 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            // Update the admin password
-            if (UpdateAdminPassword(adminEmail, newPassword))
+            if (!dbManager.ValidateAdminPassword(adminEmail.Trim(), oldPassword))
+            {
+                MessageBox.Show("The old password is incorrect. Please try again.");
+                return;
+            }
+
+            if (dbManager.UpdateAdminPassword(adminEmail.Trim(), newPassword))
             {
                 MessageBox.Show("Your password has been reset successfully.");
                 this.Close();
@@ -57,28 +65,12 @@ namespace FinalFinanceTrack
                    hasSpecialCharacter.IsMatch(password);
         }
 
-        private bool UpdateAdminPassword(string email, string newPassword)
+        private void Back_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                string connectionString = "server=127.0.0.1;user=root;database=budget;password=";
-                using (var connection = new MySqlConnection(connectionString))
-                {
-                    connection.Open();
-                    var query = "UPDATE admin SET Password = @Password WHERE Email = @Email";
-                    var cmd = new MySqlCommand(query, connection);
-                    cmd.Parameters.AddWithValue("@Password", newPassword);
-                    cmd.Parameters.AddWithValue("@Email", email);
-
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    return rowsAffected > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to update password: {ex.Message}");
-                return false;
-            }
+            // Navigate back to the AdminsLogIn window
+            AdminsLogIn adminsLogIn = new AdminsLogIn();
+            adminsLogIn.Show();
+            this.Close();
         }
     }
 }
