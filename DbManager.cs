@@ -169,6 +169,7 @@ namespace FinalFinanceTrack
             {
                 transaction = connection.BeginTransaction();
 
+                // Insert into the income table
                 string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
                 MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
                 cmdIncome.Parameters.AddWithValue("@Amount", amount);
@@ -177,7 +178,8 @@ namespace FinalFinanceTrack
                 cmdIncome.ExecuteNonQuery();
                 long incomeId = cmdIncome.LastInsertedId;
 
-                string queryUserIncome = "INSERT INTO userincome (user_id, income_id) VALUES (@UserId, @IncomeId);";
+                // Insert into the userincome table
+                string queryUserIncome = "INSERT INTO userincome (User_ID, Income_ID) VALUES (@UserId, @IncomeId);";
                 MySqlCommand cmdUserIncome = new MySqlCommand(queryUserIncome, connection, transaction);
                 cmdUserIncome.Parameters.AddWithValue("@UserId", userId);
                 cmdUserIncome.Parameters.AddWithValue("@IncomeId", incomeId);
