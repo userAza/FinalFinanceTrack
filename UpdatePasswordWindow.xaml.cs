@@ -6,12 +6,13 @@ namespace FinalFinanceTrack
     public partial class UpdatePasswordWindow : Window
     {
         private DbManager dbManager;
-        private int userId = 1; // Replace with the actual user ID
+        private int userId;
 
-        public UpdatePasswordWindow()
+        public UpdatePasswordWindow(int userId) // Accept userId as a parameter
         {
             InitializeComponent();
             dbManager = new DbManager();
+            this.userId = userId; // Set the userId
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
@@ -19,6 +20,12 @@ namespace FinalFinanceTrack
             string oldPassword = oldPasswordBox.Password;
             string newPassword = newPasswordBox.Password;
             string confirmPassword = confirmPasswordBox.Password;
+
+            if (string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
+            {
+                MessageBox.Show("All fields are required.");
+                return;
+            }
 
             if (newPassword == confirmPassword)
             {
@@ -29,6 +36,7 @@ namespace FinalFinanceTrack
                     if (dbManager.UpdatePassword(userId, hashedNewPassword))
                     {
                         MessageBox.Show("New password saved.");
+                        this.Close();
                     }
                     else
                     {
@@ -48,13 +56,6 @@ namespace FinalFinanceTrack
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-        }
-
-        private void BackToSettingsButton_Click(object sender, RoutedEventArgs e)
-        {
-            SettingsWindow settingsWindow = new SettingsWindow();
-            settingsWindow.Show();
             this.Close();
         }
     }

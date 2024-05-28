@@ -4,9 +4,12 @@ namespace FinalFinanceTrack
 {
     public partial class SettingsWindow : Window
     {
-        public SettingsWindow()
+        private int userId;
+
+        public SettingsWindow(int userId)
         {
             InitializeComponent();
+            this.userId = userId;
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -18,7 +21,7 @@ namespace FinalFinanceTrack
 
         private void UpdatePassword_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePasswordWindow updatePasswordWindow = new UpdatePasswordWindow();
+            UpdatePasswordWindow updatePasswordWindow = new UpdatePasswordWindow(userId);
             updatePasswordWindow.Show();
             this.Close();
         }
@@ -39,7 +42,7 @@ namespace FinalFinanceTrack
 
         private void AddProfilePicture_Click(object sender, RoutedEventArgs e)
         {
-            AddProfilePic addProfilePicWindow = new AddProfilePic();
+            AddProfilePic addProfilePicWindow = new AddProfilePic(userId);
             addProfilePicWindow.Show();
             this.Close();
         }

@@ -10,12 +10,14 @@ namespace FinalFinanceTrack
 {
     public partial class AddProfilePic : Window
     {
-        public event Action ProfilePictureSaved;
+        public event Action ProfilePictureSaved = delegate { };
         private const string ProfilePicturePath = "ProfilePicture.png";
+        private int userId;
 
-        public AddProfilePic()
+        public AddProfilePic(int userId)
         {
             InitializeComponent(); // This should be recognized if the XAML is correctly linked
+            this.userId = userId;
         }
 
         private void UploadPicture_Click(object sender, RoutedEventArgs e)
@@ -105,6 +107,8 @@ namespace FinalFinanceTrack
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            SettingsWindow settingsWindow = new SettingsWindow(userId);
+            settingsWindow.Show();
             this.Close();
         }
     }
