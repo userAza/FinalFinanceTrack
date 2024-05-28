@@ -44,7 +44,8 @@ namespace FinalFinanceTrack
             this.Close();
         }
 
-        private void RemovePlaceholderText(object sender, RoutedEventArgs e)
+
+            private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (textBox != null && textBox.Text == "Email")

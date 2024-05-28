@@ -49,7 +49,7 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(emailTextBox.Text.Trim()))
+            if (string.IsNullOrWhiteSpace(emailTextBox.Text.Trim()) || emailTextBox.Text.Trim() == "Email must be ending with @fintrack.com")
             {
                 MessageBox.Show("Email is required.");
                 return;
@@ -63,7 +63,7 @@ namespace FinalFinanceTrack
 
             string password = passwordBox.Visibility == Visibility.Visible ? passwordBox.Password : passwordTextBox.Text;
 
-            if (string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(password) || password == "Password")
             {
                 MessageBox.Show("Password is required.");
                 return;
@@ -77,7 +77,7 @@ namespace FinalFinanceTrack
 
             string confirmPassword = confirmPasswordBox.Visibility == Visibility.Visible ? confirmPasswordBox.Password : confirmPasswordTextBox.Text;
 
-            if (string.IsNullOrWhiteSpace(confirmPassword))
+            if (string.IsNullOrWhiteSpace(confirmPassword) || confirmPassword == "Confirm Password")
             {
                 MessageBox.Show("Confirm password is required.");
                 return;
@@ -86,6 +86,24 @@ namespace FinalFinanceTrack
             if (password != confirmPassword)
             {
                 MessageBox.Show("The passwords do not match. Please re-enter your passwords.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(securityQuestion1TextBox.Text.Trim()))
+            {
+                MessageBox.Show("Security Question 1 is required.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(securityQuestion2TextBox.Text.Trim()))
+            {
+                MessageBox.Show("Security Question 2 is required.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(securityQuestion3TextBox.Text.Trim()))
+            {
+                MessageBox.Show("Security Question 3 is required.");
                 return;
             }
 
@@ -126,7 +144,6 @@ namespace FinalFinanceTrack
             // For the sake of example, let's assume we return a dummy byte array.
             return new byte[0]; // Replace with actual implementation
         }
-
 
         private bool IsValidPassword(string password)
         {

@@ -5,7 +5,6 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="2*"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -14,43 +13,47 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Text-based Back Button -->
-        <Button Margin="10,-2,0,0" Width="54" Height="23"
+        <Button Grid.Row="0" Margin="10,10,0,0" Width="54" Height="23"
                 Content="Back" Click="Back_Click"
                 HorizontalAlignment="Left" VerticalAlignment="Top"
                 Background="DarkGray" Foreground="White"
-                FontSize="12" Padding="10,0"/>
+                FontSize="12" Padding="10,0">
+        </Button>
 
         <!-- Title for resetting password -->
         <TextBlock Text="Reset your password" FontSize="18" FontWeight="Bold" 
                    HorizontalAlignment="Center" Grid.Row="1" Margin="0,10,0,5"/>
 
+        <!-- Email Label and TextBox -->
+        <TextBlock Text="Email" Grid.Row="2" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBox x:Name="AdminEmailTextBox" Grid.Row="3" Width="200" Height="30"
+                 HorizontalAlignment="Center" Margin="0,5,0,0"/>
+
         <!-- Old Password Label and TextBox -->
-        <TextBlock Text="Old Password" Grid.Row="3" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-        <TextBox x:Name="AdminOldPasswordTextBox" Grid.Row="4" Width="200" Height="30"
+        <TextBlock Text="Old Password" Grid.Row="4" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBox x:Name="AdminOldPasswordTextBox" Grid.Row="5" Width="200" Height="30"
                  HorizontalAlignment="Center" Margin="0,5,0,0"/>
 
         <!-- New Password Label and TextBox -->
-        <TextBlock Text="New Password" Grid.Row="5" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-        <TextBox x:Name="AdminNewPasswordTextBox" Grid.Row="6" Width="200" Height="30"
+        <TextBlock Text="New Password" Grid.Row="6" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+        <TextBox x:Name="AdminNewPasswordTextBox" Grid.Row="7" Width="200" Height="30"
                  HorizontalAlignment="Center" Margin="0,5,0,0"/>
 
         <!-- Password Requirements -->
         <TextBlock Text="Password must be at least 8 characters long, include at least one uppercase letter, one special character (.@§$+-*/\&amp;lt;\&amp;gt;), and one number (0-9)."
-                   FontSize="12" Foreground="Gray" Grid.Row="7" HorizontalAlignment="Center" 
+                   FontSize="12" Foreground="Gray" Grid.Row="8" HorizontalAlignment="Center" 
                    TextWrapping="Wrap" Margin="0,9,0,16" Width="360"/>
 
-        <!-- Confirm New Password Label -->
-        <TextBlock Text="Confirm New Password" Grid.Row="8" HorizontalAlignment="Center" Margin="0,5,0,0"/>
-
-        <!-- Confirm New Password TextBox -->
+        <!-- Confirm New Password Label and TextBox -->
+        <TextBlock Text="Confirm New Password" Grid.Row="9" HorizontalAlignment="Center" Margin="0,0,0,88"/>
         <TextBox x:Name="AdminConfirmPasswordTextBox" Grid.Row="9" Width="200" Height="30"
-                 HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                 HorizontalAlignment="Center" Margin="0,27,0,74"/>
 
         <!-- Submit Button -->
-        <Button Content="Submit" Grid.Row="10" Width="80" Height="25" HorizontalAlignment="Center" Margin="0,10,0,10" Click="SubmitButton_Click"/>
+        <Button Content="Submit" Grid.Row="9" Width="80" Height="25" HorizontalAlignment="Center" Margin="0,77,0,29" Click="SubmitButton_Click"/>
     </Grid>
 </Window>

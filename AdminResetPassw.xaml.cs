@@ -15,13 +15,14 @@ namespace FinalFinanceTrack
             InitializeComponent();
             adminEmail = email;
             dbManager = new DbManager();
+            AdminEmailTextBox.Text = email;
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            string oldPassword = AdminOldPasswordTextBox.Text.Trim();
-            string newPassword = AdminNewPasswordTextBox.Text.Trim();
-            string confirmPassword = AdminConfirmPasswordTextBox.Text.Trim();
+            string oldPassword = AdminOldPasswordTextBox.Text;
+            string newPassword = AdminNewPasswordTextBox.Text;
+            string confirmPassword = AdminConfirmPasswordTextBox.Text;
 
             if (!IsValidPassword(newPassword))
             {
@@ -35,13 +36,13 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            if (!dbManager.ValidateAdminPassword(adminEmail.Trim(), oldPassword))
+            if (!dbManager.ValidateAdminPassword(adminEmail, oldPassword))
             {
                 MessageBox.Show("The old password is incorrect. Please try again.");
                 return;
             }
 
-            if (dbManager.UpdateAdminPassword(adminEmail.Trim(), newPassword))
+            if (dbManager.UpdateAdminPassword(adminEmail, newPassword))
             {
                 MessageBox.Show("Your password has been reset successfully.");
                 this.Close();

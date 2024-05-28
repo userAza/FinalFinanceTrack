@@ -288,96 +288,13 @@ namespace FinalFinanceTrack
         }
 
 
-        public bool UpdateAdminPassword(string email, string newPassword)
-        {
-            if (!OpenConnection())
-                return false;
-
-            try
-            {
-                string query = "UPDATE admin SET Password = @Password WHERE Email = @Email";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Password", newPassword);
-                cmd.Parameters.AddWithValue("@Email", email);
-
-                int rowsAffected = cmd.ExecuteNonQuery();
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating password: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
-        }
-
-        public bool ValidateAdminPassword(string email, string oldPassword)
-        {
-            if (!OpenConnection())
-                return false;
-
-            try
-            {
-                string trimmedEmail = email.Trim();
-                string trimmedPassword = oldPassword.Trim();
-
-                string query = "SELECT COUNT(*) FROM admin WHERE Email = @Email AND Password = @Password";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", trimmedEmail);
-                cmd.Parameters.AddWithValue("@Password", trimmedPassword);
-
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-
-                return count > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error validating old password: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
-        }
+ 
 
 
 
 
-        public string GetAdminPassword(string email)
-        {
-            if (!OpenConnection())
-                return null;
 
-            try
-            {
-                string query = "SELECT Password FROM admin WHERE Email = @Email";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", email);
-
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return reader["Password"].ToString();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving password: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return null;
-        }
-
-        public (string, string, string) GetAdminSecurityAnswers(string email)
+        /*public (string, string, string) GetAdminSecurityAnswers(string email)
         {
             if (!OpenConnection())
                 return (null, null, null);
@@ -408,7 +325,7 @@ namespace FinalFinanceTrack
                 CloseConnection();
             }
             return (null, null, null);
-        }
+        }*/
 
         public bool DeleteUserByEmail(string email)
         {
@@ -695,9 +612,8 @@ namespace FinalFinanceTrack
 
             try
             {
-                string query = "SELECT COUNT(*) FROM user WHERE Id = @UserId AND Password = @Password";
+                string query = "SELECT COUNT(*) FROM user WHERE Password = @Password";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@UserId", userId);
                 cmd.Parameters.AddWithValue("@Password", hashedOldPassword);
 
                 int count = Convert.ToInt32(cmd.ExecuteScalar());
@@ -713,37 +629,62 @@ namespace FinalFinanceTrack
                 CloseConnection();
             }
         }
-
-        public bool ValidateAdminLogin(string email, string password)
+        public bool ValidateAdminPassword(string email, string oldPassword)
         {
             if (!OpenConnection())
                 return false;
 
             try
             {
-                string query = "SELECT Password FROM admin WHERE Email = @Email";
+                string query = "SELECT COUNT(*) FROM admin WHERE Email = @Email AND Password = @Password";
                 MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", email);
+                cmd.Parameters.AddWithValue("@Email", email.Trim());
+                cmd.Parameters.AddWithValue("@Password", oldPassword.Trim());
 
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        string storedPassword = reader["Password"].ToString();
-                        return storedPassword == password;
-                    }
-                }
+                int count = Convert.ToInt32(cmd.ExecuteScalar());
+                return count > 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error validating login: " + ex.Message);
+                MessageBox.Show("Error validating old password: " + ex.Message);
+                return false;
             }
             finally
             {
                 CloseConnection();
             }
-            return false;
         }
+
+        public bool UpdateAdminPassword(string email, string newPassword)
+        {
+            if (!OpenConnection())
+                return false;
+
+            try
+            {
+                string query = "UPDATE admin SET Password = @Password WHERE Email = @Email";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@Password", newPassword.Trim());
+                cmd.Parameters.AddWithValue("@Email", email.Trim());
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error updating password: " + ex.Message);
+                return false;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+
+
+
+
+
 
 
     }
