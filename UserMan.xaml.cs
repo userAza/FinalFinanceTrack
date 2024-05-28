@@ -21,15 +21,9 @@ namespace FinalFinanceTrack
 
         private void AddNewUserButton_Click(object sender, RoutedEventArgs e)
         {
-            // Toggle visibility of the Add User Panel
-            if (AddUserPanel.Visibility == Visibility.Collapsed)
-            {
-                AddUserPanel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                AddUserPanel.Visibility = Visibility.Collapsed;
-            }
+            CreateUser newuser = new CreateUser();
+            newuser.Show();
+            this.Close();
         }
 
         private void EditUserButton_Click(object sender, RoutedEventArgs e)
@@ -78,5 +72,6 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Failed to create user.");
             }
         }
+
     }
 }
