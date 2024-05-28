@@ -8,12 +8,29 @@ namespace FinalFinanceTrack
         private DbManager dbManager;
         private int userId;
 
-        public EditUser(int userId)
+        public EditUser(int userId) : this()
+        {
+            this.userId = userId;
+            LoadUserData();
+        }
+        public EditUser()
         {
             InitializeComponent();
             dbManager = new DbManager();
-            this.userId = userId;
-            LoadUserData();
+        }
+
+
+
+        private void LoadUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(UserIdInputTextBox.Text, out userId))
+            {
+                LoadUserData();
+            }
+            else
+            {
+                MessageBox.Show("Invalid user ID.");
+            }
         }
 
         private void LoadUserData()
@@ -31,7 +48,6 @@ namespace FinalFinanceTrack
             else
             {
                 MessageBox.Show("User not found.");
-                this.Close();
             }
         }
 
@@ -58,9 +74,10 @@ namespace FinalFinanceTrack
         {
             this.Close();
         }
+
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            UserMan userMan = new UserMan(userId);
+            UserMan userMan = new UserMan();
             userMan.Show();
             this.Close();
         }

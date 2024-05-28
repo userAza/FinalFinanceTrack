@@ -6,9 +6,13 @@ namespace FinalFinanceTrack
     {
         private int userId;
 
-        public UserMan(int userId)
+        public UserMan()
         {
             InitializeComponent();
+        }
+
+        public UserMan(int userId) : this()
+        {
             this.userId = userId;
         }
 
@@ -28,15 +32,10 @@ namespace FinalFinanceTrack
 
         private void EditUserButton_Click(object sender, RoutedEventArgs e)
         {
+           
+
             EditUser editUser = new EditUser(userId);
             editUser.Show();
-            this.Close();
-        }
-
-        private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
-        {
-            DeleteUser deleteUser = new DeleteUser(userId);
-            deleteUser.Show();
             this.Close();
         }
 
@@ -72,6 +71,13 @@ namespace FinalFinanceTrack
                 MessageBox.Show("Failed to create user.");
             }
         }
+        private void DeleteUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteUser deleteUser = new DeleteUser(userId);
+            deleteUser.Show();
+            this.Close();
+        }
+
 
     }
 }
