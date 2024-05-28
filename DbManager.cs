@@ -745,6 +745,38 @@ namespace FinalFinanceTrack
             return false;
         }
 
+        public int GetIncomeCategoryId(string categoryName)
+        {
+            if (!OpenConnection())
+                return -1;
+
+            try
+            {
+                string query = "SELECT id FROM categoryincome WHERE Name = @CategoryName";
+                MySqlCommand cmd = new MySqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@CategoryName", categoryName);
+
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return reader.GetInt32("id");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error retrieving category ID: " + ex.Message);
+            }
+            finally
+            {
+                CloseConnection();
+            }
+
+            return -1; // Return an invalid ID if something went wrong
+        }
+
+
 
     }
 }
