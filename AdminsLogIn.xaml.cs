@@ -96,7 +96,7 @@ namespace FinalFinanceTrack
             string storedPassword = dbManager.GetAdminPassword(email);
             if (storedPassword != null && password == storedPassword)
             {
-                MainPage mainPage = new MainPage();
+                MainPage mainPage = new MainPage(/* Pass the userId here */);
                 mainPage.Show();
                 this.Close();
             }

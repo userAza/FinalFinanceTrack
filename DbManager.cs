@@ -47,52 +47,6 @@ public class DbManager
         }
     }
 
-    //public bool InsertUser(string firstName, string lastName, string email, string password, string answer1, string answer2, string answer3)
-    //{
-    //    if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) ||
-    //        string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) ||
-    //        string.IsNullOrWhiteSpace(answer1) || string.IsNullOrWhiteSpace(answer2) ||
-    //        string.IsNullOrWhiteSpace(answer3))
-    //    {
-    //        MessageBox.Show("Please fill in all fields.");
-    //        return false;
-    //    }
-
-    //    if (!Regex.IsMatch(email, @"\A[^@\s]+@[^@\s]+\.[^@\s]+\z"))
-    //    {
-    //        MessageBox.Show("Please enter a valid email address.");
-    //        return false;
-    //    }
-
-    //    if (!OpenConnection())
-    //        return false;
-
-    //    try
-    //    {
-    //        string query = "INSERT INTO user (First_Name, Last_Name, Email, Password, Answer1, Answer2, Answer3) VALUES (@FirstName, @LastName, @Email, @Password, @Answer1, @Answer2, @Answer3)";
-    //        MySqlCommand cmd = new MySqlCommand(query, connection);
-
-    //        cmd.Parameters.AddWithValue("@FirstName", firstName);
-    //        cmd.Parameters.AddWithValue("@LastName", lastName);
-    //        cmd.Parameters.AddWithValue("@Email", email);
-    //        cmd.Parameters.AddWithValue("@Password", password);  // Store password as plain text
-    //        cmd.Parameters.AddWithValue("@Answer1", answer1);
-    //        cmd.Parameters.AddWithValue("@Answer2", answer2);
-    //        cmd.Parameters.AddWithValue("@Answer3", answer3);
-
-    //        cmd.ExecuteNonQuery();
-    //        return true;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        MessageBox.Show("Error during sign up: " + ex.Message);
-    //        return false;
-    //    }
-    //    finally
-    //    {
-    //        CloseConnection();
-    //    }
-    //}
     public bool InsertUser(string firstName, string lastName, string email, string password, byte[] profilePhoto)
     {
         if (!OpenConnection())
@@ -106,7 +60,7 @@ public class DbManager
             cmd.Parameters.AddWithValue("@FirstName", firstName);
             cmd.Parameters.AddWithValue("@LastName", lastName);
             cmd.Parameters.AddWithValue("@Email", email);
-            cmd.Parameters.AddWithValue("@Password", password);  // Store password as plain text
+            cmd.Parameters.AddWithValue("@Password", password);
             cmd.Parameters.AddWithValue("@ProfilePhoto", profilePhoto);
 
             cmd.ExecuteNonQuery();
@@ -122,6 +76,7 @@ public class DbManager
             CloseConnection();
         }
     }
+
     public DataTable GetAllUsers()
     {
         DataTable dataTable = new DataTable();
@@ -213,7 +168,6 @@ public class DbManager
         {
             transaction = connection.BeginTransaction();
 
-            // Insert income data into the `income` table
             string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
             MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
             cmdIncome.Parameters.AddWithValue("@Amount", amount);
@@ -222,7 +176,6 @@ public class DbManager
             cmdIncome.ExecuteNonQuery();
             long incomeId = cmdIncome.LastInsertedId;
 
-            // Link the new income record with the user
             string queryUserIncome = "INSERT INTO userincome (user_id, income_id) VALUES (@UserId, @IncomeId);";
             MySqlCommand cmdUserIncome = new MySqlCommand(queryUserIncome, connection, transaction);
             cmdUserIncome.Parameters.AddWithValue("@UserId", userId);
@@ -270,14 +223,51 @@ public class DbManager
         }
     }
 
-    public bool UpdateUserPassword(string email, string newPassword)
+    public bool UpdateUserPassword(int userId, string oldPassword, string newPassword)
     {
         if (!OpenConnection())
             return false;
 
         try
         {
-            string query = "UPDATE user SET Password = @Password WHERE Email = @Email";
+            string query = "SELECT COUNT(*) FROM user WHERE Id = @UserId AND Password = @OldPassword";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@OldPassword", oldPassword);
+
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            if (count == 0)
+            {
+                return false;
+            }
+
+            query = "UPDATE user SET Password = @NewPassword WHERE Id = @UserId";
+            cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@NewPassword", newPassword);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            int result = cmd.ExecuteNonQuery();
+            return result > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public bool UpdateAdminPassword(string email, string newPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "UPDATE admin SET Password = @Password WHERE Email = @Email";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@Password", newPassword);
             cmd.Parameters.AddWithValue("@Email", email);
@@ -324,32 +314,6 @@ public class DbManager
             CloseConnection();
         }
         return null;
-    }
-
-    public bool UpdateAdminPassword(string email, string newPassword)
-    {
-        if (!OpenConnection())
-            return false;
-
-        try
-        {
-            string query = "UPDATE admin SET Password = @Password WHERE Email = @Email";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@Password", newPassword);
-            cmd.Parameters.AddWithValue("@Email", email);
-
-            int rowsAffected = cmd.ExecuteNonQuery();
-            return rowsAffected > 0;
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error updating password: " + ex.Message);
-            return false;
-        }
-        finally
-        {
-            CloseConnection();
-        }
     }
 
     public (string, string, string) GetAdminSecurityAnswers(string email)
@@ -441,6 +405,7 @@ public class DbManager
 
         return dataTable;
     }
+
     public DataTable GetUserById(int userId)
     {
         DataTable dataTable = new DataTable();
@@ -501,7 +466,6 @@ public class DbManager
             CloseConnection();
         }
     }
-
 
     public decimal GetTotalSavings(int year, int month)
     {
@@ -564,6 +528,7 @@ public class DbManager
 
         return years;
     }
+
     public bool ValidateOldPassword(int userId, string hashedOldPassword)
     {
         if (!OpenConnection())
@@ -571,7 +536,7 @@ public class DbManager
 
         try
         {
-            string query = "SELECT COUNT(*) FROM user WHERE UserId = @UserId AND Password = @Password";
+            string query = "SELECT COUNT(*) FROM user WHERE Id = @UserId AND Password = @Password";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@UserId", userId);
             cmd.Parameters.AddWithValue("@Password", hashedOldPassword);
@@ -597,7 +562,7 @@ public class DbManager
 
         try
         {
-            string query = "UPDATE user SET Password = @Password WHERE UserId = @UserId";
+            string query = "UPDATE user SET Password = @Password WHERE Id = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@Password", newPassword);
             cmd.Parameters.AddWithValue("@UserId", userId);
@@ -616,8 +581,6 @@ public class DbManager
         }
     }
 
-
-    // New method to validate admin login
     public bool ValidateAdminLogin(string email, string password)
     {
         if (!OpenConnection())

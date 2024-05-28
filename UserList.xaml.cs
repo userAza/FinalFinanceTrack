@@ -7,11 +7,13 @@ namespace FinalFinanceTrack
     public partial class UserList : Window
     {
         private DbManager dbManager;
+        private int userId;
 
-        public UserList()
+        public UserList(int userId)
         {
             InitializeComponent();
             dbManager = new DbManager();
+            this.userId = userId;
             LoadUserData();
         }
 
@@ -37,7 +39,7 @@ namespace FinalFinanceTrack
 
         private void button_Back_Click(object sender, RoutedEventArgs e)
         {
-            MainPage mainPage = new MainPage();
+            MainPage mainPage = new MainPage(userId);
             mainPage.Show();
             this.Hide();
         }

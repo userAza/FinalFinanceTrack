@@ -1,13 +1,15 @@
-﻿using FinalFinanceTrack;
-using System.Windows;
+﻿using System.Windows;
 
 namespace FinalFinanceTrack
 {
     public partial class MainPage : Window
     {
-        public MainPage()
+        private int userId;
+
+        public MainPage(int userId)
         {
             InitializeComponent();
+            this.userId = userId;
         }
 
         private void UserManagementButton_Click(object sender, RoutedEventArgs e)
@@ -19,15 +21,13 @@ namespace FinalFinanceTrack
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            
-            SettingsWindow settingsPage = new SettingsWindow();
-            settingsPage.Show();
+            AdminSettings adminSettings = new AdminSettings(userId);
+            adminSettings.Show();
             this.Close();
         }
 
         private void OverviewButton_Click(object sender, RoutedEventArgs e)
         {
-            
             Overview overviewPage = new Overview();
             overviewPage.Show();
             this.Close();
@@ -35,7 +35,7 @@ namespace FinalFinanceTrack
 
         private void ClickMeButton_Click(object sender, RoutedEventArgs e)
         {
-            //to  make codeeeeee.....
+            // Placeholder for additional code
         }
     }
 }
