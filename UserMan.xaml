@@ -9,6 +9,8 @@
         <Button x:Name="EditUserButton" Content="EDIT USER" HorizontalAlignment="Center" VerticalAlignment="Top" Width="192" Height="43" Margin="0,228,0,0" Click="EditUserButton_Click"/>
         <Button x:Name="DeleteUserButton" Content="DELETE" HorizontalAlignment="Center" VerticalAlignment="Top" Width="192" Height="40" Margin="0,288,0,0" Click="DeleteUserButton_Click"/>
 
+        <Button x:Name="BackButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="30" Margin="10,10,0,0" Click="BackButton_Click"/>
+
         <!-- Add New User Form -->
         <StackPanel x:Name="AddUserPanel" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
             <TextBox x:Name="FirstNameTextBox" Margin="0,10,0,10" Width="200" Height="30"/>

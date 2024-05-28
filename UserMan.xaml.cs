@@ -77,7 +77,12 @@ namespace FinalFinanceTrack
             deleteUser.Show();
             this.Close();
         }
-
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainPage mainPage = new MainPage(userId);
+            mainPage.Show();
+            this.Close();
+        }
 
     }
 }
