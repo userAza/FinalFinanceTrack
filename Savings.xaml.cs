@@ -14,9 +14,23 @@ namespace FinalFinanceTrack
             CalculateSavings(DateTime.Now.Month); // Initialize with the current month
         }
 
-        private void CalculateSavings(int month)
+
+        private void LoadUserSavings(int month)
         {
-            int userId = Utility.GetCurrentUserId();
+            string email = Utility.GetCurrentUserEmail();
+            int? userId = dbManager.GetUserIdByEmail(email);
+
+            if (!userId.HasValue)
+            {
+                MessageBox.Show("User not found.");
+                return;
+            }
+
+            CalculateSavings(userId.Value, month);
+        }
+
+        private void CalculateSavings(int userId, int month)
+        {
             decimal totalIncome = DbManager.GetTotalIncomeForUser(userId, month, dbManager); // Pass the dbManager instance
             decimal totalExpenses = DbManager.GetTotalExpensesForUser(userId, month, dbManager); // Pass the dbManager instance
             decimal savings = totalIncome - totalExpenses;
@@ -76,7 +90,7 @@ namespace FinalFinanceTrack
             if (MonthComboBox.SelectedIndex >= 0)
             {
                 int selectedMonth = MonthComboBox.SelectedIndex + 1;
-                CalculateSavings(selectedMonth);
+                LoadUserSavings(selectedMonth);
             }
         }
 

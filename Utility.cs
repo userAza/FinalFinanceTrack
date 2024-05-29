@@ -8,5 +8,12 @@
             
             return SessionUser.GetCurrentUserId();
         }
+
+        public static string GetCurrentUserEmail()
+        {
+            // Retrieve the current user's email from the session or other authentication mechanism.
+            return SessionUser.GetCurrentUserEmail();
+        }
+
     }
 }
