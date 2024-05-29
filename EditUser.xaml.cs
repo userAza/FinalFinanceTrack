@@ -77,11 +77,11 @@ namespace FinalFinanceTrack
             this.Close();
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+     /*   private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             UserMan userMan = new UserMan();
             userMan.Show();
             this.Close();
-        }
+        }*/
     }
 }
