@@ -12,6 +12,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -29,7 +30,6 @@
             <Button Name="IncomeButton" Content="Income" Width="100" Margin="5" Click="IncomeButton_Click"/>
             <Button Name="ExpensesButton" Content="Expenses" Width="100" Margin="5" Click="ExpensesButton_Click"/>
             <Button Name="SavingsButton" Content="Savings" Width="100" Margin="5" Click="SavingsButton_Click" Background="LightGray"/>
-            <Button Name="HistoryButton" Content="History" Width="100" Margin="5" Click="HistoryButton_Click"/>
         </StackPanel>
 
         <!-- Main Content Area -->
@@ -62,5 +62,8 @@
                          Minimum="0" Maximum="100" Value="0"/>
             <TextBlock x:Name="SavingsPercentage" Text="0%" FontSize="16" FontWeight="Bold" Margin="10"/>
         </StackPanel>
+
+        <!-- OK Button -->
+        <Button Name="OKButton" Content="OK" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="575,0,0,71" Click="OKButton_Click" Grid.Row="2" RenderTransformOrigin="0.736,-0.728"/>
     </Grid>
 </Window>

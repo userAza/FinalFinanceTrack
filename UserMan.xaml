@@ -11,13 +11,5 @@
 
         <Button x:Name="BackButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="30" Margin="10,10,0,0" Click="BackButton_Click"/>
 
-        <!-- Add New User Form -->
-        <StackPanel x:Name="AddUserPanel" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-            <TextBox x:Name="FirstNameTextBox" Margin="0,10,0,10" Width="200" Height="30"/>
-            <TextBox x:Name="LastNameTextBox" Margin="0,10,0,10" Width="200" Height="30"/>
-            <TextBox x:Name="EmailTextBox" Margin="0,10,0,10" Width="200" Height="30"/>
-            <PasswordBox x:Name="PasswordBox" Margin="0,10,0,10" Width="200" Height="30"/>
-            <Button Content="Create User" Click="CreateUserButton_Click" Margin="0,10,0,10" Width="200" Height="30"/>
-        </StackPanel>
     </Grid>
 </Window>

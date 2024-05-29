@@ -82,7 +82,13 @@ namespace FinalFinanceTrack
 
             if (storedPassword != null && inputPassword == storedPassword)
             {
-                return true;
+                // Retrieve and set the current user ID
+                int? userId = dbManager.GetUserIdByEmail(email);
+                if (userId.HasValue)
+                {
+                    SessionUser.Login(userId.Value, email);
+                    return true;
+                }
             }
             return false;
         }

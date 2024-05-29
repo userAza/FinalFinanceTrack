@@ -39,26 +39,25 @@ namespace FinalFinanceTrack
             }
         }
 
-
         private void button_createuser_Click(object sender, RoutedEventArgs e)
         {
             string firstName = Firstname_textbox.Text;
             string lastName = LastName_Textbox.Text;
             string email = EmailAddress_textbox.Text;
             string password = Password_textbox.Password;
+            string securityQuestion1 = SecurityQuestion1_textbox.Text;
+            string securityQuestion2 = SecurityQuestion2_textbox.Text;
+            string securityQuestion3 = SecurityQuestion3_textbox.Text;
 
             if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) ||
-                string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(profilePicturePath))
+                string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password) ||
+                string.IsNullOrWhiteSpace(securityQuestion1) || string.IsNullOrWhiteSpace(securityQuestion2) || string.IsNullOrWhiteSpace(securityQuestion3))
             {
                 MessageBox.Show("Please fill in all fields.");
                 return;
             }
 
-
-            byte[] profilePictureData = File.ReadAllBytes(profilePicturePath);
-
-
-            bool isSuccess = dbManager.InsertUser(firstName, lastName, email, password);
+            bool isSuccess = dbManager.InsertUser(firstName, lastName, email, password, securityQuestion1, securityQuestion2, securityQuestion3);
 
             if (isSuccess)
             {
@@ -77,6 +76,5 @@ namespace FinalFinanceTrack
             userMan.Show();
             this.Close();
         }
-
     }
 }

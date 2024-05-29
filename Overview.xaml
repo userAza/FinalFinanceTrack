@@ -39,7 +39,6 @@
             <Button Name="IncomeButton" Content="Income" Width="200" Margin="10" Click="IncomeButton_Click" FontFamily="Berlin Sans FB" BorderThickness="2"/>
             <Button Name="ExpensesButton" Content="Expenses" Width="200" Margin="10" Click="ExpensesButton_Click" BorderThickness="2"/>
             <Button Name="SavingsButton" Content="Savings" Width="200" Margin="10" Click="SavingsButton_Click" BorderThickness="2"/>
-            <Button Name="HistoryButton" Content="History" Width="200" Margin="10" Click="HistoryButton_Click" BorderThickness="2"/>
         </WrapPanel>
     </Grid>
 </Window>

@@ -10,33 +10,18 @@ namespace FinalFinanceTrack
         public Savings()
         {
             InitializeComponent();
-
-            // Initialize the DbManager
-            dbManager = new DbManager(); 
-
-            // Initialize with the current month
-            LoadUserSavings(DateTime.Now.Month); 
+            dbManager = new DbManager();
         }
 
-
-        private void LoadUserSavings(int month)
+        private void LoadUserSavings(int userId, int month)
         {
-            string email = Utility.GetCurrentUserEmail();
-            int? userId = dbManager.GetUserIdByEmail(email);
-
-            if (!userId.HasValue)
-            {
-                MessageBox.Show("User not found.");
-                return;
-            }
-
-            CalculateSavings(userId.Value, month);
+            CalculateSavings(userId, month);
         }
 
         private void CalculateSavings(int userId, int month)
         {
-            decimal totalIncome = DbManager.GetTotalIncomeForUser(userId, month, dbManager); // Pass the dbManager instance
-            decimal totalExpenses = DbManager.GetTotalExpensesForUser(userId, month, dbManager); // Pass the dbManager instance
+            decimal totalIncome = dbManager.GetTotalIncomeForUser(userId, month);
+            decimal totalExpenses = dbManager.GetTotalExpensesForUser(userId, month);
             decimal savings = totalIncome - totalExpenses;
 
             SavingsAmount.Text = $"€ {savings:N2}";
@@ -57,7 +42,7 @@ namespace FinalFinanceTrack
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            int userId = Utility.GetCurrentUserId();
+            int userId = SessionUser.GetCurrentUserId();
             SettingsWindow settingsPage = new SettingsWindow(userId);
             settingsPage.Show();
             this.Hide();
@@ -91,18 +76,25 @@ namespace FinalFinanceTrack
 
         private void MonthComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Optional: Handle month selection if needed
+        }
+
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Handle OK button click
             if (MonthComboBox.SelectedIndex >= 0)
             {
                 int selectedMonth = MonthComboBox.SelectedIndex + 1;
-                LoadUserSavings(selectedMonth);
+                int userId = SessionUser.GetCurrentUserId();
+                if (userId != 0)
+                {
+                    LoadUserSavings(userId, selectedMonth);
+                }
+                else
+                {
+                    MessageBox.Show("User not found.");
+                }
             }
-        }
-
-        private void HistoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            History historyPage = new History();
-            historyPage.Show();
-            this.Close();
         }
     }
 }

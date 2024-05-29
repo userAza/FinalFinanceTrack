@@ -121,7 +121,10 @@ namespace FinalFinanceTrack
                 firstNameTextBox.Text.Trim(),
                 lastNameTextBox.Text.Trim(),
                 emailTextBox.Text.Trim(),
-                password))
+                password,
+                securityQuestion1TextBox.Text.Trim(),
+                securityQuestion2TextBox.Text.Trim(),
+                securityQuestion3TextBox.Text.Trim()))
             {
                 MessageBox.Show("Signup successful! Log in on the login page.");
 

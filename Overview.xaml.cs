@@ -59,13 +59,7 @@ namespace FinalFinanceTrack
             this.Close();
         }
 
-        private void HistoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            History historyPage = new History();
-            historyPage.Show();
-            this.Close();
-        }
-
+ 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             int userId = Utility.GetCurrentUserId();

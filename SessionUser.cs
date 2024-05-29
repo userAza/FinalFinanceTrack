@@ -1,27 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FinalFinanceTrack
+﻿namespace FinalFinanceTrack
 {
     public static class SessionUser
     {
-        public static int CurrentUserId { get; set; } = 1;  // Defaulting to 1 for simplicity
-
+        public static int CurrentUserId { get; private set; } = 0;
         private static string currentUserEmail;
 
         // Call this method when user logs in
-        public static void Login(int userId)
+        public static void Login(int userId, string email)
         {
             CurrentUserId = userId;
+            currentUserEmail = email;
         }
 
         // Call this method when user logs out
         public static void Logout()
         {
             CurrentUserId = 0;  // Resets to 0 or another invalid ID
+            currentUserEmail = null;
         }
 
         // Static method to retrieve the current user ID
@@ -30,16 +25,9 @@ namespace FinalFinanceTrack
             return CurrentUserId;  // Retrieves the user ID from the session
         }
 
-        //get the user's current email to validate their session to obtain data from previous sessions
-        public static void SetCurrentUserEmail(string email)
-        {
-            currentUserEmail = email;
-        }
-
         public static string GetCurrentUserEmail()
         {
-            return currentUserEmail;
+            return currentUserEmail;  // Retrieves the user email from the session
         }
-
     }
 }

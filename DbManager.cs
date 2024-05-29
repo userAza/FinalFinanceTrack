@@ -48,20 +48,24 @@ public class DbManager
         }
     }
 
-    public bool InsertUser(string firstName, string lastName, string email, string password)
+    public bool InsertUser(string firstName, string lastName, string email, string password, string securityQuestion1, string securityQuestion2, string securityQuestion3)
     {
         if (!OpenConnection())
             return false;
 
         try
         {
-            string query = "INSERT INTO user (First_Name, Last_Name, Email, Password) VALUES (@FirstName, @LastName, @Email, @Password)";
+            string query = "INSERT INTO user (First_Name, Last_Name, Email, Password, SecurityQuestion1, SecurityQuestion2, SecurityQuestion3) " +
+                           "VALUES (@FirstName, @LastName, @Email, @Password, @SecurityQuestion1, @SecurityQuestion2, @SecurityQuestion3)";
             MySqlCommand cmd = new MySqlCommand(query, connection);
 
             cmd.Parameters.AddWithValue("@FirstName", firstName);
             cmd.Parameters.AddWithValue("@LastName", lastName);
             cmd.Parameters.AddWithValue("@Email", email);
             cmd.Parameters.AddWithValue("@Password", password);
+            cmd.Parameters.AddWithValue("@SecurityQuestion1", securityQuestion1);
+            cmd.Parameters.AddWithValue("@SecurityQuestion2", securityQuestion2);
+            cmd.Parameters.AddWithValue("@SecurityQuestion3", securityQuestion3);
 
             cmd.ExecuteNonQuery();
             return true;
@@ -76,6 +80,7 @@ public class DbManager
             CloseConnection();
         }
     }
+
 
     public DataTable GetAllUsers()
     {
@@ -512,22 +517,32 @@ public class DbManager
 
     public int? GetUserIdByEmail(string email)
     {
-        using (var connection = new MySqlConnection(connectionString))
+        int? userId = null;
+        if (!OpenConnection()) return userId;
+
+        try
         {
-            connection.Open();
-            string query = "SELECT Id FROM user WHERE Email = @Email";
-            var cmd = new MySqlCommand(query, connection);
+            string query = "SELECT ID FROM user WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@Email", email);
 
             object result = cmd.ExecuteScalar();
-            if (result != null && result != DBNull.Value)
+            if (result != null)
             {
-                return Convert.ToInt32(result);
+                userId = Convert.ToInt32(result);
             }
         }
-        return null;
-    }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving user ID: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
 
+        return userId;
+    }
     public string GetUserEmailById(int userId)
     {
         if (!OpenConnection())
@@ -972,6 +987,7 @@ public class DbManager
     }
 
 
+
     public int GetExpenseCategoryId(string categoryName)
     {
         if (!OpenConnection())
@@ -1210,11 +1226,101 @@ public class DbManager
 
         return categories;
     }
+    public bool DoesUserExist(int userId)
+    {
+        if (!OpenConnection())
+            return false;
 
+        try
+        {
+            string query = "SELECT COUNT(*) FROM user WHERE ID = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
 
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            return count > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error verifying user: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
+    public decimal GetTotalIncomeForUser(int userId, int month)
+    {
+        decimal totalIncome = 0;
+        if (!OpenConnection()) return totalIncome;
 
+        try
+        {
+            string query = @"
+                SELECT SUM(i.Amount) 
+                FROM income i
+                JOIN userincome ui ON i.ID = ui.Income_Id
+                WHERE ui.User_Id = @UserId AND MONTH(STR_TO_DATE(i.Month, '%M')) = @Month";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@Month", month);
 
+            object result = cmd.ExecuteScalar();
+            if (result != DBNull.Value)
+            {
+                totalIncome = Convert.ToDecimal(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving total income: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return totalIncome;
+    }
+
+    public decimal GetTotalExpensesForUser(int userId, int month)
+    {
+        decimal totalExpenses = 0;
+        if (!OpenConnection()) return totalExpenses;
+
+        try
+        {
+            string query = @"
+                SELECT SUM(e.Amount) 
+                FROM expense e
+                JOIN userexpense ue ON e.ID = ue.Expense_Id
+                WHERE ue.User_Id = @UserId AND MONTH(STR_TO_DATE(e.Month, '%M')) = @Month";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@Month", month);
+
+            object result = cmd.ExecuteScalar();
+            if (result != DBNull.Value)
+            {
+                totalExpenses = Convert.ToDecimal(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving total expenses: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return totalExpenses;
+    }
 }
+
+
+
 
 

@@ -172,11 +172,5 @@ namespace FinalFinanceTrack
             }
         }
 
-        private void HistoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            History historyPage = new History();
-            historyPage.Show();
-            this.Close();
-        }
     }
 }

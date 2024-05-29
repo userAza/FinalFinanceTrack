@@ -86,6 +86,13 @@ namespace FinalFinanceTrack
         private void SaveExpense()
         {
             int userId = GetCurrentUserId();
+            MessageBox.Show($"Current User ID: {userId}");  // Debugging statement
+
+            if (userId == 0)
+            {
+                MessageBox.Show("No user is currently logged in.");
+                return;
+            }
 
             if (!decimal.TryParse(AmountInput.Text, out decimal amount))
             {
@@ -121,16 +128,13 @@ namespace FinalFinanceTrack
             }
         }
 
+
+
         private void AmountInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !decimal.TryParse(e.Text, out _); // Ensure only numeric input
         }
 
-        private void HistoryButton_Click(object sender, RoutedEventArgs e)
-        {
-            History historyPage = new History();
-            historyPage.Show();
-            this.Close();
-        }
+
     }
 }
