@@ -170,7 +170,7 @@ public class DbManager
             transaction = connection.BeginTransaction();
 
             // Insert into the income table
-            string queryIncome = "INSERT INTO income (Amount, Month, Year, Category_ID) VALUES (@Amount, @Month, @Year, @CategoryId);";
+            string queryIncome = "INSERT INTO income (Amount, Month, Year, CategoryID) VALUES (@Amount, @Month, @Year, @CategoryId);";
             MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
             cmdIncome.Parameters.AddWithValue("@Amount", amount);
             cmdIncome.Parameters.AddWithValue("@Month", month);
@@ -208,7 +208,7 @@ public class DbManager
 
         try
         {
-            string query = "SELECT ID FROM categoryincome WHERE Name = @CategoryName";
+            string query = "SELECT ID FROM categoryincome WHERE Type = @CategoryName";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@CategoryName", categoryName);
 
@@ -940,7 +940,7 @@ public class DbManager
             transaction = connection.BeginTransaction();
 
             // Insert into the expense table
-            string queryExpense = "INSERT INTO expense (Amount, Month, Year, Category_ID) VALUES (@Amount, @Month, @Year, @CategoryId);";
+            string queryExpense = "INSERT INTO expense (Amount, Month, Year, CategoryID) VALUES (@Amount, @Month, @Year, @CategoryId);";
             MySqlCommand cmdExpense = new MySqlCommand(queryExpense, connection, transaction);
             cmdExpense.Parameters.AddWithValue("@Amount", amount);
             cmdExpense.Parameters.AddWithValue("@Month", month);
@@ -971,6 +971,7 @@ public class DbManager
         }
     }
 
+
     public int GetExpenseCategoryId(string categoryName)
     {
         if (!OpenConnection())
@@ -978,7 +979,7 @@ public class DbManager
 
         try
         {
-            string query = "SELECT ID FROM categoryexpense WHERE Name = @CategoryName";
+            string query = "SELECT ID FROM categoryexpense WHERE Type = @CategoryName";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@CategoryName", categoryName);
 
@@ -1012,8 +1013,8 @@ public class DbManager
 
         try
         {
-            string query = "SELECT income.ID, Amount, Month, Year, categoryincome.Name as Category FROM income " +
-                           "JOIN categoryincome ON income.Category_ID = categoryincome.ID " +
+            string query = "SELECT income.ID, Amount, Month, Year, categoryincome.Type as Category FROM income " +
+                           "JOIN categoryincome ON income.CategoryID = categoryincome.ID " +
                            "JOIN userincome ON income.ID = userincome.Income_ID " +
                            "WHERE userincome.User_ID = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
@@ -1055,10 +1056,10 @@ public class DbManager
 
         try
         {
-            string query = "SELECT income.ID, Amount, Month, Year, categoryincome.Name as Category FROM income " +
-                           "JOIN categoryincome ON income.Category_ID = categoryincome.ID " +
+            string query = "SELECT income.ID, Amount, Month, Year, categoryincome.Type as Category FROM income " +
+                           "JOIN categoryincome ON income.CategoryID = categoryincome.ID " +
                            "JOIN userincome ON income.ID = userincome.Income_ID " +
-                           "WHERE userincome.User_ID = @UserId AND categoryincome.Name = @Category";
+                           "WHERE userincome.User_ID = @UserId AND categoryincome.Type = @Category";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@UserId", userId);
             cmd.Parameters.AddWithValue("@Category", category);
@@ -1100,8 +1101,8 @@ public class DbManager
 
         try
         {
-            string query = "SELECT expense.ID, Amount, Month, Year, categoryexpense.Name as Category FROM expense " +
-                           "JOIN categoryexpense ON expense.Category_ID = categoryexpense.ID " +
+            string query = "SELECT expense.ID, Amount, Month, Year, categoryexpense.Type as Category FROM expense " +
+                           "JOIN categoryexpense ON expense.CategoryID = categoryexpense.ID " +
                            "JOIN userexpense ON expense.ID = userexpense.Expense_ID " +
                            "WHERE userexpense.User_ID = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
@@ -1143,10 +1144,10 @@ public class DbManager
 
         try
         {
-            string query = "SELECT expense.ID, Amount, Month, Year, categoryexpense.Name as Category FROM expense " +
-                           "JOIN categoryexpense ON expense.Category_ID = categoryexpense.ID " +
+            string query = "SELECT expense.ID, Amount, Month, Year, categoryexpense.Type as Category FROM expense " +
+                           "JOIN categoryexpense ON expense.CategoryID = categoryexpense.ID " +
                            "JOIN userexpense ON expense.ID = userexpense.Expense_ID " +
-                           "WHERE userexpense.User_ID = @UserId AND categoryexpense.Name = @Category";
+                           "WHERE userexpense.User_ID = @UserId AND categoryexpense.Type = @Category";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@UserId", userId);
             cmd.Parameters.AddWithValue("@Category", category);
@@ -1187,14 +1188,14 @@ public class DbManager
 
         try
         {
-            string query = "SELECT Name FROM categoryincome";
+            string query = "SELECT Type FROM categoryincome";
             MySqlCommand cmd = new MySqlCommand(query, connection);
 
             using (MySqlDataReader reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
                 {
-                    categories.Add(reader.GetString("Name"));
+                    categories.Add(reader.GetString("Type"));
                 }
             }
         }
@@ -1217,6 +1218,3 @@ public class DbManager
 }
 
 
-
-
-}
