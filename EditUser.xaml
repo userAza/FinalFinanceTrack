@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Edit User" Height="500" Width="800">
     <Grid Background="#FFF9F6F4" Margin="0,0,-66,-47">
-        <Button x:Name="BackButton" Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Height="30" Margin="10,10,0,0" Click="BackButton_Click"/>
 
         <Label x:Name="UserIdLabel" Content="User ID:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,50,0,0"/>
         <TextBox x:Name="UserIdInputTextBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="200" Margin="150,50,0,0"/>

@@ -10,6 +10,8 @@ namespace FinalFinanceTrack
     {
         public static int CurrentUserId { get; set; } = 1;  // Defaulting to 1 for simplicity
 
+        private static string currentUserEmail;
+
         // Call this method when user logs in
         public static void Login(int userId)
         {
@@ -27,5 +29,17 @@ namespace FinalFinanceTrack
         {
             return CurrentUserId;  // Retrieves the user ID from the session
         }
+
+        //get the user's current email to validate their session to obtain data from previous sessions
+        public static void SetCurrentUserEmail(string email)
+        {
+            currentUserEmail = email;
+        }
+
+        public static string GetCurrentUserEmail()
+        {
+            return currentUserEmail;
+        }
+
     }
 }
