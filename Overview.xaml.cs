@@ -7,25 +7,34 @@ namespace FinalFinanceTrack
 {
     public partial class Overview : Window
     {
-        private const string ProfilePicturePath = "ProfilePicture.png";
+        private DbManager dbManager;
 
         public Overview()
         {
             InitializeComponent();
+            dbManager = new DbManager();
             LoadProfilePicture();
         }
 
         public void LoadProfilePicture()
         {
-            if (File.Exists(ProfilePicturePath))
+            int userId = Utility.GetCurrentUserId();
+            byte[] profileImageBytes = dbManager.GetProfilePicture(userId);
+
+            if (profileImageBytes != null && profileImageBytes.Length > 0)
             {
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
-                bitmap.UriSource = new Uri(ProfilePicturePath, UriKind.RelativeOrAbsolute);
+                bitmap.StreamSource = new MemoryStream(profileImageBytes);
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
                 ProfileImage.Source = bitmap;
                 ProfileImage.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ProfileImage.Source = null; // Or set to a default image
+                ProfileImage.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -73,10 +82,9 @@ namespace FinalFinanceTrack
             addProfilePicWindow.ShowDialog();
         }
 
-
         private void AddProfilePicWindow_ProfilePictureSaved()
         {
-            LoadProfilePicture(); // Reload the profile picture after it has been saved
+            LoadProfilePicture(); // Refresh function to reload the profile picture
         }
     }
 }

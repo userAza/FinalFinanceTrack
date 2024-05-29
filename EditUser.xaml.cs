@@ -11,15 +11,15 @@ namespace FinalFinanceTrack
         public EditUser(int userId) : this()
         {
             this.userId = userId;
-            LoadUserData();
+            // Comment out LoadUserData call here
+            // LoadUserData();
         }
+
         public EditUser()
         {
             InitializeComponent();
             dbManager = new DbManager();
         }
-
-
 
         private void LoadUserButton_Click(object sender, RoutedEventArgs e)
         {
@@ -72,11 +72,10 @@ namespace FinalFinanceTrack
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            UserMan userMan = new UserMan(userId); 
+            UserMan userMan = new UserMan(userId);
             userMan.Show();
             this.Close();
         }
-
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="FinalFinanceTrack.AdminSettings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Admin Settings" Height="400" Width="600">
+        Title="Admin Settings" Height="500" Width="800">
     <Grid>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
             <Button Content="Back" Click="BackButton_Click" Margin="0,10,0,10" Width="200" Height="30"/>

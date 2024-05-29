@@ -21,10 +21,11 @@ namespace FinalFinanceTrack
 
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            LogIn loginWindow = new LogIn();
-            loginWindow.Show();
+            AdminsLogIn adminLoginWindow = new AdminsLogIn();
+            adminLoginWindow.Show();
             this.Close();
         }
+
 
         private void UpdatePasswordButton_Click(object sender, RoutedEventArgs e)
         {

@@ -18,6 +18,7 @@
                 Background="DarkGray" Foreground="White"
                 FontSize="12" Padding="10,0"/>
 
+
         <!-- Title Text -->
         <TextBlock Text="Add or change your profile picture!" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="10"/>
 
@@ -32,10 +33,11 @@
             <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="200"/>
         </Grid>
 
-        <!-- Button to Upload New Picture -->
+        <!-- Buttons for Upload, OK, and Delete Picture -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
             <Button Content="Upload Picture" Width="150" Height="30" Margin="5" Click="UploadPicture_Click"/>
             <Button Content="OK" Width="150" Height="30" Margin="5" Click="SavePicture_Click"/>
+            <Button Content="Delete Picture" Width="150" Height="30" Margin="5" Click="DeletePicture_Click"/>
         </StackPanel>
 
         <!-- Popup for Auto-closing Message -->

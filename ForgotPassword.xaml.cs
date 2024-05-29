@@ -65,38 +65,11 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            InsertPasswordResetRequest(userEmail);
-
             // Identity verification successful, open the ResetPassw window with the user email
             ResetPassw resetPasswWindow = new ResetPassw(userEmail);
             resetPasswWindow.ShowDialog(); // Use ShowDialog to make it modal
 
             // Close the current ForgotPassword window after opening ResetPassw
-            this.Close();
-        }
-
-        private void InsertPasswordResetRequest(string email)
-        {
-            try
-            {
-                string connectionString = "server=127.0.0.1;user=root;database=budget;password=";
-                using (var connection = new MySqlConnection(connectionString))
-                {
-                    connection.Open();
-                    var query = "INSERT INTO password_reset_requests (Email) VALUES (@Email)";
-                    var cmd = new MySqlCommand(query, connection);
-                    cmd.Parameters.AddWithValue("@Email", email);
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to insert reset request: {ex.Message}");
-            }
-        }
-
-        private void Back_Click(object sender, RoutedEventArgs e)
-        {
             this.Close();
         }
 
@@ -122,6 +95,11 @@ namespace FinalFinanceTrack
                 }
             }
             return (null, null, null); // Return null if no data found
+        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

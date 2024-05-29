@@ -1,9 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace FinalFinanceTrack
@@ -11,13 +9,14 @@ namespace FinalFinanceTrack
     public partial class AddProfilePic : Window
     {
         public event Action ProfilePictureSaved = delegate { };
-        private const string ProfilePicturePath = "ProfilePicture.png";
         private int userId;
+        private DbManager dbManager;
 
         public AddProfilePic(int userId)
         {
-            InitializeComponent(); // This should be recognized if the XAML is correctly linked
+            InitializeComponent();
             this.userId = userId;
+            dbManager = new DbManager();
         }
 
         private void UploadPicture_Click(object sender, RoutedEventArgs e)
@@ -30,85 +29,51 @@ namespace FinalFinanceTrack
 
             if (openFileDialog.ShowDialog() == true)
             {
-                var fileExtension = Path.GetExtension(openFileDialog.FileName)?.ToLower();
-                if (fileExtension != ".jpg" && fileExtension != ".jpeg" && fileExtension != ".png")
-                {
-                    MessageBox.Show("The wrong format is being used. Please use JPEG, JPG, or PNG formats.");
-                    return;
-                }
+                string selectedFileName = openFileDialog.FileName;
+                byte[] imageBytes = File.ReadAllBytes(selectedFileName);
 
-                try
+                if (dbManager.UpdateProfilePicture(userId, imageBytes))
                 {
                     BitmapImage bitmap = new BitmapImage();
                     bitmap.BeginInit();
-                    bitmap.UriSource = new Uri(openFileDialog.FileName);
+                    bitmap.StreamSource = new MemoryStream(imageBytes);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmap.Rotation = GetRotation(bitmap.UriSource.LocalPath);
                     bitmap.EndInit();
-
                     ProfileImage.Source = bitmap;
-                    ProfileImage.Visibility = Visibility.Visible;
+
+                    ProfilePictureSaved?.Invoke();
+
+                    MessagePopup.IsOpen = true;
+                    Task.Delay(2000).ContinueWith(_ => MessagePopup.Dispatcher.Invoke(() => MessagePopup.IsOpen = false));
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"An error occurred while loading the image: {ex.Message}");
+                    MessageBox.Show("Failed to upload profile picture.");
                 }
             }
         }
 
-        private Rotation GetRotation(string imagePath)
+        private void DeletePicture_Click(object sender, RoutedEventArgs e)
         {
-            using (var stream = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            if (dbManager.DeleteProfilePicture(userId))
             {
-                var decoder = BitmapDecoder.Create(stream, BitmapCreateOptions.IgnoreColorProfile, BitmapCacheOption.Default);
-                var metadata = (BitmapMetadata)decoder.Frames[0].Metadata;
-
-                if (metadata != null && metadata.ContainsQuery("System.Photo.Orientation"))
-                {
-                    var orientation = (ushort)metadata.GetQuery("System.Photo.Orientation");
-
-                    switch (orientation)
-                    {
-                        case 6:
-                            return Rotation.Rotate90;
-                        case 8:
-                            return Rotation.Rotate270;
-                        case 3:
-                            return Rotation.Rotate180;
-                        default:
-                            return Rotation.Rotate0;
-                    }
-                }
-                return Rotation.Rotate0;
+                ProfileImage.Source = null;
+                ProfilePictureSaved?.Invoke();
+                MessageBox.Show("Profile picture deleted successfully.");
+            }
+            else
+            {
+                MessageBox.Show("Failed to delete profile picture.");
             }
         }
 
-        private async void SavePicture_Click(object sender, RoutedEventArgs e)
+        private void SavePicture_Click(object sender, RoutedEventArgs e)
         {
-            var rtb = new RenderTargetBitmap(200, 200, 96, 96, PixelFormats.Pbgra32);
-            rtb.Render(ProfileImage.Parent as Visual);
-
-            var png = new PngBitmapEncoder();
-            png.Frames.Add(BitmapFrame.Create(rtb));
-
-            using (var stream = new FileStream(ProfilePicturePath, FileMode.Create))
-            {
-                png.Save(stream);
-            }
-
-            // Display popup message
-            MessagePopup.IsOpen = true;
-            await Task.Delay(2000); // Wait for 2 seconds
-            MessagePopup.IsOpen = false;
-
-            // Raise the event to notify the Overview window
-            ProfilePictureSaved?.Invoke();
+            this.Close();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow(userId);
-            settingsWindow.Show();
             this.Close();
         }
     }

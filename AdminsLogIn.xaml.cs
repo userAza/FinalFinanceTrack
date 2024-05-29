@@ -32,13 +32,6 @@ namespace FinalFinanceTrack
             this.Close();
         }
 
-        private void ForgotPasswordHyperlink_Click(object sender, RoutedEventArgs e)
-        {
-            // Navigate to the ForgotPasswordAdmin window
-            ForgotPasswordAdmin forgotPasswordAdmin = new ForgotPasswordAdmin();
-            forgotPasswordAdmin.Show();
-            this.Close();
-        }
 
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)
         {

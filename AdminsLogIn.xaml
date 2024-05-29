@@ -26,15 +26,10 @@
             <Button x:Name="toggleAdminPasswordVisibilityButton" Content="👁" Width="30" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ToggleAdminPasswordVisibility_Click" Margin="286,0,0,0"/>
         </Grid>
 
-        <!-- Forgot Password Link -->
-        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,188,0,0">
-            <Hyperlink Click="ForgotPasswordHyperlink_Click">
-                Forgot password?
-            </Hyperlink>
-        </TextBlock>
+
 
         <!-- Log In Button -->
         <Button Content="Log In" HorizontalAlignment="Center" VerticalAlignment="Top" Width="150" Height="40"
-                Margin="0,308,0,0" Click="LogIn_Click"/>
+                Margin="0,242,0,0" Click="LogIn_Click"/>
     </Grid>
 </Window>

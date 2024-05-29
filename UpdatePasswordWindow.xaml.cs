@@ -6,22 +6,21 @@ namespace FinalFinanceTrack
     public partial class UpdatePasswordWindow : Window
     {
         private DbManager dbManager;
-        private int userId;
 
-        public UpdatePasswordWindow(int userId) // Accept userId as a parameter
+        public UpdatePasswordWindow()
         {
             InitializeComponent();
             dbManager = new DbManager();
-            this.userId = userId; // Set the userId
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
+            string email = emailTextBox.Text;
             string oldPassword = oldPasswordBox.Password;
             string newPassword = newPasswordBox.Password;
             string confirmPassword = confirmPasswordBox.Password;
 
-            if (string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
             {
                 MessageBox.Show("All fields are required.");
                 return;
@@ -29,11 +28,9 @@ namespace FinalFinanceTrack
 
             if (newPassword == confirmPassword)
             {
-                string hashedOldPassword = Security.HashPassword(oldPassword);
-                if (dbManager.ValidateOldPassword(userId, hashedOldPassword))
+                if (dbManager.ValidateOldPassword(email, oldPassword))
                 {
-                    string hashedNewPassword = Security.HashPassword(newPassword);
-                    if (dbManager.UpdatePassword(userId, hashedNewPassword))
+                    if (dbManager.UpdatePassword(email, newPassword))
                     {
                         MessageBox.Show("New password saved.");
                         this.Close();
@@ -56,6 +53,8 @@ namespace FinalFinanceTrack
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            SettingsWindow settingsWindow = new SettingsWindow(); // No need to pass userId
+            settingsWindow.Show();
             this.Close();
         }
     }

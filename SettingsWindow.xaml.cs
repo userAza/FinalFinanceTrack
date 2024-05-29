@@ -4,12 +4,18 @@ namespace FinalFinanceTrack
 {
     public partial class SettingsWindow : Window
     {
-        private int userId;
+        private int? userId;
 
-        public SettingsWindow(int userId)
+        public SettingsWindow(int? userId = null)
         {
             InitializeComponent();
             this.userId = userId;
+
+            // Use the userId as needed, check for null if necessary
+            if (userId.HasValue)
+            {
+                // Handle operations that require userId
+            }
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -21,7 +27,7 @@ namespace FinalFinanceTrack
 
         private void UpdatePassword_Click(object sender, RoutedEventArgs e)
         {
-            UpdatePasswordWindow updatePasswordWindow = new UpdatePasswordWindow(userId);
+            UpdatePasswordWindow updatePasswordWindow = new UpdatePasswordWindow(); // No userId needed
             updatePasswordWindow.Show();
             this.Close();
         }
@@ -42,9 +48,16 @@ namespace FinalFinanceTrack
 
         private void AddProfilePicture_Click(object sender, RoutedEventArgs e)
         {
-            AddProfilePic addProfilePicWindow = new AddProfilePic(userId);
-            addProfilePicWindow.Show();
-            this.Close();
+            if (userId.HasValue)
+            {
+                AddProfilePic addProfilePicWindow = new AddProfilePic(userId.Value);
+                addProfilePicWindow.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("User ID is required for this operation.");
+            }
         }
     }
 }

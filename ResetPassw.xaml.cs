@@ -1,5 +1,6 @@
-﻿using System.Windows;
+﻿using System;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace FinalFinanceTrack
 {
@@ -20,7 +21,7 @@ namespace FinalFinanceTrack
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             string newPassword = NewPasswordTextBox.Text;
-            string confirmPassword = NewPasswordTextBox.Text;
+            string confirmPassword = ConfirmPasswordTextBox.Text;
 
             if (!IsValidPassword(newPassword))
             {
@@ -35,8 +36,7 @@ namespace FinalFinanceTrack
             }
 
             DbManager dbManager = new DbManager();
-            int? userId = dbManager.GetUserIdByEmail(userEmail);
-            if (userId.HasValue && dbManager.UpdatePassword(userId.Value, newPassword))
+            if (dbManager.UpdatePassword(userEmail, newPassword))
             {
                 MessageBox.Show("Your password has been reset successfully.");
                 LogIn loginWindow = new LogIn();
@@ -62,14 +62,10 @@ namespace FinalFinanceTrack
                    hasSpecialCharacter.IsMatch(password);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            // Handle button click event
-        }
-
         private void NewPasswordTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             // Handle text changed event
         }
     }
 }
+

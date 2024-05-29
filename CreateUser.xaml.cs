@@ -73,7 +73,10 @@ namespace FinalFinanceTrack
 
         private void button_Exit_Click(object sender, RoutedEventArgs e)
         {
+            UserMan userMan = new UserMan();
+            userMan.Show();
             this.Close();
         }
+
     }
 }

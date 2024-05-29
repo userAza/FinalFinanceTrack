@@ -1,783 +1,743 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using FinalFinanceTrack;
+using MySql.Data.MySqlClient;
 using System.Data;
 using System.Windows;
-using System.Collections.Generic;
 
-namespace FinalFinanceTrack
+public class DbManager
 {
-    public class DbManager
+    private MySqlConnection connection;
+    private string connectionString = "server=127.0.0.1;user=root;database=budget;password=";
+    public MySqlConnection Connection { get; private set; }
+
+    public DbManager()
     {
-        private MySqlConnection connection;
-        private string connectionString = "server=127.0.0.1;user=root;database=budget;password=";
+        connection = new MySqlConnection(connectionString);
+    }
 
-        public DbManager()
+    public bool OpenConnection()
+    {
+        try
         {
-            connection = new MySqlConnection(connectionString);
+            if (connection.State == ConnectionState.Closed)
+            {
+                connection.Open();
+            }
+            return true;
         }
-
-        public bool OpenConnection()
+        catch (Exception ex)
         {
-            try
-            {
-                if (connection.State == ConnectionState.Closed)
-                {
-                    connection.Open();
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Cannot open connection: " + ex.Message);
-                return false;
-            }
+            MessageBox.Show("Cannot open connection: " + ex.Message);
+            return false;
         }
+    }
 
-        public void CloseConnection()
+    public void CloseConnection()
+    {
+        try
         {
-            try
+            if (connection.State != ConnectionState.Closed)
             {
-                if (connection.State != ConnectionState.Closed)
-                {
-                    connection.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Cannot close connection: " + ex.Message);
+                connection.Close();
             }
         }
-
-        public bool InsertUser(string firstName, string lastName, string email, string password)
+        catch (Exception ex)
         {
-            if (!OpenConnection())
-                return false;
-
-            try
-            {
-                string query = "INSERT INTO user (First_Name, Last_Name, Email, Password, profilePhoto) VALUES (@FirstName, @LastName, @Email, @Password)";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-
-                cmd.Parameters.AddWithValue("@FirstName", firstName);
-                cmd.Parameters.AddWithValue("@LastName", lastName);
-                cmd.Parameters.AddWithValue("@Email", email);
-                cmd.Parameters.AddWithValue("@Password", password);
-
-                cmd.ExecuteNonQuery();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error during user creation: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
+            MessageBox.Show("Cannot close connection: " + ex.Message);
         }
+    }
 
-        public DataTable GetAllUsers()
+    public bool InsertUser(string firstName, string lastName, string email, string password)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
         {
-            DataTable dataTable = new DataTable();
+            string query = "INSERT INTO user (First_Name, Last_Name, Email, Password) VALUES (@FirstName, @LastName, @Email, @Password)";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
 
-            if (!OpenConnection())
-                return dataTable;
+            cmd.Parameters.AddWithValue("@FirstName", firstName);
+            cmd.Parameters.AddWithValue("@LastName", lastName);
+            cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@Password", password);
 
-            try
-            {
-                string query = "SELECT Id, First_Name, Last_Name, Email FROM user";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                adapter.Fill(dataTable);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading user data: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
+            cmd.ExecuteNonQuery();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error during user creation: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
+    public DataTable GetAllUsers()
+    {
+        DataTable dataTable = new DataTable();
+
+        if (!OpenConnection())
             return dataTable;
+
+        try
+        {
+            string query = "SELECT Id, First_Name, Last_Name, Email FROM user";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+            adapter.Fill(dataTable);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error loading user data: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
         }
 
-        public bool DeleteUser(int userId)
+        return dataTable;
+    }
+
+    public bool DeleteUser(int userId)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
         {
-            if (!OpenConnection())
-                return false;
+            string query = "DELETE FROM user WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
 
-            try
-            {
-                string query = "DELETE FROM user WHERE Id = @UserId";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                int result = cmd.ExecuteNonQuery();
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error deleting user: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
+            int result = cmd.ExecuteNonQuery();
+            return result > 0;
         }
-
-        public string GetPassword(string email)
+        catch (Exception ex)
         {
-            if (!OpenConnection())
-                return null;
+            MessageBox.Show("Error deleting user: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
-            try
-            {
-                string query = "SELECT Password FROM user WHERE Email = @Email";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", email);
-
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return reader["Password"].ToString();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving password: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
+    public string GetPassword(string email)
+    {
+        if (!OpenConnection())
             return null;
-        }
 
-        public bool InsertIncome(int userId, decimal amount, string month, string year)
+        try
         {
-            if (!OpenConnection())
-                return false;
+            string query = "SELECT Password FROM user WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
 
-            MySqlTransaction transaction = null;
-            try
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
-                transaction = connection.BeginTransaction();
-
-                // Insert into the income table
-                string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
-                MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
-                cmdIncome.Parameters.AddWithValue("@Amount", amount);
-                cmdIncome.Parameters.AddWithValue("@Month", month);
-                cmdIncome.Parameters.AddWithValue("@Year", year);
-                cmdIncome.ExecuteNonQuery();
-                long incomeId = cmdIncome.LastInsertedId;
-
-                // Insert into the userincome table
-                string queryUserIncome = "INSERT INTO userincome (User_ID, Income_ID) VALUES (@UserId, @IncomeId);";
-                MySqlCommand cmdUserIncome = new MySqlCommand(queryUserIncome, connection, transaction);
-                cmdUserIncome.Parameters.AddWithValue("@UserId", userId);
-                cmdUserIncome.Parameters.AddWithValue("@IncomeId", incomeId);
-                cmdUserIncome.ExecuteNonQuery();
-
-                transaction.Commit();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to save income data: {ex.Message}");
-                transaction?.Rollback();
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
-        }
-
-        public bool ExecuteQuery(string query, Dictionary<string, object> parameters)
-        {
-            if (!OpenConnection())
-                return false;
-
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                foreach (var param in parameters)
+                if (reader.Read())
                 {
-                    cmd.Parameters.AddWithValue(param.Key, param.Value);
+                    return reader["Password"].ToString();
                 }
-                cmd.ExecuteNonQuery();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Database operation failed: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
             }
         }
-
-        public bool UpdateUserPassword(int userId, string oldPassword, string newPassword)
+        catch (Exception ex)
         {
-            if (!OpenConnection())
-                return false;
+            MessageBox.Show("Error retrieving password: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+        return null;
+    }
 
-            try
+    public bool InsertIncome(int userId, decimal amount, string month, string year)
+    {
+        if (!OpenConnection())
+            return false;
+
+        MySqlTransaction transaction = null;
+        try
+        {
+            transaction = connection.BeginTransaction();
+
+            // Insert into the income table
+            string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
+            MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
+            cmdIncome.Parameters.AddWithValue("@Amount", amount);
+            cmdIncome.Parameters.AddWithValue("@Month", month);
+            cmdIncome.Parameters.AddWithValue("@Year", year);
+            cmdIncome.ExecuteNonQuery();
+            long incomeId = cmdIncome.LastInsertedId;
+
+            // Insert into the userincome table
+            string queryUserIncome = "INSERT INTO userincome (User_ID, Income_ID) VALUES (@UserId, @IncomeId);";
+            MySqlCommand cmdUserIncome = new MySqlCommand(queryUserIncome, connection, transaction);
+            cmdUserIncome.Parameters.AddWithValue("@UserId", userId);
+            cmdUserIncome.Parameters.AddWithValue("@IncomeId", incomeId);
+            cmdUserIncome.ExecuteNonQuery();
+
+            transaction.Commit();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to save income data: {ex.Message}");
+            transaction?.Rollback();
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public bool ExecuteQuery(string query, Dictionary<string, object> parameters)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            foreach (var param in parameters)
             {
-                string query = "SELECT COUNT(*) FROM user WHERE Id = @UserId AND Password = @OldPassword";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                cmd.Parameters.AddWithValue("@OldPassword", oldPassword);
+                cmd.Parameters.AddWithValue(param.Key, param.Value);
+            }
+            cmd.ExecuteNonQuery();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Database operation failed: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                if (count == 0)
+    public bool UpdateUserPassword(int userId, string oldPassword, string newPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "SELECT COUNT(*) FROM user WHERE Id = @UserId AND Password = @OldPassword";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@OldPassword", oldPassword);
+
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            if (count == 0)
+            {
+                return false;
+            }
+
+            query = "UPDATE user SET Password = @NewPassword WHERE Id = @UserId";
+            cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@NewPassword", newPassword);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            int result = cmd.ExecuteNonQuery();
+            return result > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public bool UpdatePassword(string email, string newPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "UPDATE user SET Password = @Password WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Password", newPassword);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            int result = cmd.ExecuteNonQuery();
+            return result > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public bool DeleteUserByEmail(string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            MessageBox.Show("Please enter a valid email address.");
+            return false;
+        }
+
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "DELETE FROM user WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            int rowsAffected = cmd.ExecuteNonQuery();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error deleting user: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public DataTable GetUsers()
+    {
+        DataTable dataTable = new DataTable();
+
+        if (!OpenConnection())
+            return null;
+
+        try
+        {
+            string query = "SELECT * FROM user";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+            adapter.Fill(dataTable);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error loading user data: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return dataTable;
+    }
+
+    public bool UpdateUser(int userId, string firstName, string lastName, string email)
+    {
+        if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(email))
+        {
+            MessageBox.Show("Please fill in all fields.");
+            return false;
+        }
+
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "UPDATE user SET First_Name = @FirstName, Last_Name = @LastName, Email = @Email WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@FirstName", firstName);
+            cmd.Parameters.AddWithValue("@LastName", lastName);
+            cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            int rowsAffected = cmd.ExecuteNonQuery();
+            return rowsAffected > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating user: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public User GetUserByEmail(string email)
+    {
+        using (var connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            string query = "SELECT * FROM user WHERE Email = @Email";
+            var cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
                 {
-                    return false;
-                }
-
-                query = "UPDATE user SET Password = @NewPassword WHERE Id = @UserId";
-                cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@NewPassword", newPassword);
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                int result = cmd.ExecuteNonQuery();
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating password: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
-        }
-
-        public bool UpdatePassword(int userId, string newPassword)
-        {
-            if (!OpenConnection())
-                return false;
-
-            try
-            {
-                string query = "UPDATE user SET Password = @Password WHERE Id = @UserId";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Password", newPassword);
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                int result = cmd.ExecuteNonQuery();
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating password: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
-        }
-
-
-
-
-
-
-
-
-        /*public (string, string, string) GetAdminSecurityAnswers(string email)
-        {
-            if (!OpenConnection())
-                return (null, null, null);
-
-            try
-            {
-                string query = "SELECT Answer1, Answer2, Answer3 FROM admin WHERE Email = @Email LIMIT 1";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", email);
-
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
+                    User user = new User
                     {
-                        string answer1 = reader["Answer1"] as string;
-                        string answer2 = reader["Answer2"] as string;
-                        string answer3 = reader["Answer3"] as string;
-                        return (answer1, answer2, answer3);
-                    }
+                        Id = reader.GetInt32("Id"),
+                        FirstName = reader.GetString("First_Name"),
+                        LastName = reader.GetString("Last_Name"),
+                        Email = reader.GetString("Email"),
+                        Password = reader.GetString("Password")
+                    };
+                    return user;
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving security answers: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return (null, null, null);
-        }*/
-
-        public bool DeleteUserByEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                MessageBox.Show("Please enter a valid email address.");
-                return false;
-            }
-
-            if (!OpenConnection())
-                return false;
-
-            try
-            {
-                string query = "DELETE FROM user WHERE Email = @Email";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", email);
-
-                int rowsAffected = cmd.ExecuteNonQuery();
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error deleting user: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
-            }
         }
+        return null;
+    }
 
-        public DataTable GetUsers()
-        {
-            DataTable dataTable = new DataTable();
+    public DataTable GetUserById(int userId)
+    {
+        DataTable dataTable = new DataTable();
 
-            if (!OpenConnection())
-                return null;
-
-            try
-            {
-                string query = "SELECT * FROM user";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                adapter.Fill(dataTable);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading user data: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
+        if (!OpenConnection())
             return dataTable;
+
+        try
+        {
+            string query = "SELECT * FROM user WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+            adapter.Fill(dataTable);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving user: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
         }
 
-        public bool UpdateUser(int userId, string firstName, string lastName, string email)
+        return dataTable;
+    }
+
+    public int? GetUserIdByEmail(string email)
+    {
+        using (var connection = new MySqlConnection(connectionString))
         {
-            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName) || string.IsNullOrWhiteSpace(email))
-            {
-                MessageBox.Show("Please fill in all fields.");
-                return false;
-            }
+            connection.Open();
+            string query = "SELECT Id FROM user WHERE Email = @Email";
+            var cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
 
-            if (!OpenConnection())
-                return false;
-
-            try
+            object result = cmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
             {
-                string query = "UPDATE user SET First_Name = @FirstName, Last_Name = @LastName, Email = @Email WHERE Id = @UserId";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@FirstName", firstName);
-                cmd.Parameters.AddWithValue("@LastName", lastName);
-                cmd.Parameters.AddWithValue("@Email", email);
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                int rowsAffected = cmd.ExecuteNonQuery();
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating user: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
+                return Convert.ToInt32(result);
             }
         }
+        return null;
+    }
 
-        public User GetUserByEmail(string email)
-        {
-            if (!OpenConnection())
-                return null;
-
-            try
-            {
-                string query = "SELECT * FROM user WHERE Email = @Email";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", email);
-
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        User user = new User
-                        {
-                            Id = reader.GetInt32("Id"),
-                            FirstName = reader.GetString("First_Name"),
-                            LastName = reader.GetString("Last_Name"),
-                            Email = reader.GetString("Email"),
-                            Password = reader.GetString("Password")
-                        };
-                        return user;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving user: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
+    public string GetUserEmailById(int userId)
+    {
+        if (!OpenConnection())
             return null;
-        }
 
-
-
-        public DataTable GetUserById(int userId)
+        try
         {
-            DataTable dataTable = new DataTable();
+            string query = "SELECT Email FROM user WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
 
-            if (!OpenConnection())
-                return dataTable;
-
-            try
+            object result = cmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
             {
-                string query = "SELECT * FROM user WHERE Id = @UserId";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@UserId", userId);
-                MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
-                adapter.Fill(dataTable);
+                return result.ToString();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving user: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
-            return dataTable;
         }
-
-
-        public int? GetUserIdByEmail(string email)
+        catch (Exception ex)
         {
-            if (!OpenConnection())
-                return null;
-
-            try
-            {
-                string query = "SELECT Id FROM user WHERE Email = @Email";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", email);
-
-                object result = cmd.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
-                {
-                    return Convert.ToInt32(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving user ID: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return null;
+            MessageBox.Show("Error retrieving user email: " + ex.Message);
         }
-        public string GetUserEmailById(int userId)
+        finally
         {
-            if (!OpenConnection())
-                return null;
-
-            try
-            {
-                string query = "SELECT Email FROM user WHERE Id = @UserId";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@UserId", userId);
-
-                object result = cmd.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
-                {
-                    return result.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error retrieving user email: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return null;
+            CloseConnection();
         }
+        return null;
+    }
 
+    public decimal GetTotalSavings(int year, int month)
+    {
+        decimal savings = 0;
 
-
-        public decimal GetTotalSavings(int year, int month)
-        {
-            decimal savings = 0;
-
-            if (!OpenConnection())
-                return savings;
-
-            try
-            {
-                string query = "SELECT SUM(Savings) FROM History WHERE YEAR(Date) = @Year AND MONTH(Date) = @Month";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Year", year);
-                cmd.Parameters.AddWithValue("@Month", month);
-
-                object result = cmd.ExecuteScalar();
-                if (result != null && result != DBNull.Value)
-                {
-                    savings = Convert.ToDecimal(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading savings: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-
+        if (!OpenConnection())
             return savings;
-        }
 
-        public bool ValidateOldPassword(int userId, string oldPassword)
+        try
         {
-            if (!OpenConnection())
-                return false;
+            string query = "SELECT SUM(Savings) FROM History WHERE YEAR(Date) = @Year AND MONTH(Date) = @Month";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Year", year);
+            cmd.Parameters.AddWithValue("@Month", month);
 
-            try
+            object result = cmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
             {
-                string query = "SELECT COUNT(*) FROM user WHERE Password = @Password";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Password", oldPassword);
-
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error validating old password: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
+                savings = Convert.ToDecimal(result);
             }
         }
-
-        public List<int> GetDistinctYears()
+        catch (Exception ex)
         {
-            List<int> years = new List<int>();
+            MessageBox.Show("Error loading savings: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
 
-            if (!OpenConnection())
-                return years;
+        return savings;
+    }
 
-            try
-            {
-                string query = "SELECT DISTINCT YEAR(Date) AS Year FROM History";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
+    public bool ValidateOldPassword(string email, string oldPassword)
+    {
+        if (!OpenConnection())
+            return false;
 
-                MySqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    years.Add(reader.GetInt32(0));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading years: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
+        try
+        {
+            string query = "SELECT COUNT(*) FROM user WHERE Email = @Email AND Password = @Password";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@Password", oldPassword);
 
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+
+ 
+
+            return count > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error validating old password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public List<int> GetDistinctYears()
+    {
+        List<int> years = new List<int>();
+
+        if (!OpenConnection())
             return years;
+
+        try
+        {
+            string query = "SELECT DISTINCT YEAR(Date) AS Year FROM History";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                years.Add(reader.GetInt32(0));
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error loading years: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
         }
 
+        return years;
+    }
 
-        public int GetIncomeCategoryId(string categoryName)
+    public int GetIncomeCategoryId(string categoryName)
+    {
+        if (!OpenConnection())
+            return -1;
+
+        try
         {
-            if (!OpenConnection())
-                return -1;
+            string query = "SELECT id FROM categoryincome WHERE Name = @CategoryName";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@CategoryName", categoryName);
 
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return reader.GetInt32("id");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving category ID: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return -1; // Return an invalid ID if something went wrong
+    }
+
+    public static decimal GetTotalIncomeForUser(int userId, int month, DbManager dbManager)
+    {
+        decimal totalIncome = 0;
+
+        if (dbManager.OpenConnection())
+        {
             try
             {
-                string query = "SELECT id FROM categoryincome WHERE Name = @CategoryName";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@CategoryName", categoryName);
+                string query = "SELECT SUM(Amount) FROM income WHERE ID = @UserId AND MONTH = @Month";
+                MySqlCommand command = new MySqlCommand(query, dbManager.connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@Month", month);
 
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                object result = command.ExecuteScalar();
+                if (result != DBNull.Value)
                 {
-                    if (reader.Read())
-                    {
-                        return reader.GetInt32("id");
-                    }
+                    totalIncome = Convert.ToDecimal(result);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error retrieving category ID: " + ex.Message);
+                MessageBox.Show("Error retrieving total income: " + ex.Message);
             }
             finally
             {
-                CloseConnection();
+                dbManager.CloseConnection();
             }
-
-            return -1; // Return an invalid ID if something went wrong
         }
 
-        public static decimal GetTotalIncomeForUser(int userId, int month, DbManager dbManager)
+        return totalIncome;
+    }
+
+    public static decimal GetTotalExpensesForUser(int userId, int month, DbManager dbManager)
+    {
+        decimal totalExpenses = 0;
+
+        if (dbManager.OpenConnection())
         {
-            decimal totalIncome = 0;
-
-            if (dbManager.OpenConnection())
-            {
-                try
-                {
-                    string query = "SELECT SUM(Amount) FROM income WHERE ID = @UserId AND MONTH = @Month";
-                    MySqlCommand command = new MySqlCommand(query, dbManager.connection);
-                    command.Parameters.AddWithValue("@UserId", userId);
-                    command.Parameters.AddWithValue("@Month", month);
-
-                    object result = command.ExecuteScalar();
-                    if (result != DBNull.Value)
-                    {
-                        totalIncome = Convert.ToDecimal(result);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error retrieving total income: " + ex.Message);
-                }
-                finally
-                {
-                    dbManager.CloseConnection();
-                }
-            }
-
-            return totalIncome;
-        }
-
-        public static decimal GetTotalExpensesForUser(int userId, int month, DbManager dbManager)
-        {
-            decimal totalExpenses = 0;
-
-            if (dbManager.OpenConnection())
-            {
-                try
-                {
-                    string query = "SELECT SUM(Amount) FROM expense WHERE ID = @UserId AND MONTH = @Month";
-                    MySqlCommand command = new MySqlCommand(query, dbManager.connection);
-                    command.Parameters.AddWithValue("@UserId", userId);
-                    command.Parameters.AddWithValue("@Month", month);
-
-                    object result = command.ExecuteScalar();
-                    if (result != DBNull.Value)
-                    {
-                        totalExpenses = Convert.ToDecimal(result);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error retrieving total expenses: " + ex.Message);
-                }
-                finally
-                {
-                    dbManager.CloseConnection();
-                }
-            }
-
-            return totalExpenses;
-        }
-        public bool ValidateSecurityQuestions(string email, string answer1, string answer2, string answer3)
-        {
-            if (!OpenConnection())
-                return false;
-
             try
             {
-                string query = "SELECT COUNT(*) FROM admin WHERE Email = @Email AND SecurityQuestion1 = @Answer1 AND SecurityQuestion2 = @Answer2 AND SecurityQuestion3 = @Answer3";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Email", email.Trim());
-                cmd.Parameters.AddWithValue("@Answer1", answer1.Trim());
-                cmd.Parameters.AddWithValue("@Answer2", answer2.Trim());
-                cmd.Parameters.AddWithValue("@Answer3", answer3.Trim());
+                string query = "SELECT SUM(Amount) FROM expense WHERE ID = @UserId AND MONTH = @Month";
+                MySqlCommand command = new MySqlCommand(query, dbManager.connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                command.Parameters.AddWithValue("@Month", month);
 
-                int count = Convert.ToInt32(cmd.ExecuteScalar());
-                return count > 0;
+                object result = command.ExecuteScalar();
+                if (result != DBNull.Value)
+                {
+                    totalExpenses = Convert.ToDecimal(result);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error validating security questions: " + ex.Message);
-                return false;
+                MessageBox.Show("Error retrieving total expenses: " + ex.Message);
             }
             finally
             {
-                CloseConnection();
+                dbManager.CloseConnection();
             }
         }
 
-        public bool UpdateAdminPassword(string email, string newPassword)
+        return totalExpenses;
+    }
+
+    public bool UpdateProfilePicture(int userId, byte[] imageBytes)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
         {
-            if (!OpenConnection())
-                return false;
+            string query = "UPDATE user SET ProfilePhoto = @ProfilePhoto WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@ProfilePhoto", imageBytes);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.ExecuteNonQuery();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating profile picture: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
 
-            try
-            {
-                string query = "UPDATE admin SET Password = @Password WHERE Email = @Email";
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@Password", newPassword.Trim());
-                cmd.Parameters.AddWithValue("@Email", email.Trim());
+    public bool DeleteProfilePicture(int userId)
+    {
+        if (!OpenConnection())
+            return false;
 
-                int rowsAffected = cmd.ExecuteNonQuery();
-                return rowsAffected > 0;
-            }
-            catch (Exception ex)
+        try
+        {
+            string query = "UPDATE user SET ProfilePhoto = NULL WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.ExecuteNonQuery();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error deleting profile picture: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public byte[] GetProfilePicture(int userId)
+    {
+        if (!OpenConnection())
+            return null;
+
+        try
+        {
+            string query = "SELECT ProfilePhoto FROM user WHERE Id = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            object result = cmd.ExecuteScalar();
+            if (result != DBNull.Value && result != null)
             {
-                MessageBox.Show("Error updating password: " + ex.Message);
-                return false;
-            }
-            finally
-            {
-                CloseConnection();
+                return (byte[])result;
             }
         }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving profile picture: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+        return null;
     }
 }
