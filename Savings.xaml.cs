@@ -10,8 +10,12 @@ namespace FinalFinanceTrack
         public Savings()
         {
             InitializeComponent();
-            dbManager = new DbManager(); // Initialize the DbManager
-            CalculateSavings(DateTime.Now.Month); // Initialize with the current month
+
+            // Initialize the DbManager
+            dbManager = new DbManager(); 
+
+            // Initialize with the current month
+            LoadUserSavings(DateTime.Now.Month); 
         }
 
 
