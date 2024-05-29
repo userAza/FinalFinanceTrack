@@ -86,7 +86,6 @@ namespace FinalFinanceTrack
         private void SaveExpense()
         {
             int userId = GetCurrentUserId();
-            MessageBox.Show($"Current User ID: {userId}");  // Debugging statement
 
             if (userId == 0)
             {

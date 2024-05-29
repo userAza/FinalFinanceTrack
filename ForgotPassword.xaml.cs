@@ -79,7 +79,7 @@ namespace FinalFinanceTrack
             using (var connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "SELECT Answer1, Answer2, Answer3 FROM user WHERE Email = @Email LIMIT 1";
+                string query = "SELECT securityQuestion1, securityQuestion2, securityQuestion3 FROM user WHERE Email = @Email LIMIT 1";
                 var cmd = new MySqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Email", email);
 
@@ -87,9 +87,9 @@ namespace FinalFinanceTrack
                 {
                     if (reader.Read())
                     {
-                        string answer1 = reader["Answer1"] as string;
-                        string answer2 = reader["Answer2"] as string;
-                        string answer3 = reader["Answer3"] as string;
+                        string answer1 = reader["securityQuestion1"] as string;
+                        string answer2 = reader["securityQuestion2"] as string;
+                        string answer3 = reader["securityQuestion3"] as string;
                         return (answer1, answer2, answer3);
                     }
                 }

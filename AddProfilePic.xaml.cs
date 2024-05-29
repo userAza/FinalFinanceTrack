@@ -71,6 +71,8 @@ namespace FinalFinanceTrack
 
         private void SavePicture_Click(object sender, RoutedEventArgs e)
         {
+            Overview overviewPage = new Overview();
+            overviewPage.Show();
             this.Close();
         }
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -79,11 +81,13 @@ namespace FinalFinanceTrack
             {
                 Overview overviewPage = new Overview();
                 overviewPage.Show();
+                this.Close();
             }
             else if (sourceWindow == "SettingsWindow")
             {
                 SettingsWindow settingsPage = new SettingsWindow(userId);
                 settingsPage.Show();
+                this.Close();
             }
             this.Close();
         }

@@ -736,7 +736,7 @@ public class DbManager
 
         try
         {
-            string query = "UPDATE user SET ProfilePhoto = @ProfilePhoto WHERE Id = @UserId";
+            string query = "UPDATE user SET ProfilePhoto = @ProfilePhoto WHERE ID = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@ProfilePhoto", imageBytes);
             cmd.Parameters.AddWithValue("@UserId", userId);
@@ -761,7 +761,7 @@ public class DbManager
 
         try
         {
-            string query = "UPDATE user SET ProfilePhoto = NULL WHERE Id = @UserId";
+            string query = "UPDATE user SET ProfilePhoto = NULL WHERE ID = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@UserId", userId);
             cmd.ExecuteNonQuery();
@@ -785,7 +785,7 @@ public class DbManager
 
         try
         {
-            string query = "SELECT ProfilePhoto FROM user WHERE Id = @UserId";
+            string query = "SELECT ProfilePhoto FROM user WHERE ID = @UserId";
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@UserId", userId);
 

@@ -36,7 +36,8 @@ namespace FinalFinanceTrack
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            // Navigate back to the previous page
+            Overview overviewPage = new Overview();
+            overviewPage.Show();
             this.Close();
         }
 

@@ -97,6 +97,7 @@ namespace FinalFinanceTrack
         {
             ForgotPassword forgotPasswordWindow = new ForgotPassword();
             forgotPasswordWindow.Show();
+            this.Close();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
