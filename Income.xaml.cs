@@ -94,10 +94,10 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            string source = CategoryComboBox.Text;
-            if (string.IsNullOrEmpty(source))
+            string categoryName = CategoryComboBox.Text;
+            if (string.IsNullOrEmpty(categoryName))
             {
-                MessageBox.Show("Please select a source.");
+                MessageBox.Show("Please select a category.");
                 return;
             }
 
@@ -113,7 +113,14 @@ namespace FinalFinanceTrack
             string year = selectedDate.Value.ToString("yyyy");
 
             DbManager dbManager = new DbManager();
-            if (dbManager.InsertIncome(userId, amount, month, year)) // Ensure that this method matches your DbManager capabilities
+            int categoryId = dbManager.GetIncomeCategoryId(categoryName); // Get the category ID
+            if (categoryId == -1)
+            {
+                MessageBox.Show("Invalid category selected.");
+                return;
+            }
+
+            if (dbManager.InsertIncome(userId, amount, month, year, categoryId)) // Updated to include category ID
             {
                 MessageBox.Show("Income data saved successfully!");
             }

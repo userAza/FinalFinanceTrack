@@ -85,6 +85,8 @@ namespace FinalFinanceTrack
 
         private void SaveExpense()
         {
+            int userId = GetCurrentUserId();
+
             if (!decimal.TryParse(AmountInput.Text, out decimal amount))
             {
                 MessageBox.Show("Please enter a valid amount", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -101,15 +103,15 @@ namespace FinalFinanceTrack
             DateTime selectedDate = DatePicker.SelectedDate ?? DateTime.Now;
 
             DbManager dbManager = new DbManager();
-            string query = "INSERT INTO expense (Amount, Month, Year) VALUES (@Amount, @Month, @Year)";
-            Dictionary<string, object> parameters = new Dictionary<string, object>
-            {
-                {"@Amount", amount},
-                {"@Month", selectedDate.ToString("MMMM")},
-                {"@Year", selectedDate.Year.ToString()}
-            };
+            int categoryId = dbManager.GetExpenseCategoryId(selectedCategory); // Get the category ID
 
-            if (dbManager.ExecuteQuery(query, parameters))
+            if (categoryId == -1)
+            {
+                MessageBox.Show("Invalid category selected.");
+                return;
+            }
+
+            if (dbManager.InsertExpense(userId, amount, selectedDate.ToString("MMMM"), selectedDate.Year.ToString(), categoryId))
             {
                 MessageBox.Show("Expense saved successfully!");
             }
@@ -119,6 +121,43 @@ namespace FinalFinanceTrack
             }
         }
 
+        //old code :
+        /*        private void SaveExpense()
+                {
+                    if (!decimal.TryParse(AmountInput.Text, out decimal amount))
+                    {
+                        MessageBox.Show("Please enter a valid amount", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    if (CategoryComboBox.SelectedItem == null)
+                    {
+                        MessageBox.Show("Please select a category", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    string selectedCategory = (CategoryComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+                    DateTime selectedDate = DatePicker.SelectedDate ?? DateTime.Now;
+
+                    DbManager dbManager = new DbManager();
+                    string query = "INSERT INTO expense (Amount, Month, Year) VALUES (@Amount, @Month, @Year)";
+                    Dictionary<string, object> parameters = new Dictionary<string, object>
+                    {
+                        {"@Amount", amount},
+                        {"@Month", selectedDate.ToString("MMMM")},
+                        {"@Year", selectedDate.Year.ToString()}
+                    };
+
+                    if (dbManager.ExecuteQuery(query, parameters))
+                    {
+                        MessageBox.Show("Expense saved successfully!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to save expense.");
+                    }
+                }
+        */
         private void AmountInput_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !decimal.TryParse(e.Text, out _); // Ensure only numeric input
