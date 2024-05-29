@@ -85,6 +85,8 @@ namespace FinalFinanceTrack
 
         private void SaveExpense()
         {
+            int userId = GetCurrentUserId();
+
             if (!decimal.TryParse(AmountInput.Text, out decimal amount))
             {
                 MessageBox.Show("Please enter a valid amount", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -101,15 +103,15 @@ namespace FinalFinanceTrack
             DateTime selectedDate = DatePicker.SelectedDate ?? DateTime.Now;
 
             DbManager dbManager = new DbManager();
-            string query = "INSERT INTO expense (Amount, Month, Year) VALUES (@Amount, @Month, @Year)";
-            Dictionary<string, object> parameters = new Dictionary<string, object>
-            {
-                {"@Amount", amount},
-                {"@Month", selectedDate.ToString("MMMM")},
-                {"@Year", selectedDate.Year.ToString()}
-            };
+            int categoryId = dbManager.GetExpenseCategoryId(selectedCategory); // Get the category ID
 
-            if (dbManager.ExecuteQuery(query, parameters))
+            if (categoryId == -1)
+            {
+                MessageBox.Show("Invalid category selected.");
+                return;
+            }
+
+            if (dbManager.InsertExpense(userId, amount, selectedDate.ToString("MMMM"), selectedDate.Year.ToString(), categoryId))
             {
                 MessageBox.Show("Expense saved successfully!");
             }

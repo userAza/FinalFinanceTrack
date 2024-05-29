@@ -26,8 +26,21 @@ namespace FinalFinanceTrack
         public Income()
         {
             InitializeComponent();
+            PopulateCategories();
             highlightbtn = new NavigationManager();
             highlightbtn.SetActiveButton(IncomeButton);
+        }
+
+        private void PopulateCategories()
+        {
+            DbManager dbManager = new DbManager();
+            var categories = dbManager.GetIncomeCategories();
+            foreach (var category in categories)
+            {
+                CategoryComboBox.Items.Add(new ComboBoxItem { Content = category });
+            }
+            if (CategoryComboBox.Items.Count > 0)
+                CategoryComboBox.SelectedIndex = 0;
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
@@ -45,7 +58,6 @@ namespace FinalFinanceTrack
             settingsPage.Show();
             this.Close();
         }
-
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -94,10 +106,10 @@ namespace FinalFinanceTrack
                 return;
             }
 
-            string source = CategoryComboBox.Text;
-            if (string.IsNullOrEmpty(source))
+            string categoryName = (CategoryComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            if (string.IsNullOrEmpty(categoryName))
             {
-                MessageBox.Show("Please select a source.");
+                MessageBox.Show("Please select a category.");
                 return;
             }
 
@@ -113,7 +125,14 @@ namespace FinalFinanceTrack
             string year = selectedDate.Value.ToString("yyyy");
 
             DbManager dbManager = new DbManager();
-            if (dbManager.InsertIncome(userId, amount, month, year)) // Ensure that this method matches your DbManager capabilities
+            int categoryId = dbManager.GetIncomeCategoryId(categoryName); // Get the category ID
+            if (categoryId == -1)
+            {
+                MessageBox.Show("Invalid category selected.");
+                return;
+            }
+
+            if (dbManager.InsertIncome(userId, amount, month, year, categoryId)) // Updated to include category ID
             {
                 MessageBox.Show("Income data saved successfully!");
             }

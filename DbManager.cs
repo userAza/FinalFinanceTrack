@@ -1,7 +1,9 @@
 ﻿using FinalFinanceTrack;
+using System;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Windows;
+using System.Collections.Generic;
 
 public class DbManager
 {
@@ -156,7 +158,8 @@ public class DbManager
         return null;
     }
 
-    public bool InsertIncome(int userId, decimal amount, string month, string year)
+
+    public bool InsertIncome(int userId, decimal amount, string month, string year, int categoryId)
     {
         if (!OpenConnection())
             return false;
@@ -167,11 +170,12 @@ public class DbManager
             transaction = connection.BeginTransaction();
 
             // Insert into the income table
-            string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
+            string queryIncome = "INSERT INTO income (Amount, Month, Year, Category_ID) VALUES (@Amount, @Month, @Year, @CategoryId);";
             MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
             cmdIncome.Parameters.AddWithValue("@Amount", amount);
             cmdIncome.Parameters.AddWithValue("@Month", month);
             cmdIncome.Parameters.AddWithValue("@Year", year);
+            cmdIncome.Parameters.AddWithValue("@CategoryId", categoryId);
             cmdIncome.ExecuteNonQuery();
             long incomeId = cmdIncome.LastInsertedId;
 
@@ -197,6 +201,80 @@ public class DbManager
         }
     }
 
+    public int GetIncomeCategoryId(string categoryName)
+    {
+        if (!OpenConnection())
+            return -1;
+
+        try
+        {
+            string query = "SELECT ID FROM categoryincome WHERE Name = @CategoryName";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@CategoryName", categoryName);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return reader.GetInt32("ID");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving category ID: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return -1; // Return an invalid ID if something went wrong
+    }
+
+
+    //old code: 1hr ago  29/05/2024
+    /*    public bool InsertIncome(int userId, decimal amount, string month, string year)
+        {
+            if (!OpenConnection())
+                return false;
+
+            MySqlTransaction transaction = null;
+            try
+            {
+                transaction = connection.BeginTransaction();
+
+                // Insert into the income table
+                string queryIncome = "INSERT INTO income (Amount, Month, Year) VALUES (@Amount, @Month, @Year);";
+                MySqlCommand cmdIncome = new MySqlCommand(queryIncome, connection, transaction);
+                cmdIncome.Parameters.AddWithValue("@Amount", amount);
+                cmdIncome.Parameters.AddWithValue("@Month", month);
+                cmdIncome.Parameters.AddWithValue("@Year", year);
+                cmdIncome.ExecuteNonQuery();
+                long incomeId = cmdIncome.LastInsertedId;
+
+                // Insert into the userincome table
+                string queryUserIncome = "INSERT INTO userincome (User_ID, Income_ID) VALUES (@UserId, @IncomeId);";
+                MySqlCommand cmdUserIncome = new MySqlCommand(queryUserIncome, connection, transaction);
+                cmdUserIncome.Parameters.AddWithValue("@UserId", userId);
+                cmdUserIncome.Parameters.AddWithValue("@IncomeId", incomeId);
+                cmdUserIncome.ExecuteNonQuery();
+
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save income data: {ex.Message}");
+                transaction?.Rollback();
+                return false;
+            }
+            finally
+            {
+                CloseConnection();
+            }
+        }
+    */
     public bool ExecuteQuery(string query, Dictionary<string, object> parameters)
     {
         if (!OpenConnection())
@@ -569,36 +647,6 @@ public class DbManager
         return years;
     }
 
-    public int GetIncomeCategoryId(string categoryName)
-    {
-        if (!OpenConnection())
-            return -1;
-
-        try
-        {
-            string query = "SELECT id FROM categoryincome WHERE Name = @CategoryName";
-            MySqlCommand cmd = new MySqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("@CategoryName", categoryName);
-
-            using (MySqlDataReader reader = cmd.ExecuteReader())
-            {
-                if (reader.Read())
-                {
-                    return reader.GetInt32("id");
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show("Error retrieving category ID: " + ex.Message);
-        }
-        finally
-        {
-            CloseConnection();
-        }
-
-        return -1; // Return an invalid ID if something went wrong
-    }
 
     public static decimal GetTotalIncomeForUser(int userId, int month, DbManager dbManager)
     {
@@ -740,4 +788,290 @@ public class DbManager
         }
         return null;
     }
+
+    public bool InsertExpense(int userId, decimal amount, string month, string year, int categoryId)
+    {
+        if (!OpenConnection())
+            return false;
+
+        MySqlTransaction transaction = null;
+        try
+        {
+            transaction = connection.BeginTransaction();
+
+            // Insert into the expense table
+            string queryExpense = "INSERT INTO expense (Amount, Month, Year, Category_ID) VALUES (@Amount, @Month, @Year, @CategoryId);";
+            MySqlCommand cmdExpense = new MySqlCommand(queryExpense, connection, transaction);
+            cmdExpense.Parameters.AddWithValue("@Amount", amount);
+            cmdExpense.Parameters.AddWithValue("@Month", month);
+            cmdExpense.Parameters.AddWithValue("@Year", year);
+            cmdExpense.Parameters.AddWithValue("@CategoryId", categoryId);
+            cmdExpense.ExecuteNonQuery();
+            long expenseId = cmdExpense.LastInsertedId;
+
+            // Insert into the userexpense table
+            string queryUserExpense = "INSERT INTO userexpense (User_ID, Expense_ID) VALUES (@UserId, @ExpenseId);";
+            MySqlCommand cmdUserExpense = new MySqlCommand(queryUserExpense, connection, transaction);
+            cmdUserExpense.Parameters.AddWithValue("@UserId", userId);
+            cmdUserExpense.Parameters.AddWithValue("@ExpenseId", expenseId);
+            cmdUserExpense.ExecuteNonQuery();
+
+            transaction.Commit();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to save expense data: {ex.Message}");
+            transaction?.Rollback();
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public int GetExpenseCategoryId(string categoryName)
+    {
+        if (!OpenConnection())
+            return -1;
+
+        try
+        {
+            string query = "SELECT ID FROM categoryexpense WHERE Name = @CategoryName";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@CategoryName", categoryName);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return reader.GetInt32("ID");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving category ID: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return -1; // Return an invalid ID if something went wrong
+    }
+
+    //retrieve income data for the specific user:
+    public List<IncomeRecord> GetUserIncome(int userId)
+    {
+        List<IncomeRecord> incomes = new List<IncomeRecord>();
+
+        if (!OpenConnection())
+            return incomes;
+
+        try
+        {
+            string query = "SELECT income.ID, Amount, Month, Year, categoryincome.Name as Category FROM income " +
+                           "JOIN categoryincome ON income.Category_ID = categoryincome.ID " +
+                           "JOIN userincome ON income.ID = userincome.Income_ID " +
+                           "WHERE userincome.User_ID = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    incomes.Add(new IncomeRecord
+                    {
+                        ID = reader.GetInt32("ID"),
+                        Amount = reader.GetDecimal("Amount"),
+                        Month = reader.GetString("Month"),
+                        Year = reader.GetString("Year"),
+                        Category = reader.GetString("Category")
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving user income: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return incomes;
+    }
+
+    public List<IncomeRecord> GetUserIncomeByCategory(int userId, string category)
+    {
+        List<IncomeRecord> incomes = new List<IncomeRecord>();
+
+        if (!OpenConnection())
+            return incomes;
+
+        try
+        {
+            string query = "SELECT income.ID, Amount, Month, Year, categoryincome.Name as Category FROM income " +
+                           "JOIN categoryincome ON income.Category_ID = categoryincome.ID " +
+                           "JOIN userincome ON income.ID = userincome.Income_ID " +
+                           "WHERE userincome.User_ID = @UserId AND categoryincome.Name = @Category";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@Category", category);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    incomes.Add(new IncomeRecord
+                    {
+                        ID = reader.GetInt32("ID"),
+                        Amount = reader.GetDecimal("Amount"),
+                        Month = reader.GetString("Month"),
+                        Year = reader.GetString("Year"),
+                        Category = reader.GetString("Category")
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving user income by category: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return incomes;
+    }
+
+
+    public List<ExpenseRecord> GetUserExpenses(int userId)
+    {
+        List<ExpenseRecord> expenses = new List<ExpenseRecord>();
+
+        if (!OpenConnection())
+            return expenses;
+
+        try
+        {
+            string query = "SELECT expense.ID, Amount, Month, Year, categoryexpense.Name as Category FROM expense " +
+                           "JOIN categoryexpense ON expense.Category_ID = categoryexpense.ID " +
+                           "JOIN userexpense ON expense.ID = userexpense.Expense_ID " +
+                           "WHERE userexpense.User_ID = @UserId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    expenses.Add(new ExpenseRecord
+                    {
+                        ID = reader.GetInt32("ID"),
+                        Amount = reader.GetDecimal("Amount"),
+                        Month = reader.GetString("Month"),
+                        Year = reader.GetString("Year"),
+                        Category = reader.GetString("Category")
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving user expenses: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return expenses;
+    }
+
+    public List<ExpenseRecord> GetUserExpensesByCategory(int userId, string category)
+    {
+        List<ExpenseRecord> expenses = new List<ExpenseRecord>();
+
+        if (!OpenConnection())
+            return expenses;
+
+        try
+        {
+            string query = "SELECT expense.ID, Amount, Month, Year, categoryexpense.Name as Category FROM expense " +
+                           "JOIN categoryexpense ON expense.Category_ID = categoryexpense.ID " +
+                           "JOIN userexpense ON expense.ID = userexpense.Expense_ID " +
+                           "WHERE userexpense.User_ID = @UserId AND categoryexpense.Name = @Category";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@UserId", userId);
+            cmd.Parameters.AddWithValue("@Category", category);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    expenses.Add(new ExpenseRecord
+                    {
+                        ID = reader.GetInt32("ID"),
+                        Amount = reader.GetDecimal("Amount"),
+                        Month = reader.GetString("Month"),
+                        Year = reader.GetString("Year"),
+                        Category = reader.GetString("Category")
+                    });
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving user expenses by category: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return expenses;
+    }
+
+    public List<string> GetIncomeCategories()
+    {
+        List<string> categories = new List<string>();
+
+        if (!OpenConnection())
+            return categories;
+
+        try
+        {
+            string query = "SELECT Name FROM categoryincome";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    categories.Add(reader.GetString("Name"));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving income categories: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+
+        return categories;
+    }
+
+
+
+
+
 }
