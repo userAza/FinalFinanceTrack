@@ -77,10 +77,12 @@ namespace FinalFinanceTrack
         private void ProfilePicture_Click(object sender, RoutedEventArgs e)
         {
             int userId = Utility.GetCurrentUserId();
-            AddProfilePic addProfilePicWindow = new AddProfilePic(userId);
+            AddProfilePic addProfilePicWindow = new AddProfilePic(userId, "Overview");
             addProfilePicWindow.ProfilePictureSaved += AddProfilePicWindow_ProfilePictureSaved;
-            addProfilePicWindow.ShowDialog();
+            addProfilePicWindow.Show();
+            this.Close();
         }
+
 
         private void AddProfilePicWindow_ProfilePictureSaved()
         {

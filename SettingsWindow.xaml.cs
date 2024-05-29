@@ -50,7 +50,7 @@ namespace FinalFinanceTrack
         {
             if (userId.HasValue)
             {
-                AddProfilePic addProfilePicWindow = new AddProfilePic(userId.Value);
+                AddProfilePic addProfilePicWindow = new AddProfilePic(userId.Value, "SettingsWindow");
                 addProfilePicWindow.Show();
                 this.Close();
             }
@@ -59,5 +59,6 @@ namespace FinalFinanceTrack
                 MessageBox.Show("User ID is required for this operation.");
             }
         }
+
     }
 }

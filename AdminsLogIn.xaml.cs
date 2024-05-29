@@ -23,14 +23,31 @@ namespace FinalFinanceTrack
             string email = adminEmailTextBox.Text;
             string password = adminPasswordBox.Password;
 
-            // Implement your login logic, e.g., checking credentials against a database
-            int userId = 1; // Replace with actual userId retrieval logic
+            DbManager dbManager = new DbManager();
+            string storedPassword = dbManager.GetAdminPassword(email);
 
-            // Navigate to MainPage with userId
-            MainPage mainPage = new MainPage(userId);
-            mainPage.Show();
-            this.Close();
+            if (storedPassword != null && storedPassword == password)
+            {
+                // Retrieve adminId based on the email
+                int? adminId = dbManager.GetAdminIdByEmail(email);
+                if (adminId.HasValue)
+                {
+                    // Navigate to MainPage with adminId
+                    MainPage mainPage = new MainPage(adminId.Value);
+                    mainPage.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Admin not found.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Invalid email or password.");
+            }
         }
+
 
 
         private void RemovePlaceholderText(object sender, RoutedEventArgs e)

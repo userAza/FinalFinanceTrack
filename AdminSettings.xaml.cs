@@ -4,17 +4,22 @@ namespace FinalFinanceTrack
 {
     public partial class AdminSettings : Window
     {
-        private int userId;
+        private int? userId;
 
-        public AdminSettings(int userId)
+        public AdminSettings(int? userId = null)
         {
             InitializeComponent();
             this.userId = userId;
+
+            if (!userId.HasValue)
+            {
+                MessageBox.Show("User ID is not set.");
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            MainPage mainPage = new MainPage(userId);
+            MainPage mainPage = new MainPage(userId.GetValueOrDefault());
             mainPage.Show();
             this.Close();
         }
@@ -26,20 +31,17 @@ namespace FinalFinanceTrack
             this.Close();
         }
 
-
         private void UpdatePasswordButton_Click(object sender, RoutedEventArgs e)
         {
-            DbManager dbManager = new DbManager();
-            string userEmail = dbManager.GetUserEmailById(userId); // New method to get email by user ID
-            if (userEmail != null)
+            if (userId.HasValue)
             {
-                ResetPassw resetPassw = new ResetPassw(userEmail);
-                resetPassw.Show();
+                UpdatePasswAdmin updatePasswAdminWindow = new UpdatePasswAdmin(userId.Value);
+                updatePasswAdminWindow.Show();
                 this.Close();
             }
             else
             {
-                MessageBox.Show("Failed to find user email. Please try again.");
+                MessageBox.Show("User ID is not set. Cannot update password.");
             }
         }
     }

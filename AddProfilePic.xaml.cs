@@ -11,11 +11,13 @@ namespace FinalFinanceTrack
         public event Action ProfilePictureSaved = delegate { };
         private int userId;
         private DbManager dbManager;
+        private string sourceWindow;
 
-        public AddProfilePic(int userId)
+        public AddProfilePic(int userId, string sourceWindow)
         {
             InitializeComponent();
             this.userId = userId;
+            this.sourceWindow = sourceWindow;
             dbManager = new DbManager();
         }
 
@@ -71,9 +73,18 @@ namespace FinalFinanceTrack
         {
             this.Close();
         }
-
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            if (sourceWindow == "Overview")
+            {
+                Overview overviewPage = new Overview();
+                overviewPage.Show();
+            }
+            else if (sourceWindow == "SettingsWindow")
+            {
+                SettingsWindow settingsPage = new SettingsWindow(userId);
+                settingsPage.Show();
+            }
             this.Close();
         }
     }

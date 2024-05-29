@@ -478,6 +478,8 @@ public class DbManager
         return null;
     }
 
+
+
     public decimal GetTotalSavings(int year, int month)
     {
         decimal savings = 0;
@@ -740,4 +742,146 @@ public class DbManager
         }
         return null;
     }
+
+    public string GetAdminEmailById(int adminId)
+    {
+        if (!OpenConnection())
+            return null;
+
+        try
+        {
+            string query = "SELECT Email FROM admin WHERE ID = @AdminId";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@AdminId", adminId);
+
+            object result = cmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                return result.ToString();
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving admin email: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+        return null;
+    }
+
+    public bool UpdateAdminPassword(string email, string newPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "UPDATE admin SET Password = @Password WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Password", newPassword);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            int result = cmd.ExecuteNonQuery();
+            return result > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error updating admin password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public bool ValidateOldAdminPassword(string email, string oldPassword)
+    {
+        if (!OpenConnection())
+            return false;
+
+        try
+        {
+            string query = "SELECT COUNT(*) FROM admin WHERE Email = @Email AND Password = @Password";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+            cmd.Parameters.AddWithValue("@Password", oldPassword);
+
+            int count = Convert.ToInt32(cmd.ExecuteScalar());
+            return count > 0;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error validating old admin password: " + ex.Message);
+            return false;
+        }
+        finally
+        {
+            CloseConnection();
+        }
+    }
+
+    public string GetAdminPassword(string email)
+    {
+        if (!OpenConnection())
+            return null;
+
+        try
+        {
+            string query = "SELECT Password FROM admin WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.Read())
+                {
+                    return reader["Password"].ToString();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving password: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+        return null;
+    }
+
+    public int? GetAdminIdByEmail(string email)
+    {
+        if (!OpenConnection())
+            return null;
+
+        try
+        {
+            string query = "SELECT ID FROM admin WHERE Email = @Email";
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Email", email);
+
+            object result = cmd.ExecuteScalar();
+            if (result != null && result != DBNull.Value)
+            {
+                return Convert.ToInt32(result);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Error retrieving admin ID: " + ex.Message);
+        }
+        finally
+        {
+            CloseConnection();
+        }
+        return null;
+    }
+
+
+
+
 }

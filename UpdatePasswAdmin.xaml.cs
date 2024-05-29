@@ -4,22 +4,24 @@ using System.Windows;
 
 namespace FinalFinanceTrack
 {
-    public partial class UpdatePasswordWindow : Window
+    public partial class UpdatePasswAdmin : Window
     {
         private DbManager dbManager;
+        private int userId;
 
-        public UpdatePasswordWindow()
+        public UpdatePasswAdmin(int userId)
         {
             InitializeComponent();
             dbManager = new DbManager();
+            this.userId = userId;
         }
 
-        private void OkButton_Click(object sender, RoutedEventArgs e)
+        private void AdminOkButton_Click(object sender, RoutedEventArgs e)
         {
-            string email = emailTextBox.Text;
-            string oldPassword = oldPasswordBox.Password;
-            string newPassword = newPasswordBox.Password;
-            string confirmPassword = confirmPasswordBox.Password;
+            string email = adminEmailTextBox.Text;
+            string oldPassword = adminOldPasswordBox.Password;
+            string newPassword = adminNewPasswordBox.Password;
+            string confirmPassword = adminConfirmPasswordBox.Password;
 
             if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
             {
@@ -33,6 +35,13 @@ namespace FinalFinanceTrack
                 return;
             }
 
+            string dbEmail = dbManager.GetAdminEmailById(userId);
+            if (dbEmail != email)
+            {
+                MessageBox.Show("Email does not match.");
+                return;
+            }
+
             if (newPassword == confirmPassword)
             {
                 if (dbManager.ValidateOldPassword(email, oldPassword))
@@ -40,9 +49,8 @@ namespace FinalFinanceTrack
                     if (dbManager.UpdatePassword(email, newPassword))
                     {
                         MessageBox.Show("New password saved.");
-                        // After the message box is closed, show the SettingsWindow
-                        SettingsWindow settingsWindow = new SettingsWindow();
-                        settingsWindow.Show();
+                        AdminSettings adminSettingsWindow = new AdminSettings(userId);
+                        adminSettingsWindow.Show();
                         this.Close();
                     }
                     else
@@ -61,10 +69,10 @@ namespace FinalFinanceTrack
             }
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        private void AdminCancelButton_Click(object sender, RoutedEventArgs e)
         {
-            SettingsWindow settingsWindow = new SettingsWindow(); // No need to pass userId
-            settingsWindow.Show();
+            AdminSettings adminSettingsWindow = new AdminSettings(userId); // Return to AdminSettings
+            adminSettingsWindow.Show();
             this.Close();
         }
 
